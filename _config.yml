@@ -1,0 +1,10 @@
+name: "Jiri Hnidek"
+description: "Personal page and blog"
+
+url: "http://localhost:4000"
+
+paginate: 4
+
+markdown: rdiscount
+permalink: pretty
+highlighter: pigments
