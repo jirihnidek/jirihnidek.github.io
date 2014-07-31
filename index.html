@@ -63,17 +63,14 @@
 <script src="include/js/modernizr.js"></script>
 
 <!-- Analytics -->
-<script type="text/javascript">
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'Insert Your Code']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+  ga('create', 'UA-52302083-5', 'auto');
+  ga('send', 'pageview');
 
 </script>
 <!-- End Analytics -->
@@ -95,10 +92,6 @@
 <header>
     <div class="sticky-nav">
     	<a id="mobile-nav" class="menu-nav" href="#menu-nav"></a>
-        
-        <div id="logo">
-        	<a id="goUp" href="#home-slider" title="Jiri Hnidek">Jiri Hnidek</a>
-        </div>
         
         <nav id="menu">
         	<ul id="menu-nav">
@@ -183,8 +176,10 @@
 
             <!-- Start left column -->
             <div class="span6">
+
+                <h3 class="spec">C/C++</h3>
                 
-                <!-- Start Toggle -->
+                <!-- Start C/C++ Projects -->
                 <div class="accordion" id="toggleArea">
                 
                     <div class="accordion-group">
@@ -217,14 +212,38 @@
                         </div>
                     </div>                  
                 </div>
+
+                <h3 class="spec">Javascript</h3>
+                
+                <!-- Start Javascript Projects -->
+                <div class="accordion" id="toggleArea">
+                
+                    <div class="accordion-group">
+                        <div class="accordion-heading togglize">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#" href="#collapseThreeLeft">
+                                Verse Javascript
+                                <span class="font-icon-plus"></span>
+                                <span class="font-icon-minus"></span>
+                            </a>
+                        </div>
+                        <div id="collapseThreeLeft" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <a href="https://github.com/verse/verse-javascript">Verse Javascript</a> should be Javascript library implementing support for communication with Verse server over WebSocket. Thus it will be possible to write WebGL Verse clients.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <!-- End left column -->
 
 
             <!-- Start right column -->
             <div class="span6">
+
+                <h3 class="spec">Python</h3>
                 
-                <!-- Start Toggle -->
+                <!-- Start Python Projects -->
                 <div class="accordion" id="toggleArea">
                 
                     <div class="accordion-group">
@@ -237,13 +256,49 @@
                         </div>
                         <div id="collapseOneRight" class="accordion-body collapse">
                             <div class="accordion-inner">
-                            Blender Addon <a href="https://github.com/verse/verse-blender">IO Verse</a> implements basic real-time sharing of Blender 3D data at Verse server. It allows to share mesh objects.
+                            Blender Addon <a href="https://github.com/verse/verse-blender">IO Verse</a> implements basic real-time sharing of Blender 3D data at Verse server. It allows only to share mesh objects at this moment.
                             </div>
                         </div>
                     </div>
                     
+                    <div class="accordion-group">
+                        <div class="accordion-heading togglize">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#" href="#collapseTwoRight">
+                                Verse Entities 
+                                <span class="font-icon-plus"></span>
+                                <span class="font-icon-minus"></span>
+                            </a>
+                        </div>
+                        <div id="collapseTwoRight" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                            <a href="https://github.com/verse/verse-entities">Verse Entities</a> is Python module that simplify implementation of Verse clients.
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- End Toggle -->
+                <!-- End Python Projects -->
+
+                <h3 class="spec">Other</h3>
+                
+                <!-- Start Javascript Projects -->
+                <div class="accordion" id="toggleArea">
+                
+                    <div class="accordion-group">
+                        <div class="accordion-heading togglize">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#" href="#collapseThreeRight">
+                                Gists
+                                <span class="font-icon-plus"></span>
+                                <span class="font-icon-minus"></span>
+                            </a>
+                        </div>
+                        <div id="collapseThreeRight" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                Various <a href="https://gist.github.com/jirihnidek">Gists</a> aka microprojects and samples of source code.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <!-- Start left column -->
         </div>
@@ -269,13 +324,13 @@
     <div class="row">
     	
         <!-- Start Profile -->
-    	<div class="span4 profile">
+    	<div class="span3 profile">
         	<div class="image-wrap">
-                <img src="include/img/profile/profile-01.jpg" alt="John Doe">
+                <img src="include/img/profile/profile-01.jpg" alt="Jiri Hnidek">
             </div>
         </div>
 
-        <div class="span4">
+        <div class="span5">
             <h3 class="profile-name">Jiri Hnidek</h3>
             <p class="profile-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac augue at erat <a href="#">hendrerit dictum</a>. 
             Praesent porta, purus eget sagittis imperdiet, nulla mi ullamcorper metus, id hendrerit metus diam vitae est. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
@@ -284,7 +339,7 @@
                         <li><a href="https://twitter.com/jirihnidek" title="Follow Me on Twitter" target="_blank"><span class="font-icon-social-twitter"></span></a></li>
                         <li><a href="https://plus.google.com/+jirihnidek/posts" title="Follow Me on Google Plus" target="_blank"><span class="font-icon-social-google-plus"></span></a></li>
                         <li><a href="http://www.linkedin.com/in/jirihnidek" title="Follow Me on LinkedIn" target="_blank"><span class="font-icon-social-linkedin"></span></a></li>
-                        <li><a href="http://github.com/jirihnidek" title="Follow Me on GitHub" target="_blank"><span class="font-icon-social-zerply"></span></a></li>
+                        <li><a href="http://github.com/jirihnidek" title="Follow Me on GitHub" target="_blank"><span class="font-icon-social-github"></span></a></li>
                 </ul>
             </div>
 
@@ -301,9 +356,7 @@
                         <br>
                         Studentska 2
                         <br>
-                        Liberec 1, 461 17
-                        <br>
-                        Czech Republic
+                        Liberec 1, 461 17, Czech Republic
                     </li>
                 </ul>
             </div>
@@ -338,7 +391,6 @@
 <script src="include/js/jquery.isotope.js"></script> <!-- Isotope Filter -->
 <script src="include/js/jquery.fancybox.pack.js"></script> <!-- Fancybox -->
 <script src="include/js/jquery.fancybox-media.js"></script> <!-- Fancybox for Media -->
-<script src="include/js/jquery.tweet.js"></script> <!-- Tweet -->
 <script src="include/js/plugins.js"></script> <!-- Contains: jPreloader, jQuery Easing, jQuery ScrollTo, jQuery One Page Navi -->
 <script src="include/js/main.js"></script> <!-- Default JS -->
 <!-- End Js -->
