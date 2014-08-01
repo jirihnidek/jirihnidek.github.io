@@ -38,7 +38,6 @@ TODO: post.html template
 </div>
 
 {% include footer.html %}
-```
 
 {% endfor %}
 ```
