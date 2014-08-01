@@ -19,6 +19,26 @@ TODO in index.html:
   </div>
 </div>
 
+TODO: post.html template
+
+```
+{% include header.html %}
+
+<div class="row-fluid">
+  <div class="col-sm-8">
+    <h1>{{ page.title }}</h1>
+    <p class="muted">{{ page.date | date_to_long_string }}</p>
+
+    {{ content }}
+  </div>
+  <div class="col-sm-4">
+    {% include sidebar.html %}
+  </div>
+</div>
+
+{% include footer.html %}
+```
+
 {% endfor %}
 ```
 
