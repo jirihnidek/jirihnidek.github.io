@@ -18,6 +18,7 @@ TODO in index.html:
     </p>
   </div>
 </div>
+```
 
 TODO: post.html template
 
