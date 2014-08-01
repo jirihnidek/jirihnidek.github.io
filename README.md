@@ -1,49 +1,15 @@
 jirihnidek.github.io
 ====================
 
-Jiri Hnidek's personal pages
+[Jiri Hnidek](http://jirihnidek.github.io)'s personal pages using [Bootstrap](http://getbootstrap.com/), [Jekyll](http://jekyllrb.com/) and [GitHub Pages](https://pages.github.com/).
 
-TODO in index.html:
+To run pages localy run following code
 
-```
-{% for post in site.posts %}
-
-<div class="row-fluid">
-  <div class="col-sm-12">
-    <h3>{{ post.title }}</h3>
-    <h4>{{ post.date | date_to_long_string }}</h4>
-    <p>{{ post.excerpt }}</p>
-    <p>
-      <a href="{{ post.url }}">Read Rest</a>
-    </p>
-  </div>
-</div>
+```bash
+git clone git@github.com:jirihnidek/jirihnidek.github.io.git
+cd jirihnidek.github.io
+bundle install
+jekyll server --watch
 ```
 
-TODO: post.html template
-
-```
-{% include header.html %}
-
-<div class="row-fluid">
-  <div class="col-sm-8">
-    <h1>{{ page.title }}</h1>
-    <p class="muted">{{ page.date | date_to_long_string }}</p>
-
-    {{ content }}
-  </div>
-  <div class="col-sm-4">
-    {% include sidebar.html %}
-  </div>
-</div>
-
-{% include footer.html %}
-
-{% endfor %}
-```
-
-## Tutorials
-
-* https://www.andrewmunsell.com/blog/ultimate-jekyll-tutorial
-* http://code.tutsplus.com/articles/building-static-sites-with-jekyll--net-22211
-* http://joshualande.com/jekyll-github-pages-poole/
+Then open following link in your browser: http://localhost:4000
