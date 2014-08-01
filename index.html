@@ -5,34 +5,38 @@ layout: main_page
 <!-- Blog Section -->
 <div id="blog" class="page-alternate">
     <div class="container">
+
         <!-- Title Page -->
         <div class="row">
             <div class="span12">
                 <div class="title-page">
                     <h2 class="title">Blog</h2>
+                    <h3 class="title-description">Some fragments from my work.</h3>
                 </div>
             </div>
         </div>
 
-        <!-- Start Blog post -->
+        <!-- Start Blog post Section -->
         <div class="row">
+        {% for post in site.posts limit: 2 %}
             <!-- Start Blog post -->
             <div class="span6">
-                <h3 class="spec">Blog Post #1</h3>
-            
-                <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.</p>
+                <h3 class="spec">{{ post.title }}</h3>
+                <div class="row">
+                    <div class="span3">{{ post.date | date_to_long_string }}</div>
+                </div>
+                <p>{{ post.excerpt }} <a href="{{ post.url }}">Read Rest</a></p>
             </div>
             <!-- End Blog post -->
-            
-            <!-- Start Blog post -->
-            <div class="span6">
-                <h3 class="spec">Blog Post #2</h3>
-                
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas neque diam, luctus at laoreet in, <a href="#" data-toggle="tooltip" title="I'm a Simple Tootlip">auctor ut tellus</a>. Etiam enim lacus, ornare et tempor, rhoncus rhoncus sem.</p>
-                
-            </div>
-            <!-- End Blog post -->
+        {% endfor %}
         </div>
         <!-- End Blog post Section -->
+
+        <div class="row">
+            <!-- Start Blog post -->
+            <div class="span12">
+            <a href="#blank">Read more blog posts ...</a>
+            </div>
+        </div>
     </div>
 </div>
