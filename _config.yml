@@ -1,10 +1,15 @@
 name: "Jiri Hnidek"
 description: "Personal page and blog"
+author :
+  name : Jiri Hnidek
+  email : jiri.hnidek@tul.cz
 
 url: "http://localhost:4000"
 
+exclude: ['Gemfile', 'Gemfile.lock']
 paginate: 4
-
-markdown: rdiscount
+markdown: redcarpet
+redcarpet:
+  extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "strikethrough", "superscript"]
 permalink: pretty
-highlighter: pigments
+highlighter: pygments
