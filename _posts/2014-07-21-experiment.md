@@ -10,9 +10,12 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse elementum l
 Erat pellentesque ornare gravida, ipsum est luctus neque, eget condimentum urna arcu sit amet felis. Duis nisl augue, scelerisque quis iaculis non, commodo a tellus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tincidunt porttitor nibh at semper.
 
 ```c
+#include <stdio.h>
+#include <stdlib.h>
+
 int main(void)
 {
-    return 1;
+    return EXIT_SUCCESS;
 }
 ```
 
