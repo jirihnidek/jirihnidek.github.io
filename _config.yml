@@ -6,7 +6,7 @@ author :
 
 url: "http://localhost:4000"
 
-exclude: ['Gemfile', 'Gemfile.lock']
+exclude: ['Gemfile', 'Gemfile.lock', 'README.md']
 paginate: 4
 markdown: redcarpet
 redcarpet:
