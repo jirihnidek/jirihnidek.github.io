@@ -37,23 +37,16 @@ layout: main_page
         <!-- Title Page -->
         <div class="row">
             <div class="span12">
-                <h3>Older Posts</h2>
+                <h2>All Posts</h2>
             </div>
         </div>
 
         <div class="row">
+        {% for post in site.posts %}
             <div class="span6">
-                <a href="#">Blog Post #0</a>
+                <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
             </div>
-            <div class="span6">
-                <a href="#">Blog Post #0</a>
-            </div>
-            <div class="span6">
-                <a href="#">Blog Post #0</a>
-            </div>
-            <div class="span6">
-                <a href="#">Blog Post #0</a>
-            </div>
+        {% endfor %}
         </div>
     </div>
 </div>
@@ -68,7 +61,7 @@ layout: main_page
             <div class="span12">
                 <div class="title-page">
                     <h2 class="title">Wiki</h2>
-                    <h3 class="title-description">My old notes converted from MediaWiki. I will translate these pages to English one day (cought).</h3>
+                    <h3 class="title-description">My old notes converted from MediaWiki. I will translate these pages to English one day (cough).</h3>
                 </div>
             </div>
         </div>
@@ -79,7 +72,6 @@ layout: main_page
             <!-- Start Wiki Page -->
             <div class="span6">
                 <h3 class="spec"><a href="{{ wiki.url }}">{{ wiki.title }}</a></h3>
-                <p>{{ wiki.excerpt }}</p>
             </div>
             <!-- End Wiki Page -->
         {% endfor %}
