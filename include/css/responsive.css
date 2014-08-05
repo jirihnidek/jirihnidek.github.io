@@ -396,7 +396,7 @@
   	only screen and (min-resolution: 2dppx) {
 		
 		header #logo a {
-			background-image: url(../img/logo_@2x.png);
+			/*background-image: url(../img/logo_@2x.png);*/
 			background-size: 96px 30px;
 		}
 		
