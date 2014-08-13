@@ -2,6 +2,7 @@
 title: Command IP
 layout: wiki
 tags: linux, network, ip
+language: Czech
 ---
 
 Příkaz '''ip''' slouží v Linuxu k zobrazování a správé routovacích tabulek, síťových rozhraní, tunelů a dalších věciček souvisejících se síťováním. Tato stránka nemá ambice být nějakým kompletním manuálem. Slouží jako můj poznámkový blok k danému tématu.

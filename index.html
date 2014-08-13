@@ -52,7 +52,7 @@ layout: main_page
 </div>
 
 
-<!-- Blog Section -->
+<!-- Wiki Section -->
 <div id="wiki" class="page">
     <div class="container">
 
@@ -71,7 +71,7 @@ layout: main_page
         {% for wiki in site.wiki %}
             <!-- Start Wiki Page -->
             <div class="span6">
-                <h3 class="spec"><a href="{{ wiki.url }}">{{ wiki.title }}</a></h3>
+                <h3 class="spec"><a href="{{ wiki.url }}">{{ wiki.title }}</a> ( {{ wiki.language }} language ) </h3>
             </div>
             <!-- End Wiki Page -->
         {% endfor %}

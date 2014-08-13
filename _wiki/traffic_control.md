@@ -1,6 +1,8 @@
 ---
 title: Traffic Control
 layout: wiki
+tags: linux, network, traffic control, shaping, qos
+language: Czech
 ---
 
 Traffic Control je nástroj pro prioritizaci paketů v operačním systému Linux. Nastavení se provádí pomocí příkazu *tc*. Může sloužit pro zlepšení propustnosti sítě případně pro simulování některých stavů sítě (packet loss, delay, atd.)

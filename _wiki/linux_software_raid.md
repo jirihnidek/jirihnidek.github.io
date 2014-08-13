@@ -2,6 +2,7 @@
 title: Linux Software RAID
 layout: wiki
 tags: linux, raid
+language: Czech
 ---
 
 Tyto stránky slouží jako moje poznámky k Linuxovému nástroji **mdadm**, který slouží k vytváření a správě softwarového RAIDu pod OS Linux.
