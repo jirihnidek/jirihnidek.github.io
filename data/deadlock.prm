@@ -1,0 +1,38 @@
+proctype Client(chan in; chan out)
+{
+	byte i;
+			
+	do
+	:: in?i ->
+		if
+		:: (i>0) -> { goto end; };
+		:: else -> { out!i; };
+		fi;
+	od;
+	
+end:
+	skip;
+}
+
+proctype Server(chan in; chan out)
+{
+	byte i;
+	
+	do
+	:: in?i -> atomic {
+		out!i+1;
+		goto end;
+		}
+	od;
+
+end:
+	skip;
+}
+
+init
+{
+	chan q1 = [0] of {byte};
+	chan q2 = [0] of {byte};
+	
+	atomic{run Server(q1, q2); run Client(q2, q1);};
+}
