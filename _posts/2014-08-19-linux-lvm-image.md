@@ -1,22 +1,10 @@
 ---
-title: Blog Post No.2
+title: Linux LVM and Disk Image
 layout: post
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse elementum leo non felis porttitor vulputate. Nulla ipsum quam, auctor ut hendrerit quis, tincidunt eu metus. Quisque ipsum tellus, semper a tempus quis, interdum vel magna. Cras a nisl diam, in accumsan augue. Pellentesque varius nibh eu diam tempor rhoncus.
+When you use some virtualization platform, then it is useful to know how to change disk image of the virtualized Linux. When disk images contains partitions formated with some file system format, then it is simple and straightforward, but when virtualized Linux uses LVM, then it becomes little bit tricky.
 
-## Pellentesque sollicitudin
+## Using Loop Device
 
-Erat pellentesque ornare gravida, ipsum est luctus neque, eget condimentum urna arcu sit amet felis. Duis nisl augue, scelerisque quis iaculis non, commodo a tellus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tincidunt porttitor nibh at semper.
-
-```c
-#include <stdio.h>
-#include <stdlib.h>
-
-int main(void)
-{
-    return EXIT_SUCCESS;
-}
-```
-
-Duis nisl augue, scelerisque quis iaculis non, commodo a tellus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tincidunt porttitor nibh at semper.
+TODO
