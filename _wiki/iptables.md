@@ -45,7 +45,13 @@ Pro ip6tables je přidání pravidla podobné:
 
 ## Drobnosti k SSH ##
 
-Tato sekce se úplně netýká iptables, ale může být důležitá pro zvýšení bezpečnosti tohoto protokolu. Pokud totiž chceme omezit uživatelé, kteří se chtějí přihlásit pomocí SSH pouze na některé lokální uživatele, tak to lze udělat v konfiguračním souboru SSH: _/etc/ssh/sshd_config_, ale elegantnější a mnohem flexibilnější je udělat to pomocí PAM modulu **pam_access.so**. Jak na to? Do souboru _/etc/pam.d/sshd_ přidáme řádek:
+Tato sekce se úplně netýká iptables, ale může být důležitá pro zvýšení bezpečnosti tohoto protokolu. Pokud totiž chceme omezit uživatelé, kteří se chtějí přihlásit pomocí SSH pouze na některé lokální uživatele, tak to lze udělat v konfiguračním souboru SSH: _/etc/ssh/sshd_config_ přidáním následujícího řádku:
+
+    AllowUsers josef
+
+Tím SSH serveru říkáme, že má povolit přpojení pouze pro uživatele josef a ostatní uživatele se nebudou moci připojit.
+
+Mnohem flexibilnější je udělat omezení připojování pomocí PAM modulu **pam_access.so**. Jak na to? Do souboru _/etc/pam.d/sshd_ přidáme řádek:
 
     account    required     pam_access.so accessfile=/etc/ssh/access.conf
 
