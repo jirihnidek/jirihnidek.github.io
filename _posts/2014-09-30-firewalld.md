@@ -118,4 +118,46 @@ Previous commands will save rules to the file `/etc/firewalld/zones/public.xml`:
 </zone>
 ```
 
+## Own Service ##
+
+When you want to add rule for your own service or service that is not yet supported by firewalld, then you have to several steps. It will be demonstrated for NRPE service. Firs of all you have to create service file. You can copy some existing service file (e.g.: ssh):
+
+```bash
+cp /usr/lib/firewalld/services/ssh.xml /etc/firewalld/services/nrpe.xml
+```
+
+Modify nrpe.xml using your favorite text editor:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>NRPE</short>
+  <description>Nrpe is a system daemon that will execute various Nagios plugins locally on behalf of a remote (monitoring) host that uses the check_nrpe plugin</description>
+  <port protocol="tcp" port="5666"/>
+</service>
+```
+
+Finally you will have to reload configuration files of firewalld service:
+
+```bash
+service firewalld reload
+```
+
+or
+
+```bash
+systemctl reload firewalld
+```
+
+Then you can enable this service at firewall using e.g. rich command:
+
+```bash
+firewall-cmd --add-rich-rule='rule family="ipv4" source address="147.230.0.0/16" service name="nrpe" accept limit value="1/s"'
+firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="147.230.0.0/16" service name="nrpe" accept limit value="1/s"'
+```
+
+## References ##
+
+[1] https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/sec-Using_Firewalls.html
+
 That's all folks. :-)
