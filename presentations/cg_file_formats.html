@@ -1,0 +1,867 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Počítačová grafika - souborové formáty</title>
+
+		<meta name="description" content="Souborové formáty používané v počítačové grafice">
+		<meta name="author" content="Jiří Hnídek">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Souborové formáty</h1>
+					<h3>Kurz počítačové grafiky</h3>
+					<p>
+						<small>Autor: <a href="http://jirihnidek.github.io">Jiří Hnídek</a> / <a href="mailto:jiri.hnidek@tul.cz">jiri.hnidek@tul.cz</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Vzorkování a kvantizace</h2>
+					<ul>
+						<li>
+							Převod ze spojitého signálu na digitální
+						</li>
+						<li>
+							Příkladem je digitální fotoaparát:
+							<ul>
+								<li>
+									Vzorkování: 'spojitý' proud fotonů je zachytáván na 'mřížce' CCD čipu
+								</li>
+								<li>
+									Kvantizace: 'spojité' hodnoty intenzity jednotlivých pixelech převáděny na konečný počet úrovní 
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Pixel</h2>
+					<p>Zkratka <b>picture element</b> je jednak označení pro jeden bod rastrového obrázku a druhak je to jeden svítící bod na monitoru.</p>
+					<p class="fragment"><i>Jsou pixel na obrazovce a v rastrovém obrazu totožné?</i></p>
+					<p class="fragment"><i>Ne nutně. Je důležité si uvědomit, že jeden pixel na monitoru může vzniknout z více/méně pixelů rastrového obrázku.</i></p>
+				</section>
+
+				<section>
+					<h2>Rozlišení</h2>
+					<p>U tiskáren udáváno v jednotce DPI (dots per inch) a u monitorů v jednotce PPI (pixels per inch).</p>
+					<p class="fragment"><i>Je informace o rozlišení součástí souborů s rastrovým obrázkem?</i></p>
+					<p class="fragment"><i>Nikoliv. Mějte na paměti, že tento údaj má smysl udávat pouze u technických zařízení jako jsou tiskárny, kopírky, apod. Může se ovšem objevit v tzv. meta datech obrázků, které vznikly naskenováním.</i></p>
+				</section>
+
+				<section>
+					<section>
+						<h2>Dynamický rozsah</h2>
+						<p>Udává počet úrovní, který má jeden barevný kanál a je určen počtem bitů, který slouží pro uložení jednoho barevného kanálu.</p>
+					</section>
+					<section>
+						<h3>Některé příklady ze života</h3>
+						<ul>
+							<li>1 bit: 2 úrovně (tzv. bitmapa)</li>
+							<li>8 bitů: 256 úrovní (úrovně šedi nebo barevná paleta)</li>
+							<li>12 bitů: 4096 úrovní (některé lepší digitální zrcadlovky)</li>
+							<li>16 bitů: 65 536 úrovní nebo <a href="http://en.wikipedia.org/wiki/Half-precision_floating-point_format">half-float</a></li>
+							<li>32 bitů: float</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Uložení barvy pomocí (s)RGB</h2>
+						<p>K uložení barvy se musí použít nějaký konkrétní barevný prostor. Nejčastěji se používá barevný prostor <a href="http://en.wikipedia.org/wiki/SRGB">sRGB</a>. Méně často <a href="http://en.wikipedia.org/wiki/Adobe_RGB_color_space">Adobe RGB</a>.</p>
+					</section>
+					<section>
+						<h3>Převod z XYZ do RGB lineární</h3>
+						<p>
+							$$
+							\begin{bmatrix}
+							R_\mathrm{linear}\\G_\mathrm{linear}\\B_\mathrm{linear}\end{bmatrix}=
+							\begin{bmatrix}
+							3.2406&-1.5372&-0.4986\\
+							-0.9689&1.8758&0.0415\\
+							0.0557&-0.2040&1.0570
+							\end{bmatrix}
+							\begin{bmatrix}
+							X \\ 
+							Y \\ 
+							Z \end{bmatrix}
+							$$
+						</p>
+					</section>
+					<section>
+						<h3>RGB lineární</h3>
+						<p>Výsledkem předchozího převodu jsou tzv. RGB lineární hodnoty, které jsou v rozsahu $ <0, 1> $</p>
+						<p><i>Hodnoty RGB lineární se používají při interním zpracování v počítači, ale pro uložení je často vhodné provést <a href="http://en.wikipedia.org/wiki/Gamma_correction">gamma korekci</a>.</i></p>
+					</section>
+					<section>
+						<h3>Gamma korekce</h3>
+						<p>Používá se především z toho důvodu, že naše vnímání intenzity světla je značně nelineární.</p>
+						<p>
+							$$
+							V_{out} = A V_{in}^{\gamma}
+							$$
+						</p>
+						<p>Gamma korekcí tudíž efektivně využíváme daný dynamický rozsah daného kanálu (8/16 bitů na kanál).</p>
+					</section>
+					<section>
+						<h3>Převod z RGB lineární do sRGB (gamma korekce).</h3>
+						<p>Pokud za C dosadíme jednotlivé barvy z RGB lineární, pak pro převod do sRGB platí vztah:</p>
+						<p>
+							$$
+							C_\mathrm{srgb}=\begin{cases}
+							12.92C_\mathrm{linear}, & C_\mathrm{linear} \le 0.0031308\\
+							(1+a)C_\mathrm{linear}^{1/2.4}-a, & C_\mathrm{linear} > 0.0031308
+							\end{cases}
+							$$
+						</p>
+						<p>, kde $ a = 0,055 $</p>
+					</section>
+					<section>
+						<h3>Převod z sRGB do RGB lineární</h3>
+						<p>
+							$$
+								C_\mathrm{linear}=
+								\begin{cases}\frac{C_\mathrm{srgb}}{12.92}, & C_\mathrm{srgb}\le0.04045\\
+								\left(\frac{C_\mathrm{srgb}+a}{1+a}\right)^{2.4}, & C_\mathrm{srgb}>0.04045
+								\end{cases}
+							$$
+						</p>
+					</section>
+					<section>
+						<h3>Převodní funkce (gamma korekce)</h3>
+						<img src="./img/SRGB_gamma.svg" width="50%" height="50%" style="background: white;" />
+					</section>
+					<section>
+						<h3>Gamut sRGB</h3>
+						<img src="./img/sRGB_gammut.png" width="50%" height="50%" />
+					</section>
+				</section>
+				<section>
+					<h2>Alfa kanál</h2>
+					<p>Určuje průhlednost každého pixelu. Konvence je taková, že hodnota 0 reprezentuje úplně průhledný pixel a maximální hodnota rozsahu (např.: 1.0 nebo 255) úplně neprůhledný pixel.</p>
+				</section>
+				<section>
+					<h2>Barevná paleta</h2>
+					<p>Některé souborové formáty umožňují vyjádřit barvu pixelu nikoliv přímo pomocí barvy, ale pomocí indexu do barevné palety.</p>
+					<p>Paleta bývá nejčastěji adaptivní (obsahuje maximum barev z původního obrázku).</p>
+				</section>
+				<section>
+					<section>
+						<h2>Komprese obrazové informace</h2>
+						<p>Rastrové obrázky mohou být skutečně velké. Z toho důvodu se pro jejich uložení používá jak bezeztrátová tak i ztrátová komprese.</p>
+					</section>
+					<section>
+						<h3>Bezeztrátová komprese</h3>
+						<ul>
+							<li>RLE kódování</li>
+							<li>Huffmanovo kódování</li>
+							<li>LZW kódování</li>
+							<li>DEFLATE</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Ztrátová komprese</h3>
+						<p>Využívá nedokonalosti lidského oka, kdy je možné některé informace vypustit aniž bychom to poznali.</p>
+						<ul>
+							<li>Vyšší citlivost na změnu jasu než na změnu barvy</li>
+							<li>Neschopnost rozlišit změny ve vysokofrekvenčním signálu</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>JPEG komprese</h2>
+						<p>Jedná se o ztrátový <b>kompresní formát</b>, který je používan nejen v obrázcích z příponou .jpg/.jpeg (JFIF)</p>
+						<p class="fragment">Nalezneme ho i v grafických formátech TIFF, PDF, PS, MOV, apod.</p>
+						<p class="fragment">Je vhodná na komprimaci pouze některých obrázků: <span class="fragment">fotografií, naskenovaných dokumentů, které jsou ze své podstaty rozmazané.</span></p>
+					</section>
+					<section>
+						<h3>Základní vlastnosti</h3>
+						<ul>
+							<li>Vytvořeno koncem 80. let Joint Picture Expert Group</li>
+							<li>
+							Je možné použít 4 režimy činnosti, ale běžně jsou podporovány jenom první dva
+							<ul>
+								<li>Sekvenční</li>
+								<li>Progresivní</li>
+								<li>Bezeztrátový</li>
+								<li>Hierarchický</li>
+							</ul>
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Kroky sekvenčního režimu komprese</h3>
+						<ul>
+							<li><a href="http://www.root.cz/clanky/programujeme-jpeg-transformace-a-podvzorkovani-barev/">Převod do barevného prostoru YCbCr</a></li>
+							<li>Převzorkování (4:4:4, 4:2:2)</li>
+							<li>Rozdělení obrázků do makrobloků</li>
+							<li><a href="http://www.root.cz/clanky/programujeme-jpeg-diskretni-kosinova-transformace-dct/">Diskrétní kosinová transformace</a> (DCT)</li>
+							<li><a href="http://www.root.cz/clanky/programujeme-jpeg-kvantizace-dct-koeficientu/">Kvantizace pomocí kvantizační matice</a></li>
+							<li>Linearizace (Zig-Zag)</li>
+							<li>RLE kódování</li>
+							<li><a href="http://www.root.cz/clanky/programujeme-jpeg-huffmanovo-kodovani-kvantovanych-dct-slozek/">Huffmanovo</a> (Aritmetické) kódování</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Převod z RGB (lineární) do YCbCr</h3>
+						<p>Pokud jsou vstupní hodnoty (RGB) v rozsahu $ <0, 255> $, tak převod může mít následující podobu a výstupní hodnoty (YCbCr) budou v rozsahu $<-127, 127>$</p>
+						<p>
+							$$
+							\begin{bmatrix}
+							Y \\
+							C_{b} \\
+							C_{r} \\
+							1.0\end{bmatrix}=
+							\begin{bmatrix}
+							 0.299  & 0.587  & 0.114 & 0.0 \\
+							-0.1687 & 0.3313 & 0.5   & -128 \\
+							 0.5    &-0.4187 &-0.0813& -128 \\
+							 0.0    & 0.0    & 0.0   & 1.0 \\
+							\end{bmatrix}
+							\begin{bmatrix}
+							R \\ 
+							G \\ 
+							B \\
+							1.0 \end{bmatrix}
+							$$
+						</p>
+					</section>
+					<section>
+						<h3>Převzorkování</h3>
+						<p>Jelikož je lidské oko více citlivé na změnu jasu než na změnu barvy, tak je možné vynechat některé barevné vzorky.</p>
+						<p>Jasová složka je vždy zachována. Barevné složky jsou průměrovány z 2x2 pixelů nebo 2x1 pixelů. Tím dochází k první ztrátě informace.</p>
+						<p class="fragment"><i>Čím je způsobena větší citlivost lidského oka na jas než na barvu?</i></p>
+						<p class="fragment"><i>Je to dáno počtem tyčinek (120 mil.) a čípků (8 mil.).</i></p>
+					</section>
+					<section>
+						<h3>Rozdělení obrazu do makrobloků</h3>
+						<p>Každý převzorkovaný barevný kanál je rozdělen do makrobloků 8x8.</p>
+					</section>
+					<section>
+						<h3>Diskrétní kosinová transformace (DCT)</h3>
+						<p>Nejde o ztrátovou operaci. Pouze dojde k jinému vyjádření diskétních hodnot.</p>
+						<p>Pro jednorozměrný případ má následující podobu:</p>
+						<p>
+							$$
+							X_k = c_{k} \sum_{n=1}^{N-1} s(n) \cos \frac{\pi(2n + 1)k}{2N} \quad k = 0, \dots, N-1.
+ 							$$
+ 							$$
+ 							c_{k} =
+ 							\begin{cases}
+ 							\sqrt{1/N}, k=0\\
+ 							\sqrt{2/N}, k>0
+ 							\end{cases}
+ 							$$
+						</p>
+					</section>
+					<section>
+						<h3>Diskrétní kosinová transformace (DCT)</h3>
+						<p>Pro dvourozměrný případ má následující podobu a N má v našem případě (JPEG) hodnotu 8:</p>
+						<p>
+							$$
+							X_{(i,j)} = c_{(i,j)} \sum_{n=1}^{N-1}\sum_{m=1}^{N-1} s(m,n) \cos \frac{\pi(2m + 1)i}{2N} \cos \frac{\pi(2n + 1)j}{2N}
+ 							$$
+ 							$$
+ 							c_{(i,j)} = c_{i} c_{j}
+ 							$$
+						</p>
+					</section>
+					<section>
+						<h3>Kvantizace pomocí kvantizační matice</h3>
+						<p>Výstupem DCT je transformovaný makroblok 8x8 jeho hodnoty jsou podělené kvantizační maticí (50% komprese):</p>
+						<p>
+							$$
+							\begin{bmatrix}
+							 16 & 11 & 10 & 16 &  24 &  40 &  51 &  61 \\
+							 12 & 12 & 14 & 19 &  26 &  58 &  60 &  55 \\
+							 14 & 13 & 16 & 24 &  40 &  57 &  69 &  56 \\
+							 14 & 17 & 22 & 29 &  51 &  87 &  80 &  62 \\
+							 18 & 22 & 37 & 56 &  68 & 109 & 103 &  77 \\
+							 24 & 35 & 55 & 64 &  81 & 104 & 113 &  92 \\
+							 49 & 64 & 78 & 87 & 103 & 121 & 120 & 101 \\
+							 72 & 92 & 95 & 98 & 112 & 100 & 103 &  99
+							\end{bmatrix}
+							$$
+						</p>
+					</section>
+					<section>
+						<h3>Kvantizace a komprese</h3>
+						<p>Během kvantizace dochází k největší ztrátě dat.</p>
+						<p>Kvantizační matice může být vynásobena koeficientem a tím můžeme jednak určit kvalitu komprese ale i míru ztráty obrazové informace.</p>
+						<p>Kvalita komprese se udává většinou v procentech.</p>
+					</section>
+					<section>
+						<h3>Příklad kvantizace</h3>
+						<p>Pokud následující makroblok 8x8 (výsledek DCT)</p>
+						<p>
+							$$
+							\begin{bmatrix}
+							 -415 & -33 & -58 &  35 &  58 & -51 & -15 & -12 \\
+							    5 & -34 &  49 &  18 &  27 &   1 &  -5 &   3 \\
+							  -46 &  14 &  80 & -35 & -50 &  19 &   7 & -18 \\
+							  -53 &  21 &  34 & -20 &   2 &  34 &  36 &  12 \\
+							    9 &  -2 &   9 &  -5 & -32 & -15 &  45 &  37 \\
+							   -8 &  15 & -16 &   7 &  -8 &  11 &   4 &   7 \\
+							   19 & -28 &  -2 & -26 &  -2 &   7 & -44 & -21 \\
+							   18 &  25 & -12 & -44 &  35 &  48 & -37 & -3
+							\end{bmatrix}
+							$$
+						</p>
+					</section>
+					<section>
+						<p>Podrobýme kvantizaci kvantizační maticí, tak dostaneme následující makroblok:</p>
+						<p>
+							$$
+							\begin{bmatrix}
+							 -26 & -3 & -6 &  2 &  2 & -1 & 0 & 0 \\
+							   0 & -3 & 4 &  1 &  1 &  0 & 0 & 0 \\
+							  -3 &  1 &  5 & -1 & -1 &  0 & 0 & 0 \\
+							  -4 &  1 &  2 & -1 &  0 &  0 & 0 & 0 \\
+							   1 &  0 &  0 &  0 &  0 &  0 & 0 & 0 \\
+							   0 &  0 &  0 &  0 &  0 &  0 & 0 & 0 \\
+							   0 &  0 &  0 &  0 &  0 &  0 & 0 & 0 \\
+							   0 &  0 &  0 &  0 &  0 &  0 & 0 & 0
+							\end{bmatrix}
+							$$
+						</p>
+					</section>
+					<section>
+						<h3>Linearizace</h3>
+						<img src="./img/JPEG_ZigZag.svg" width="50%" height="50%" style="background: white;" />
+					</section>
+					<section>
+						<h3>RLE kódování</h3>
+						<p><b>Run Lenght Encoding</b> bezeztrátově komprimuje opakující se hodnoty. Princip jejího fungování si ukážeme na zjednodušeném příkladu. Mějme sekvenci hodnot:</p>
+						<table>
+							<tbody>
+								<tr>
+									<td>9</td>
+									<td>4</td>
+									<td>4</td>
+									<td>4</td>
+									<td>4</td>
+									<td>4</td>
+									<td>2</td>
+								</tr>
+							</tbody>
+						</table>
+						<p>V této sekvenci se několikrát opakuje hodnota 4, takže pokud si vhodně zvolíme speciální symbol (v našem případě to bude 0, protože se v původní sekvenci nevyskytuje) značící začátek komprimované sekvenci, tak komprimovaná sekvence může vypadat následovně:</p>
+						<table>
+							<tbody>
+								<tr>
+									<td>9</td>
+									<td>0</td>
+									<td>5</td>
+									<td>4</td>
+									<td>2</td>
+								</tr>
+							</tbody>
+						</table>
+					</section>
+					<section>
+						<h3>Huffmanovo kódování</h3>
+						<p>Hodnoty s vyšší frekvencí jsou kódovány kratším bitovým slovem než hodnoty s menší frekvencí.</p>
+					</section>
+					<section>
+						<img src="./img/JPEG_compress.png" width="45%" height="45%" alt="JPEG komprese" />
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Rastrové souborové formáty</h2>
+					</section>
+					<section>
+						<p>Vybrané souborové formáty pro uložení rastrové grafiky: 
+						<span class="fragment">
+						<a href="http://www.root.cz/clanky/graficky-format-tga-jednoduchy-oblibeny-pouzivany/">TGA</a>,
+						<a href="http://www.root.cz/clanky/graficky-format-bmp-pouzivany-a-pritom-neoblibeny/">BMP</a>,
+						<a href="">GIF</a>,
+						<a href="">PNG</a>,
+						<a href="">JFIF (JPEG)</a>,
+						<a href="">TIFF</a>,
+						<a href="">WebP</a>,
+						<a href="">OpenEXR</a>
+						</span>
+						</p>
+						<p class="fragment">Existují samozřejmě mnohé další: <span class="fragment">PCX, XBM, XPM, PPM, PBM, APNG, JPEG 2000, BPG, MNG, HDR, atd.</span></p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Targa Truevision (TGA)</h2>
+						<blockquote>
+							&ldquo;Keep It Simple, Stupid!&rdquo;
+						</blockquote>
+					</section>
+					<section>
+						<h3>Vlastnosti TGA</h3>
+						<ul>
+							<li>Bitmapa (1bpp)</li>
+							<li>Barevná paleta (8bpp) RGB</li>
+							<li>256 odstínů šedi (8bpp)</li>
+							<li>RGB (24bpp), RGBA (32bpp)</li>
+							<li>Volitelně RLE komprese</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>BMP</h2>
+						<blockquote>
+							&ldquo;Be on web or die!&rdquo;
+						</blockquote>
+					</section>
+					<section>
+						<h3>Vlastnosti BMP</h3>
+						<ul>
+							<li>Vytvořil Microsoft a IBM</li>
+							<li>Pixmapa (1bpp)</li>
+							<li>Omezená barevnost
+								<ul>
+									<li>16 barev (4bpp)</li>
+									<li>256 barev (8bpp)</li>
+									<li>65 536 barev (16bpp)</li>
+								</ul>
+							</li>
+							<li>RGB (24bpp)</li>
+							<li>Barevná paleta</li>
+							<li>Volitelně RLE komprese, která někdy obrázky zvětšovala</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>GIF</h2>
+						<blockquote>
+							&ldquo;Animated gifs all around!&rdquo;
+						</blockquote>
+					</section>
+					<section>
+						<h3>Vlastnosti GIF</h3>
+						<ul>
+							<li>Graphics Interchange Format</li>
+							<li>Používá bravenou paletu (256 položek)</li>
+							<li>Obrázek je tvořen rámci</li>
+							<li>
+								Součástí každého rámce je:
+								<ul>
+									<li>Souřadnice levého horního rohu, šířka a výška</li>
+									<li>Volitelně lokální barevná paleta</li>
+									<li>Obrazová data komprimována pomocí LZW</li>
+								</ul>
+							</li>
+							<li>Může obsahovat animace, kdy každý rámec obsahuje jeden snímek animace (každý rámec má nastaveno zpoždění)</li>
+							<li>Jednobitový alfa kanál (jedna barva v paletě je úplně průhledná)</li>
+						</ul>
+					</section>
+					<section>
+						<h3>GIF &amp; Web</h3>
+						<pre><code data-trim contenteditable>
+						<img src="./image.gif" alt="gif test" title="Some animated GIF" />
+						</code></pre>
+						<img class="fragment" src="img/animated_GIF.gif" alt="test of animated gif" title="Some animated gif" />
+					</section>
+					<section>
+						<h3>Barevnost GIF obrázků</h3>
+						<p>Kolik různých barev může obsahovat obrázek uložený pomocí formátu GIF?</p>
+						<p class="fragment">V GIFu může být uložen plněbarevný obrázek, protože obraz může být rozdělen na více rámců s vlastní lokální barevnou paletou.</p>
+						<p class="fragment">Jak je to s barevností a efektivností animovaných gifů?</p>
+					</section>
+					<section>
+						<img src="./img/full_colour_GIF.gif" alt="full colour GIF" title="Full Colour GIF" />
+						<p class="fragment">Je to neefektivní pralesní technologie! Na animace použijte element HTML5 &lt;video&gt;</p>
+					</section>
+					<section>
+						<h3>GIF a průhlednost</h3>
+						<div style="width: 100%; overflow: hidden;">
+						<div style="float: left; width: 50%;">
+							<img src="./img/GIF_transparency_demonstration.gif" width="400px" height="400px" alt="" title="" style="background: white;" />
+						</div>
+						<div style="float: left; width: 50%;">
+							<img src="./img/GIF_transparency_demonstration.gif" width="400px" height="400px" alt="" title="" style="background: url(./img/chessboard.png);" />
+						</div>
+						</div>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>PNG</h2>
+						<blockquote>
+							&ldquo;No software patents, please!&rdquo;
+						</blockquote>
+					</section>
+					<section>
+						<h3>Vlastnosti PNG</h3>
+						<ul>
+							<li>Portable Network Graphics</li>
+							<li>Stupňě šedi</li>
+							<li>Barevná paleta (24 bitová)</li>
+							<li>RGBA (32bpp)</li>
+							<li>Umožňuje použít až 16 bitů na jeden kanál</li>
+							<li>Komprese DEFLATE</li>
+						</ul>
+					</section>
+					<section>
+						<h3>PNG a průhlednost</h3>
+						<div style="width: 100%; overflow: hidden;">
+						<div style="float: left; width: 50%;">
+							<img src="./img/PNG_transparency_demonstration.png" width="400px" height="400px" alt="" title="" style="background: white;" />
+						</div>
+						<div style="float: left; width: 50%;">
+							<img src="./img/PNG_transparency_demonstration.png" width="400px" height="400px" alt="" title="" style="background: url(./img/chessboard.png);" />
+						</div>
+						</div>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>JFIF</h2>
+						<blockquote>
+							&ldquo;My name is JFIF not JPEG!&rdquo;
+						</blockquote>
+					</section>
+					<section>
+						<h3>Vlastnosti JFIF</h3>
+						<ul>
+							<li>JPEG File Interchange Format</li>
+							<li>RGB (24bpp)</li>
+							<li>JPEG kompresní formát</li>
+							<li>
+								EXIF data
+								<ul>
+									<li>Meta informace o daném obrázku</li>
+									<li>Doba vzniku</li>
+									<li>Jaký program/zařízení daný obrázek vytvořil</li>
+									<li>GPS souřadnice</li>
+									<li>A spoustu dalších</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h3>JFIF &amp; Web</h3>
+						<pre><code data-trim contenteditable>
+						<img src="./image.jpeg" alt="JFIF test image" title="JFIF (JPEG) image" />
+						</code></pre>
+						<div style="width: 100%; overflow: hidden;">
+						<div class="fragment" style="float: left; width: 33%;">
+							<img src="img/lena_05.jpeg" alt="test of JPEG image" title="Some JPEG image" />
+							<span>5% (6KB)</span>
+						</div>
+						<div class="fragment" style="float: left; width: 33%;">
+							<img src="img/lena_50.jpeg" alt="test of JPEG image" title="Some JPEG image" />
+							<span>50% (29KB)</span>
+						</div>
+						<div class="fragment" style="float: left; width: 33%;">
+							<img src="img/lena_95.jpeg" alt="test of JPEG image" title="Some JPEG image" />
+							<span>95% (151KB)</span>
+						</div>
+						</div>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>TIFF</h2>
+						<blockquote>
+							&ldquo;So complicated!&rdquo;
+						</blockquote>
+					</section>
+					<section>
+						<h3>Vlastnosti TIFF</h3>
+						<p>Funkčně velmi bohatý formát. Je možné vytvářet vlastní rozšíření. Ve výsledku ho žádný program nepodporuje plně.</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>WebP</h2>
+						<blockquote>
+							&ldquo;Designed for web!&rdquo;
+						</blockquote>
+					</section>
+					<section>
+						<h3>Vlastnosti WebP</h3>
+						<ul>
+							<li>Vytvořen firmou Google v roce 2010 z video formátu WebM a RIFF</li>
+							<li>Podporuje jak ztrátovou tak bezeztrátovou kompresi. Při použití ztrátové komprese lze dosáhnout o 30% lepšího kompresního poměru oproti klasické JPEG kompresi.</li>
+							<li>Podporuje průhlednost</li>
+							<li>Podporuje jednoduché animace</li>
+							<li>Podpora v aplikacích zatím slabší. Z prohlížečů zatím Google Chrome a Opera.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>WebP (lossy) &amp; Web</h3>
+						<pre><code data-trim contenteditable>
+						<img src="./image.webp" alt="WebP test image" title="WebP image" />
+						</code></pre>
+						<img src="./img/webp_lossy.webp" alt="WebP test image" title="WebP image" />
+					</section>
+					<section>
+						<h3>WebP (animated) &amp; Web</h3>
+						<img src="./img/webp_animated.webp" alt="WebP test image" title="WebP image" />
+					</section>
+					<section>
+						<h3>WebP (alpha) &amp; Web</h3>
+						<div style="width: 100%; overflow: hidden;">
+						<div style="float: left; width: 50%;">
+							<img src="./img/webp_lossless_alpha.webp" height="400px" alt="WebP test image" title="WebP test image" style="background: url(./img/chessboard.png);" />
+							 <span>Bezeztrátová komprese</span>
+						</div>
+						<div style="float: left; width: 50%;">
+							<img src="./img/webp_lossy_alpha.webp" height="400px" alt="WebP test image" title="WebP test image" style="background: url(./img/chessboard.png);" />
+							<span>Ztrátová komprese</span>
+						</div>
+						</div>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>OpenEXR</h2>
+						<blockquote>
+							&ldquo;I said high tech, yeah!&rdquo;
+						</blockquote>
+					</section>
+					<section>
+						<h3>Obrazy s vysokým dynamickým rozsahem</h3>
+						<ul>
+							<p>V případě, že chceme rozlišit velký rozsah jasových hodnot (bílý papír, svíčka, žárovka, zářivka, slunce), tak rozsah &lt; 0, 255 &gt; nestačí a je nutné použí rozsah &lt; 0.0, FLOAT_MAX &gt;</p>
+							<p>Vyžití takových obrázků není pouze v nasvětlování scény, ale hlavní využití je predevším ve filmové postprodukci.</p>
+							<p>Problematické je zobrazení na běžných monitorech (rozsah hodnot &lt; 0, 255 &gt;)</p>
+						</ul>
+					</section>
+					<section>
+						<h3>Lokální mapování tónů</h3>
+						<img src="./img/open_exr_local_tone_mapping.png" alt="HDR local tone mapping" alt="HDR local tone mapping" />
+					</section>
+					<section>
+						<h3>Vlastnosti OpenEXR</h3>
+						<ul>
+							<li>Vytvořen v grafickém studiu <a href="http://www.ilm.com/">ILM</a></li>
+							<li>Vysoký dynamický rozsah</li>
+							<li>Podpora pro vrstvy</li>
+							<li>Podpora pro několik bezeztrátových kompresních formátů</li>
+							<li>Umožňuje ukládat i další data důležitá v postprodukci (hloubku obrazu, rychlost fragmentů, apod.)</li>
+							<li><a href="http://www.openexr.com/">Open Source</a></li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>Vektorové souborové formáty</h2>
+				</section>
+				<section>
+					<h2>Vektorová grafika</h2>
+					<ul>
+						<li>Kvalita obrázků je nezávislá na zvětšení (problémem může být příliš velké zmenšení)</li>
+						<li>Obraz není tvořen rastem, ale je vytvořený ze základních primitiv:
+						<ul>
+							<li>Úsečka, obdelník, elipsa, Bézierova křivka, text, barevné přechody, lze použít i rastrovou texturu.</li>
+						</ul>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>SVG</h2>
+						<blockquote>
+							&ldquo;Size does not matter!&rdquo;
+						</blockquote>
+					</section>
+					<section>
+						<h3>Vlastnosti SVG</h3>
+						<ul>
+							<li>Specifikováno W3C</li>
+							<li>Textový formát založený na XML</li>
+							<li>Filtry (např: rozostření)</li>
+							<li>Podpora pro animace</li>
+							<li>Možné stylovat pomocí CSS (v současné době plně pouze Firefox)</li>
+							<li>Dobrá podpora napříč prohlížeči</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Příklad SVG</h3>
+						<pre><code data-trim contenteditable>
+<svg version="1.1" 
+  width="320" height="320"
+  xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="circleGrad">
+      <stop offset="0%"   stop-color="rgb(255, 255, 0)" />
+      <stop offset="100%" stop-color="rgb(  0, 255, 0)" />
+    </radialGradient>
+  </defs>
+  <ellipse fill="url(#circleGrad)" stroke="#000" cx="50%" cy="50%" rx="50%" ry="50%">
+  </ellipse>
+</svg>
+						</code></pre>
+					</section>
+					<section>
+						<h2>SVG &amp; Web</h2>
+						<pre><code data-trim contenteditable>
+						<img src="./logo.svg" alt="SVG test image" title="SVG image" />
+						</code></pre>
+						<img src="./img/HTML5_logo_and_wordmark.svg" height="400px" alt="SVG test vectot image" title="SVG vector image" style="padding: 15px;"/>
+					</section>
+					<section>
+						<h2>SVG (animace) &amp; Web</h2>
+						<pre><code data-trim contenteditable>
+						<img src="./animce.svg" alt="SVG test image" title="SVG image" />
+						</code></pre>
+						<img src="./img/svg_clock.svg" height="400px" alt="SVG test vectot image" title="SVG vector image" style="padding: 15px;"/>
+					</section>
+					<section>
+						<h3>Grafický software</h3>
+						<ul>
+							<li><a href="http://www.inkscape.org">Inkscape</a></li>
+							<li><a href="https://www.google.com/webdesigner/">Google Web Designer</a></li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>Souborové formáty pro uložení animací</h2>
+				</section>
+				<section>
+					<section>
+						<h2>Multimediální kontejner</h2>
+						<ul>
+							<li>Souborový formát, který nespecifikuje, jak je video nebo zvuk komprimováno</li>
+							<li>Může obsahovat různé druhy video a audio proudů, titulky, informace o kapitolách, tagy, atd.</li>
+							<li>Příklady: AVI, MOV, ASF, Matroska, RealMedia, atd.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Multimediální framework</h3>
+						<ul>
+							<li>Windows: Windows Media Framework</li>
+							<li>Mac OS X: QuickTime</li>
+							<li>Linux:	Gstreamer</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>Komprese videa</h2>
+					<ul>
+						<li>Ztrátová komprese, bezeztrátová komprese</li>
+						<li>Často je používaná DCT nebo přímo JPEG komprese</li>
+						<li>Makrobloky (až 16x16, adaptivní)</li>
+						<li>Slices</li>
+						<li>IPB</li>
+						<li>Časoprostorová korespondence makrobloků</li>
+						<li>Filtry</li>
+					</ul>
+				</section>
+				<section>
+					<h2>MPEG, ITU</h2>
+					<ul>
+						<li>Motion Picture Expert Group</li>
+						<li>MPEG-1</li>
+						<li>
+							MPEG-2
+							<ul>
+								<li>DVD, digitální televize</li>
+							</ul>
+						</li>
+						<li>
+							MPEG-4
+							<ul>
+								<li>Internet, DivX, Xvid</li>
+							</ul>
+						</li>
+						<li>
+							H.264
+							<ul>
+								<li>Internet, Web</li>
+								<li>Problémy s licenčními poplatky</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section data-background-video="https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.mp4,https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.webm" data-background-color="#000000">
+					<div style="background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px;">
+					<h2>WebM</h2>
+					<ul>
+						<li>Vytvořeno v roce 2010 firmou Google</li>
+						<li>Používá multimediální kontejner Matroska</li>
+						<li>Používá kodeky VP8, VP9</li>
+						<li>Zvuk: Vorbis</li>
+						<li>Podporováno v prohlížečích Google Chrome i Mozilla Firefox</li>
+					</ul>
+					</div>
+				</section>
+				<section>
+					<h2>Děkuji za pozornost!</h2>
+					<h3 class="fragment">Nějaké dotazy?</h3>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				math: {
+					mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js', //'/plugin/math/MathJax.js',
+					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+				},
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
