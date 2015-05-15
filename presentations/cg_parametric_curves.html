@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="cs">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Počítačová grafika - souborové formáty</title>
+
+		<meta name="description" content="Souborové formáty používané v počítačové grafice">
+		<meta name="author" content="Jiří Hnídek">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!-- Analytics -->
+		<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-52302083-5', 'auto');
+		ga('send', 'pageview');
+		</script>
+		<!-- End Analytics -->
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Parametrické křivky</h1>
+					<h3>Kurz počítačové grafiky</h3>
+					<p>
+						<small>Autor: <a href="http://jirihnidek.github.io">Jiří Hnídek</a> / <a href="mailto:jiri.hnidek@tul.cz">jiri.hnidek@tul.cz</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Motivace aneb využití křivek</h2>
+					<ul>
+						<li>Fonty</li>
+						<li>Animace (animační křivky)</li>
+						<li>Grafický design (loga, ikonky, atd.)</li>
+					</ul>
+				</section>
+
+				<section>
+					<section>
+						<h2>Křivky (Curves)</h2>
+						<blockquote>
+							&ldquo;Curve need not to be curved!&rdquo;
+						</blockquote>
+					</section>
+					<section>
+						<h3>Vyjádření křivek</h3>
+						<ul>
+							<li>
+								Explicitní vyjádření (funkce):
+								$$
+								y = f(x)
+								$$
+							</li>
+							<li>
+								Implicitní vyjádření:
+								$$
+								F(x,y) = 0
+								$$
+							</li>
+							<li>
+								Parametrické vyjádření:
+								$$
+								\begin{align}
+								x &= x(t) \\
+								y &= y(t) \quad 0 \leq t \leq 1 \\
+								z &= z(t) \\
+								\end{align}
+								$$
+							</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h3>Úsečka</h3>
+						<blockquote>
+							&ldquo;
+							One ring to rule them all,<br/>
+							one ring to find them, <br/>
+							one ring to bring them all, <br/>
+							and in the darkness bind them
+							&rdquo;
+						</blockquote>
+					</section>
+					<section>
+						V počítačové grafice je často nezbytné křivku převést na sadu úseček, protože úsečku je jednoduché rasterizovat (zobrazit na monitoru).
+					</section>
+					<section>
+						<h3>Rasterizaci úsečky</h3>
+						<p>TODO</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Parametrické vyjádření křivky</h2>
+						<ul>
+							<li>
+								Bodová rovnice:
+								$$
+								Q(t) = [x(t), y(t), z(t)] \quad 0 \leq t \leq 1 \\
+								$$
+							</li>
+							<li>
+								Polohový vektor:
+								$$
+								\vec{q(t)} = Q(t) = [0, 0, 0] \quad 0 \leq t \leq 1 \\
+								$$
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Výhody parametrického vyjádření křivek</h2>
+						<p>Oproti funkcím může křivka protínat samu sebe, může se uzavřít, může být rovnoběžná s libovolnou osou, apod.</p>
+						<p>Parametr $ t $ můžeme chápat jako čas.</p>
+					</section>
+				</section>
+
+				<section>
+					<h2>Tečný vektor</h2>
+					<ul>
+						<li>
+							Tečný vektor v bodě $ Q(t_{0}) $:
+							$$
+							\begin{align}
+							\vec{q(t_{0})} &= (x(t_{0})^{\prime}, y(t_{0})^{\prime}, z(t_{0})^{\prime}) = \\
+							               &= \left( \frac{dx(t_{0})}{dt}, \frac{dy(t_{0})}{dt}, \frac{dz(t_{0})}{dt} \right) \\
+							\end{align}
+							$$
+						</li>
+						<li>Důležité po navazování křivek a skládání křivek z menších segmentů</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Spojitost</h2>
+				</section>
+
+				<section>
+					<h2>Modelování křivek</h2>
+				</section>
+
+				<section>
+					<h2>Spojitost</h2>
+				</section>
+
+				<section>
+					<h2>Kubiky</h2>
+				</section>
+
+				<section>
+					<h2>Interpolační a aproximační křivky</h2>
+				</section>
+
+				<section>
+					<h2>Interpolační křivky</h2>
+				</section>
+
+				<section>
+					<h2>aproximační křivky</h2>
+				</section>
+
+				<section>
+					<h2>Bézierovy křivky</h2>
+				</section>
+
+				<section>
+					<h2>Bézierovy kubiky</h2>
+				</section>
+
+				<section>
+					<h2>algoritmus de Casteljau</h2>
+				</section>
+
+				<section>
+					<section>
+						<h2>Coonsovy kubiky</h2>
+						<p>Označována také uniformní racionální B-spline, zkráceně B-spline a je důležitým mezikrokem k pochopení NURBS křivek a NURBS ploch</p>
+					</section>
+					<section>
+						<h2>Výpočet</h2>
+						<p>Je určena 4 řídícími body: $P_{0}$, $P_{1}$, $P_{2}$, $P_{3}$ a vztahem:</p>
+						$$
+						Q(t) = \frac{1}{6}
+						\begin{bmatrix}
+						t^{3} & t^{2} & t & 1
+						\end{bmatrix}
+						\begin{bmatrix} 
+						-1 &  3 & -3 & 1 \\
+						 3 & -6 &  3 & 0 \\
+						-3 &  0 &  3 & 0 \\
+						 1 &  4 &  1 & 0
+						\end{bmatrix}
+						\begin{bmatrix}
+						P_{0} \\
+						P_{1} \\
+						P_{2} \\
+						P_{3} \\
+						\end{bmatrix}
+						$$
+					</section>
+					<section>
+						<h2>Počáteční a koncový bod</h2>
+						<ul>
+							<li>
+								Počáteční bod leží v anitěžišti trojúhelníku tvořeného prvními třemi body ($P_{0}$, $P_{1}$, $P_{2}$), což lze jednoduše vyjádřit vztahem:
+								$$
+								Q(0) = \frac{P_{0} + 4P_{1} + P_{2}}{6}
+								$$
+							</li>
+							<li>
+								Koncový bod leží naopak v anitěžišti trojúhelníku tvořeného posledními třemi body ($P_{1}$, $P_{2}$, $P_{3}$), což lze vyjádřit:
+								$$
+								Q(1) = \frac{P_{1} + 4P_{2} + P_{3}}{6}
+								$$
+							</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<h2>Coonsův kubický B-spline</h2>
+				</section>
+
+				<section>
+					<h2>NURBS</h2>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				math: {
+					mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js', //'/plugin/math/MathJax.js',
+					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+				},
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
