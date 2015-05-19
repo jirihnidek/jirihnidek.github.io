@@ -7,7 +7,15 @@ language: Czech
 
 Tato stránka obsahuje moje osobní poznámky o programovacím jazyku Promela a nástroji Spin. Spin může sloužit nejen k simulaci modelu, který byl vytvořen v Promele, ale může sloužit i k verifikaci systému popsaného pomocí tohoto modelu. Tato stránka neslouží jako dokumentace k programovacímu jazyku Promela, ale poskytuje jednoduché návody a postupy pro konkrétní příklady.
 
-Na této stránce jsou jak příklady naprosto hloupých systémů, které obsahují nějakou chybu a zároveň se zde nacházejí systémy bez vad. U každého systému je zmíněno a jaký systém se jedná.
+Na této stránce jsou jak příklady naprosto hloupých systémů, které obsahují nějakou chybu a zároveň se zde nacházejí systémy bez vad. U každého systému je zmíněno o jaký systém se jedná.
+
+## Promela, WTF?! ##
+
+Když člověk poprvé uvidí nějaký zdrojový soubor napsaný k jazyku Promela, tak se mu pravděpodobně protočí panenky a možná prohodí i nějakou méně slušnou nadávku. Když se bavíme o Promele, tak je důležité si uvědomit, že tento jazyk nebyl navržen na programování aplikací, které používají lidské bytosti. Tento jazyk byl vytvořen pro ověření správnosti návrhu paralelních systémů. Cože? Ověření správnosti návrhu paralelního systému? Mluvte na mě česky! Dobrá, zkuste si představit, že navrhujete například nějakou klient-server aplikaci. Tomu asi člověk rozumí. Máme nějakého klienta (například webovou aplikaci ve webovém prohlížeči) a nějaký server (nějakou PHP aplikaci běžící na webovém serveru). To asi každý zná. No jo, ale na tom kurňa není nic složitého, nebo ne? Právě, že to může být velmi složité. Jak klient, tak server se mohou nacházet v různých stavech a v každém stavu se předpokládá, že protostrana bude posílat nějaké zprávy. No a co když je nebude posílat, vypadne spojení, server spadne, dojde k invazi masožrvých slimáků, atd. S tím vším se musí při návhru aplikace, respektivě komunikačního protokolu počítat a Promela se Spinem nám mohou ověřit, že jsme na něco nazapomněli.
+
+## Stavy a stavový automat ##
+
+V Promele se nám bude Programovat mnohem snáze, pokud si člověk nejprve vezme tužku a papír a nakreslí si na ně stavy a stavový diagram(y) všech různých entit (klient, server, výpočetní uzel), které spolu budou komunikovat. Člověku už během kreslení stavového diagramu dojde spoustu věcí, uvědomí si, kde všude musí počítat s timeouty, apod.
 
 ## Detekce uváznutí ##
 
