@@ -170,31 +170,148 @@
 				</section>
 
 				<section>
-					<h2>Spojitost</h2>
+					<section>
+						<h2>Spojitost</h2>
+						<img src="./img/curve_continuity.svg" alt="Continuity of two curves" title="Continuity of two curves" style="background: white;" width="75%">
+					</section>
+					<section>
+						<h3>Parametrická spojitost</h3>
+						<p>Říkáme, že křivku $ Q(t) $ nazýváme parametricky spojitou $ C^{n} $, pokud ve všech jejích bodech existuje derivace stupně $ n $ </p>
+					</section>
+					<section>
+						<h3>Geometrická spojitost</h3>
+						<p>Dvě křivky $ Q_{1} $ a $ Q_{2} $ jsou geometricky spojité $ G^{n} $ ve společném bodě, pokud je zaručeno:</p>
+						$$
+							q_{1}^{(n)} = k q_{2}^{(n)}; \quad k > 0
+						$$
+						<p>Jinými slovy pro $ G^{1} $ není potřeba rovnost tečných vektorů, ale pouze rovnost tečen v daném bodě.</p>
+					</section>
 				</section>
 
 				<section>
-					<h2>Modelování křivek</h2>
+					<section>
+						<h2>Modelování křivek</h2>
+						<blockquote>
+							&ldquo;Polynoms rule the world of parametric curves&rdquo;
+						</blockquote>
+					</section>
+					<section>
+						<h3>Polynomiální křivky</h3>
+						<div>
+							$$
+							Q(t) = a_{0} + a_{1}t + a_{2}t^{2} + \dots + a_{n}t^{n}
+							$$
+						</div>
+						<div class="fragment" style="padding-top: 15px;">
+							$$
+							\begin{pmatrix}
+							x(t)\\
+							y(t)\\
+							z(t)\\
+							\end{pmatrix} =
+							\begin{pmatrix}
+							a_{x0}\\
+							a_{y0}\\
+							a_{z0}\\
+							\end{pmatrix} +
+							\begin{pmatrix}
+							a_{x1}\\
+							a_{y1}\\
+							a_{z1}\\
+							\end{pmatrix}t +
+							\dots +
+							\begin{pmatrix}
+							a_{xn}\\
+							a_{yn}\\
+							a_{zn}\\
+							\end{pmatrix}t^{n}
+							$$	
+						</div>
+					</section>
+					<section>
+						<h3>Vlastnosti polynomiálních křivek</h3>
+						<ul>
+							<li>Jednoduchý výpočet</li>
+							<li>Snadno diferencovatelné (tečné vektory)</li>
+							<li>Používají se křivky po částech polynomiální</li>
+							<li>Nejčastěji se používají kubiky</li>
+						</ul>
+					</section>
 				</section>
 
 				<section>
-					<h2>Spojitost</h2>
-				</section>
-
-				<section>
-					<h2>Kubiky</h2>
+					<section>
+						<h2>Kubiky</h2>
+						<p>Parametrické vyjádření kubik má následující tvar:</p>
+						$$
+						\begin{align}
+						x(t) &= a_{x}t^{3} + b_{x}t^{2} + c_{x}t + d_{x} \\
+						y(t) &= a_{y}t^{3} + b_{y}t^{2} + c_{y}t + d_{y} \\
+						z(t) &= a_{z}t^{3} + b_{z}t^{2} + c_{z}t + d_{z}
+						\end{align}
+						$$
+					</section>
+					<section>
+						<h3>Maticové vyjádření</h3>
+						$$
+						Q(t) =
+						\begin{bmatrix}
+						x(t) \\
+						y(t) \\
+						z(t) \\
+						\end{bmatrix} =
+						T.C = 
+						\begin{bmatrix}
+						t^3 & t^2 & t & 1
+						\end{bmatrix}
+						\begin{bmatrix}
+						a_{x} & a_{y} & a_{z} \\
+						b_{x} & b_{y} & b_{z} \\
+						c_{x} & c_{y} & c_{z} \\
+						d_{x} & d_{y} & d_{z} \\
+						\end{bmatrix}
+						$$
+					</section>
+					<section>
+						<p>Matici $ C $ můžeme vyjádřit: $ C = MG $ </p>
+						$$
+						\begin{bmatrix}
+						a_{x} & a_{y} & a_{z} \\
+						b_{x} & b_{y} & b_{z} \\
+						c_{x} & c_{y} & c_{z} \\
+						d_{x} & d_{y} & d_{z} \\
+						\end{bmatrix} =
+						\begin{bmatrix}
+						m_{11} & m_{12} & m_{13} & m_{14} \\
+						m_{21} & m_{22} & m_{23} & m_{24} \\
+						m_{31} & m_{32} & m_{33} & m_{34} \\
+						m_{41} & m_{42} & m_{43} & m_{44} \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						G_{1} \\
+						G_{2} \\
+						G_{3} \\
+						G_{4} \\
+						\end{bmatrix}
+						$$
+						<p>kde $ M $ se nazývá bázová matice (určuje druh křivky) a $ G $ je vektor geometrických podmínek (řídící body a vektory)</p>
+					</section>
 				</section>
 
 				<section>
 					<h2>Interpolační a aproximační křivky</h2>
+					<p class="fragment">Interpolační křivky procházejí všemi řídícími body.</p>
+					<p class="fragment">Aproximační křivky nemusí procházet žádným ze svých řídící bodů.</p>
 				</section>
 
 				<section>
 					<h2>Interpolační křivky</h2>
+					<p>Patří mezi ně například Hermitovské kubiky nebo TCB křivky, ale v praxi se příliš npoužívají</p>
 				</section>
 
 				<section>
-					<h2>aproximační křivky</h2>
+					<h2>Aproximační křivky</h2>
+					<p>Ty se v počítačové grafice používají naopak velmi často. Patří mezi ně především Bézierovy kubyky, B-Spline křivky a konečně NURBs křivky</p>
 				</section>
 
 				<section>
@@ -213,6 +330,10 @@
 					<section>
 						<h2>Coonsovy kubiky</h2>
 						<p>Označována také uniformní racionální B-spline, zkráceně B-spline a je důležitým mezikrokem k pochopení NURBS křivek a NURBS ploch</p>
+					</section>
+					<section>
+						<h3>Konstrukce Coonsovy kubiky z řídících bodů</h3>
+						<img src="./img/coons_curve.svg" alt="Coons curve" title="Coons curve" style="background: #fff;" width="75%">
 					</section>
 					<section>
 						<h2>Výpočet</h2>
@@ -259,13 +380,13 @@
 							<li>
 								Tečný vektor v počátečním bodu:
 								$$
-								t_{0}^{\prime} = \frac{P_{2} - P_{0}}{2}
+								q_{0}^{\prime} = \frac{P_{2} - P_{0}}{2}
 								$$
 							</li>
 							<li>
 								Tečný vektor v koncovém bodu:
 								$$
-								t_{1}^{\prime} = \frac{P_{3} - P_{1}}{2}
+								q_{1}^{\prime} = \frac{P_{3} - P_{1}}{2}
 								$$
 							</li>
 						</ul>
