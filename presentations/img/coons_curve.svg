@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="550"
+   height="350"
+   id="svg2"
+   inkscape:label="Pozadí"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="Nový dokument 1">
+  <defs
+     id="defs3">
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend"
+       style="overflow:visible">
+      <path
+         id="path3647"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective9" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.5602993"
+     inkscape:cx="192.88868"
+     inkscape:cy="215.96328"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:snap-bbox="true"
+     inkscape:object-nodes="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:object-paths="true"
+     inkscape:snap-intersection-paths="true"
+     inkscape:snap-global="false"
+     inkscape:snap-page="false"
+     inkscape:snap-midpoints="true"
+     inkscape:snap-grids="true"
+     inkscape:window-width="1732"
+     inkscape:window-height="1154"
+     inkscape:window-x="281"
+     inkscape:window-y="221"
+     inkscape:window-maximized="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3589"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata6">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Vrstva 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-702.36218)">
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:4, 2;stroke-dashoffset:0"
+       d="m 60.723088,939.9525 100.000002,-160 200,40 80,179.99998"
+       id="path3591" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 60.723088,939.9525 300.000002,-120"
+       id="path3593" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 160.72309,779.9525 280,219.99998"
+       id="path3595" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 210.72309,879.9525 -50,-100"
+       id="path3597" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 300.72309,889.9525 60,-70"
+       id="path3599" />
+    <path
+       sodipodi:type="arc"
+       style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path3601"
+       sodipodi:cx="190"
+       sodipodi:cy="302.36218"
+       sodipodi:rx="5"
+       sodipodi:ry="5"
+       d="m 195,302.36218 a 5,5 0 1 1 -10,0 5,5 0 1 1 10,0 z"
+       transform="translate(-129.27691,637.59032)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3601"
+       id="use3603"
+       transform="translate(380,60.000002)"
+       width="744.09448"
+       height="1052.3622" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use3603"
+       id="use3605"
+       transform="translate(-79.999998,-180)"
+       width="744.09448"
+       height="1052.3622" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use3605"
+       id="use3607"
+       transform="translate(-200,-39.999998)"
+       width="744.09448"
+       height="1052.3622" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="36.629944"
+       y="945.15857"
+       id="text3609"><tspan
+         sodipodi:role="line"
+         id="tspan3611"
+         x="36.629944"
+         y="945.15857"
+         style="font-size:14px">P0</tspan></text>
+    <text
+       id="text3613"
+       y="770.15857"
+       x="149.34906"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       xml:space="preserve"><tspan
+         style="font-size:14px"
+         y="770.15857"
+         x="149.34906"
+         id="tspan3615"
+         sodipodi:role="line">P1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="364.34906"
+       y="810.15857"
+       id="text3617"><tspan
+         sodipodi:role="line"
+         id="tspan3619"
+         x="364.34906"
+         y="810.15857"
+         style="font-size:14px">P2</tspan></text>
+    <text
+       id="text3621"
+       y="1005.1586"
+       x="449.34906"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       xml:space="preserve"><tspan
+         style="font-size:14px"
+         y="1005.1586"
+         x="449.34906"
+         id="tspan3623"
+         sodipodi:role="line">P3</tspan></text>
+    <use
+       height="1052.3622"
+       width="744.09448"
+       transform="translate(-167.29582,25.423292)"
+       id="use3625"
+       xlink:href="#use3605"
+       y="0"
+       x="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+       d="M 177.53043,814.39595 332.97345,750.04344"
+       id="path3633" />
+    <path
+       style="fill:none;stroke:#ff0000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 177.07725,814.84913 c 68.43118,-29.00394 125.98588,8.15736 163.60037,32.62944"
+       id="path4453"
+       sodipodi:nodetypes="cc" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use3625"
+       id="use3627"
+       transform="translate(-15.86153,-31.269878)"
+       width="744.09448"
+       height="1052.3622"
+       style="fill:#00ff00;fill-opacity:1" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:none;marker-end:url(#Arrow1Mend)"
+       d="M 338.86487,846.11901 511.52898,974.37082"
+       id="path4083" />
+    <path
+       d="m 195,302.36218 a 5,5 0 1 1 -10,0 5,5 0 1 1 10,0 z"
+       sodipodi:ry="5"
+       sodipodi:rx="5"
+       sodipodi:cy="302.36218"
+       sodipodi:cx="190"
+       id="use3629"
+       style="fill:#0000ff;fill-opacity:1;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       sodipodi:type="arc"
+       transform="translate(148.44699,543.01361)" />
+    <path
+       d="m 195,302.36218 a 5,5 0 1 1 -10,0 5,5 0 1 1 10,0 z"
+       sodipodi:ry="5"
+       sodipodi:rx="5"
+       sodipodi:cy="302.36218"
+       sodipodi:cx="190"
+       id="use3631"
+       style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       sodipodi:type="arc"
+       transform="translate(128.95996,566.12613)" />
+    <text
+       id="text4455"
+       y="833.2215"
+       x="149.02023"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#00ff00;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       xml:space="preserve"><tspan
+         style="font-size:14px;fill:#00ff00;fill-opacity:1"
+         y="833.2215"
+         x="149.02023"
+         id="tspan4457"
+         sodipodi:role="line">Q(0)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#0000ff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="333.46719"
+       y="876.72742"
+       id="text4459"><tspan
+         sodipodi:role="line"
+         id="tspan4461"
+         x="333.46719"
+         y="876.72742"
+         style="font-size:14px;fill:#0000ff;fill-opacity:1">Q(1)</tspan></text>
+    <text
+       id="text4463"
+       y="830.81342"
+       x="248.00264"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       xml:space="preserve"><tspan
+         style="font-size:14px;fill:#ff0000;fill-opacity:1"
+         y="830.81342"
+         x="248.00264"
+         id="tspan4465"
+         sodipodi:role="line">Q(t)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="236.81407"
+       y="769.2522"
+       id="text4471"><tspan
+         sodipodi:role="line"
+         id="tspan4473"
+         x="236.81407"
+         y="769.2522"
+         style="font-size:14px">q'(0)</tspan></text>
+    <text
+       id="text4475"
+       y="913.81873"
+       x="442.56079"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       xml:space="preserve"><tspan
+         style="font-size:14px"
+         y="913.81873"
+         x="442.56079"
+         id="tspan4477"
+         sodipodi:role="line">q'(1)</tspan></text>
+  </g>
+</svg>
