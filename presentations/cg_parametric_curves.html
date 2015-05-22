@@ -315,7 +315,23 @@
 				</section>
 
 				<section>
-					<h2>Bézierovy křivky</h2>
+					<section>
+						<h2>Bézierovy křivky</h2>
+						<blockquote>
+							&ldquo;Aproximate or interpolate? That's the question!&rdquo;
+						</blockquote>
+					</section>
+					<section>
+						<h3>Bézierova křivka n-tého stupně</h3>
+						<p>Je dána vztahem:</p>
+						$$
+						Q(t) = \sum_{i=0}^{n} P_{i} B_{i}^{n}(t)
+						$$
+						<p>kde $ P_{i} $ je <i>i-tý</i> řídící bod a $ B_{i}^{n}(t) $ je Bernsteinův polynom n-tého stupně</p>
+						$$
+						B_{i}^{n}(t) = \binom{n}{i} t^{i} (1 - t)^{n-1}; \quad i = 0, 1, \dots, n
+						$$
+					</section>
 				</section>
 
 				<section>
