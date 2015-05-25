@@ -152,11 +152,35 @@
 						</blockquote>
 					</section>
 					<section>
+						<h3>Lomená čára</h3>
 						V počítačové grafice je často nezbytné křivku převést na sadu úseček, protože úsečku je jednoduché rasterizovat (zobrazit na monitoru).
 					</section>
 					<section>
 						<h3>Rasterizaci úsečky</h3>
-						<p>TODO</p>
+						<p>Úsečka je část přímky, která je jednoznačně určena body $ P_{1} = [x_{1}, y_{1}]$ a $ P_{2} = [x_{2}, y_{2}] $. Směrnice přímky je:</p>
+						$$
+						k = \frac{\Delta x}{\Delta y} = \frac{y_{2} - y_{1}}{x_{1} - x_{2}}
+						$$
+						<p>Pro osmispojitou úsečku s tloušťkou jedna a rezignací na antialiasing lze použít například algoritmus DDA (Digital Differential Analyzer)</p>
+					</section>
+					<section>
+						<h3>Algoritmus DDA</h3>
+						<p>Varianta algoritmu pro $ k < 1 $:</p>
+						<pre><code>
+var k = (y2 - y1)/(x2 - x1);
+var x = x1;
+var y = y1;
+while(x < x2) {
+	draw(x, y);
+	x += 1;
+	y += k;
+}
+						</code></pre>
+					</section>
+					<section>
+						<h3>Tlouťka, antialising, přerušování, ukončení</h3>
+						<p>V praxi je často nutné vykreslovat úsečku jako geometrický útvar (nejčastěji obdelník) a řešit další netriviální problémy.</p>
+						<p class="fragment">Naštěstí existuje spousta knihoven a API (HTML5 Canvas, WebGL, atd.), které tyto problémy řeší za nás.</p>
 					</section>
 				</section>
 
@@ -185,6 +209,7 @@
 						<h2>Výhody parametrického vyjádření křivek</h2>
 						<p>Oproti funkcím může křivka protínat samu sebe, může se uzavřít, může být rovnoběžná s libovolnou osou, apod.</p>
 						<p>Parametr $ t $ můžeme chápat jako čas.</p>
+						<p>Lze je používat jak ve 2D, tak i v 3D prostoru.</p>
 					</section>
 				</section>
 
@@ -220,6 +245,8 @@
 							q_{1}^{(n)} = k q_{2}^{(n)}; \quad k > 0
 						$$
 						<p>Jinými slovy pro $ G^{1} $ není potřeba rovnost tečných vektorů, ale pouze rovnost tečen v daném bodě.</p>
+						<p class="fragment"><i>Je-li křivka $ C^{1} $ je potom i $ G^{1} $ spojitá?</i></p>
+						<p class="fragment"><i>Ano, je-li křivka $ C^{n} $ tak je potom automaticky i $ G^{n} $ spojitá.</i></p>
 					</section>
 				</section>
 
@@ -519,12 +546,20 @@
 				<section>
 					<section>
 						<h2>Vykreslování Bézierovy křivky</h2>
+						<blockquote>
+							&ldquo;Adaptive or non-adaptive? That's the question too.&rdquo;
+						</blockquote>
 					</section>
 					<section>
 						<h3>Neadaptivní vykreslování</h3>
+						<p>Parameter $ t $ zvyšujeme o pevně daný krok (např.: $dt = 0.01$). Dostaneme množinu bodů, které spojíme lomenou čárou.</p>
+						<p class="fragment">Prvním problémem je určit, jak má být tento krok jemný.</p>
+						<p class="fragment">Druhým problémem je, že rovné části jsou často vykreslované zbytečně jemně a zakřivené části nedostatečně jemně.</p>
 					</section>
 					<section>
 						<h3>Adaptivní algoritmus de Casteljau</h3>
+						<p>Při vykreslování pomocí tohoto algoritmu se využívá dělení Bézierovy křivky na dvě části.</p>
+						<img src="./img/de_casteljau.svg" style="background: white;">
 					</section>
 				</section>
 
@@ -634,15 +669,19 @@ ctx.stroke();
 						<ul>
 							<li>
 								Počáteční bod leží v anitěžišti trojúhelníku tvořeného prvními třemi body ($P_{0}$, $P_{1}$, $P_{2}$), což lze jednoduše vyjádřit vztahem:
+								<div style="padding-top: 20px; padding-bottom: 20px;">
 								$$
 								Q(0) = \frac{P_{0} + 4P_{1} + P_{2}}{6}
 								$$
+								</div>
 							</li>
 							<li>
 								Koncový bod leží naopak v anitěžišti trojúhelníku tvořeného posledními třemi body ($P_{1}$, $P_{2}$, $P_{3}$), což lze vyjádřit:
+								<div style="padding-top: 20px;">
 								$$
 								Q(1) = \frac{P_{1} + 4P_{2} + P_{3}}{6}
 								$$
+								</div>
 							</li>
 						</ul>
 					</section>
@@ -651,26 +690,89 @@ ctx.stroke();
 						<ul>
 							<li>
 								Tečný vektor v počátečním bodu:
+								<div style="padding-top: 20px; padding-bottom: 20px;">
 								$$
 								q_{0}^{\prime} = \frac{P_{2} - P_{0}}{2}
 								$$
+								</div>
 							</li>
 							<li>
 								Tečný vektor v koncovém bodu:
+								<div style="padding-top: 20px; padding-bottom: 20px;">
 								$$
 								q_{1}^{\prime} = \frac{P_{3} - P_{1}}{2}
 								$$
+								</div>
 							</li>
 						</ul>
 					</section>
 				</section>
 
 				<section>
-					<h2>Coonsův kubický B-spline</h2>
+					<h2>Uniformní kubický B-spline</h2>
+					<p>Vzniká navazováním Coonsových kubik na sebe. Poslední tři řídící body jednoho segmentu jsou první tři řídíci body následujícího segmentu.</p>
+					<p>Pokud máme v nějaké části křivky trojnásobný bod (tři body leží na sobě), tak křivka tímto bodem prochází.</p>
 				</section>
 
 				<section>
-					<h2>NURBS</h2>
+					<section>
+						<h2>NURBS</h2>
+						<blockquote>
+							&ldquo;Non Uniform Rational B-spline! What?.&rdquo;
+						</blockquote>
+					</section>
+					<section>
+						<h3>NURBS křivky</h3>
+						<ul>
+							<li>Zobecněním uniformních kubických B-splinů</li>
+							<li><i>Neuniformita</i> říká, že vzdálenost uzlů (koncových bodů segmentů), ve smyslu parametru t, nemusí být konstantní.</li>
+							<li><i>Racionalita</i> říká, že řídící body jsou dány svými homogeními souřadnicemi.</li>
+							<li>NURBs křivka je tedy určena $ n + 1 $ řídícími body $ P_{i}; i = 0, 1, \dots, n $, řádem B-spline $ k $ a uzlovým vektorem $ U $ délky $ n + k + 1$.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Výpočet NURBs</h3>
+						<p>NURBs křivka je dána následujícím vztahem:</p>
+						$$
+						Q(t) = \frac{\sum_{i=0}^{n}w_{i}P_{i}N_{i,k}(t)}{\sum_{i=0}^{n}w_{i}N_{i,k}(t)}
+						$$
+						kde $ w_{i} $ je váha i-tého bodu a $ N_{i,k}(t) $ jsou normalizované B-spline bázové funkce.
+					</section>
+					<section>
+						<h3>Bázové funkce</h3>
+						<p>Jsou definované následujícím rekurentním vztahem:</p>
+						$$
+						N_{i,1} =
+						\begin{cases}
+						1; \quad t_{i} \leq t \le t_{i+1} \\
+						0; \quad 
+						\end{cases}
+						$$
+						$$
+						N_{i,k} =
+						\frac{t - t_{i}}{t_{i+k-1} - t_{i}}N_{i,k-1}(t) +
+						\frac{t_{i+k} - t}{t_{i+k} - t_{i+1}}N_{i+1,k-1}(t)
+						$$
+						<p>Předchozí vztah platí pro:</p>
+						$$
+						t_{i} \le t_{i+1+k}; 0 \leq i \leq n
+						$$
+						<p>Pokud se ve jmenovateli vyskytuje nula, tak výsledná hodnota je v tomto případě rovna nule.</p>
+					</section>
+					<section>
+						<h3>Využití NURBs</h3>
+						<p>Především NURBs plochy se používají v CAD/CAM aplikacích.</p>
+					</section>
+					<section>
+						<h3>NURBs a Web</h3>
+						<p>B-spline nebo NURBs není podporováno v SVG ani v Canvasu. Je nutné použít externí knihovnu.</p>
+						<a href="http://verbnurbs.com/">verbnurbs.com</a>
+					</section>
+				</section>
+
+				<section>
+					<h2>Děkuji za pozornost!</h2>
+					<h3 class="fragment">Nějaké dotazy?</h3>
 				</section>
 			</div>
 
