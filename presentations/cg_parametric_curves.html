@@ -77,6 +77,8 @@
 					</section>
 					<section>
 						<h3>Vyjádření křivek</h3>
+						<div style="width: 100%; overflow: hidden;">
+						<div style="float: left; width: 50%;">
 						<ul>
 							<li>
 								Explicitní vyjádření (funkce):
@@ -101,6 +103,39 @@
 								$$
 							</li>
 						</ul>
+						</div>
+						<div style="float: left; width: 50%;">
+						<ul style="list-style: none;">
+							<li>
+								<div class="fragment">
+									Příklad:
+									$$
+									y = x^{2}
+									$$
+								</div>
+							</li>
+							<li>
+								<div class="fragment">
+									Příklad:
+									$$
+									x^{2} + y^{2} - 1 = 0
+									$$
+								</div>
+							</li>
+							<li>
+								<div class="fragment">
+									Příklad:
+									$$
+									\begin{align}
+									x &=  2t + 1 \\
+									y &= -1t + 2 \\
+									z &=  3t - 4 \\
+									\end{align}
+									$$
+								</div>
+							</li>
+						</ul>
+						</div>
 					</section>
 				</section>
 
@@ -237,6 +272,14 @@
 							<li>Nejčastěji se používají kubiky</li>
 						</ul>
 					</section>
+					<section>
+						<h3>Často požadované vlastnosti křivek</h3>
+						<ul>
+							<li>Invariace vůči lineárním transformacím a projekcím</li>
+							<li>Křivka leží uvnitř konvexní obálce všech svých řídících bodů</li>
+							<li>Lokalita změn polohy/váhy řídícího bodu (křivky po částech polynomiální)</li>
+						</ul>
+					</section>
 				</section>
 
 				<section>
@@ -297,6 +340,27 @@
 						<p>kde $ M $ se nazývá bázová matice (určuje druh křivky) a $ G $ je vektor geometrických podmínek (řídící body a vektory)</p>
 					</section>
 					<section>
+						<p>Výsledný podoba maticového vyjádření:</p>
+						$$
+						Q(t) =
+						\begin{bmatrix}
+						t^3 & t^2 & t & 1
+						\end{bmatrix}
+						\begin{bmatrix}
+						m_{11} & m_{12} & m_{13} & m_{14} \\
+						m_{21} & m_{22} & m_{23} & m_{24} \\
+						m_{31} & m_{32} & m_{33} & m_{34} \\
+						m_{41} & m_{42} & m_{43} & m_{44} \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						G_{1} \\
+						G_{2} \\
+						G_{3} \\
+						G_{4} \\
+						\end{bmatrix}
+						$$
+					</section>
+					<section>
 						<h3>Bázové polynomy</h3>
 						$$
 						\begin{align}
@@ -306,6 +370,16 @@
 						       & (m_{14}t^{3} + m_{24}t^{2} + m_{34}t + m_{44})G_{4} \\
 						\end{align}
 						$$
+						<p>Určují váhu jednotlivých řídících bodů/vektorů pro různé hodnoty $ t \in \langle 0, 1 \rangle $</p>
+					</section>
+					<section>
+						<h3>Jednoduchý příklad bázových polynomů</h3>
+						<p>Mějme křivku, která je určena body $ P_{1} $ a $ P_{2} $:</p>
+						$$
+						Q(t) = (1 - t)P_{1} + tP_{2} \quad 0 \leq t \leq 1
+						$$
+						<p class="fragment"><i>O jakou křivku se jedná?</i></p>
+						<p class="fragment"><i>Je to úsečka s krajními body $ P_{1} $ a $ P_{2} $.</i></p>
 					</section>
 				</section>
 
@@ -336,7 +410,7 @@
 						<h3>Bézierova křivka n-tého stupně</h3>
 						<p>Je dána vztahem:</p>
 						$$
-						Q(t) = \sum_{i=0}^{n} P_{i} B_{i}^{n}(t)
+						Q(t) = \sum_{i=0}^{n} P_{i} B_{i}^{n}(t); \quad t \in \langle 0, 1 \rangle
 						$$
 						<p>kde $ P_{i} $ je <i>i-tý</i> řídící bod a $ B_{i}^{n}(t) $ je Bernsteinův polynom n-tého stupně</p>
 						$$
@@ -392,7 +466,7 @@
 					<section>
 						<h3>Bézierova křivka 3. stupně</h3>
 						$$
-						Q(t) = \sum_{i=0}^{3} P_{i} B_{i}(t)
+						Q(t) = \sum_{i=0}^{3} P_{i} B_{i}(t); \quad t \in \langle 0, 1 \rangle
 						$$
 						<p>Bernstainovy polynomy 3. stupně:</p>
 						$$
@@ -403,6 +477,21 @@
 						B_{3}(t) &= t^{3} \\
 						\end{align}
 						$$
+					</section>
+					<section>
+						<p>Výsledná podoba bázových polynomů:</p>
+						$$
+						\begin{align}
+						Q(t) = & ( -t^{3} + 3t^{2} - 3t + 1)P_{0} + \\
+						       & ( 3t^{3} - 6t^{2} + 3t)P_{1} + \\
+						       & (-3t^{3} + 3t^{2})P_{2} \\
+						       & (t^{3})P_{3} \\
+						\end{align}
+						$$
+					</section>
+					<section>
+						<h3>Průběh bázových polynomů</h3>
+						<img src="./img/bernstein_polynoms.svg" height="50%" style="background: white;">
 					</section>
 					<section>
 						<h3>Maticový zápis Bézierovy kubiky</h3>
@@ -428,7 +517,81 @@
 				</section>
 
 				<section>
-					<h2>algoritmus de Casteljau</h2>
+					<section>
+						<h2>Vykreslování Bézierovy křivky</h2>
+					</section>
+					<section>
+						<h3>Neadaptivní vykreslování</h3>
+					</section>
+					<section>
+						<h3>Adaptivní algoritmus de Casteljau</h3>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Bézierovy kubiky a HMTL5 - Canvas</h2>
+						<div style="width: 100%; overflow: hidden;">
+						<div style="float: left; width: 70%;">
+							<pre><code data-trim contenteditable>
+var canvas = document.getElementById('myCanvas');
+var ctx = canvas.getContext('2d');
+ctx.beginPath();
+ctx.moveTo(150, 100);
+ctx.bezierCurveTo(140,10, 390,10, 390,170);
+ctx.lineWidth = 10;
+ctx.strokeStyle = 'white';
+ctx.lineCap = 'round';
+ctx.stroke();
+							</code></pre>
+						</div>
+						<div style="float: left; width: 30%;">
+							<canvas id="myCanvas" width="400" height="200"></canvas>
+							<script type="text/javascript">
+							var canvas = document.getElementById('myCanvas');
+							var ctx = canvas.getContext('2d');
+							ctx.beginPath();
+							ctx.moveTo(20, 100);
+							ctx.bezierCurveTo(140,10, 240,10, 240,190);
+							ctx.lineWidth = 10;
+							ctx.strokeStyle = 'white';
+							ctx.lineCap = 'round';
+							ctx.stroke();
+							</script>
+						</div>
+						</div>
+					</section>
+					<section>
+						<h3>Canvas &amp; Bézier &amp; spol.</h3>
+						<ul>
+							<li>lineTo() vykreslí úsečku</li>
+							<li>arc() vykreslí kruhovou výseč</li>
+							<li>quadraticCurveTo() vykreslí Bézierovu křivku 2. řádu</li>
+							<li>bezierCurveTo() vykreslí Bézierovu kubiky</li>
+							<li>beginPath() umožňuje navazovat křivky</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Bézierovy kubiky a HTML5 - SVG</h2>
+						<pre><code contenteditable>
+<svg width="360" height="280" id="svg2">
+  <defs id="defs7035" />
+  <g transform="translate(0,-772.36218)" id="layer1">
+    <path d="m 40,910 c 200,-220 260,-40 280,120" id="path7045" />
+  </g>
+</svg>
+						</code></pre>
+					</section>
+					<section>
+						<h3>SVG - příklad</h3>
+						<pre><code>
+<img src="./curve.svg">
+						</code></pre>
+						<img src="./img/bezier_curve.svg" style="border: none; background: none;">
+					</section>
 				</section>
 
 				<section>
@@ -441,7 +604,7 @@
 						<img src="./img/coons_curve.svg" alt="Coons curve" title="Coons curve" style="background: #fff;" width="75%">
 					</section>
 					<section>
-						<h2>Výpočet</h2>
+						<h2>Výpočet Coonsovy kubiky</h2>
 						<p>Je určena 4 řídícími body: $P_{0}$, $P_{1}$, $P_{2}$, $P_{3}$ a vztahem:</p>
 						$$
 						Q(t) = \frac{1}{6}
@@ -461,6 +624,10 @@
 						P_{3} \\
 						\end{bmatrix}
 						$$
+					</section>
+					<section>
+						<h3>Bázové polynomy Coonsovy kubiky</h3>
+						<img src="./img/bspline_polynoms.svg" style="background: white;">
 					</section>
 					<section>
 						<h2>Počáteční a koncový bod</h2>
