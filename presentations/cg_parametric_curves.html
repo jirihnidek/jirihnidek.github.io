@@ -296,6 +296,17 @@
 						$$
 						<p>kde $ M $ se nazývá bázová matice (určuje druh křivky) a $ G $ je vektor geometrických podmínek (řídící body a vektory)</p>
 					</section>
+					<section>
+						<h3>Bázové polynomy</h3>
+						$$
+						\begin{align}
+						Q(t) = & (m_{11}t^{3} + m_{21}t^{2} + m_{31}t + m_{41})G_{1} + \\
+						       & (m_{12}t^{3} + m_{22}t^{2} + m_{32}t + m_{42})G_{2} + \\
+						       & (m_{13}t^{3} + m_{23}t^{2} + m_{33}t + m_{43})G_{3} + \\
+						       & (m_{14}t^{3} + m_{24}t^{2} + m_{34}t + m_{44})G_{4} \\
+						\end{align}
+						$$
+					</section>
 				</section>
 
 				<section>
@@ -332,10 +343,88 @@
 						B_{i}^{n}(t) = \binom{n}{i} t^{i} (1 - t)^{n-1}; \quad i = 0, 1, \dots, n
 						$$
 					</section>
+					<section>
+						<h3>Vlastnosti Bézierovy křivky</h3>
+						<ul>
+							<li>Křivka prochází prvním a řídícím bodem</li>
+							<li>Křivka leží uvnitř ohraničující obálky, která je určena řídícimi body</li>
+							<li>Při změně polohy jednoho řídícího bodu, dojde ke změně celé křivky</li>
+							<li>Nejčastěji se používají kubiky, které se na sebe navazují</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Tečné vektory v koncových bodech</h3>
+						$$
+						\begin{align}
+						\vec{q^{\prime}}(0) &= n(P_{1} - P_{0}) \\
+						\vec{q^{\prime}}(1) &= n(P_{n} - P_{n-1}) \\
+						\end{align}
+						$$
+					</section>
+					<section>
+						<h3>Spojitost dvou Bézierových křivek</h3>
+						<p>Mějme dvě Bézierovy křivky $ Q_{1}(t) $ a $ Q_{2}(t) $ </p>
+						<ul>
+							<li>Křivky mají spojitost $ C^{0} $, pokud
+							$$
+							Q_{1}(1) = Q_{2}(0)
+							$$
+							</li>
+							<li>Křivky mají spojitost $ C^{1} $, pokud
+							$$
+							(P_{n-1} - P_{n}) = (R_{0} - R_{1})
+							$$
+							</li>
+							<li>
+							Křivky mají spojitost $ G^{1} $, pokud
+							$$
+							(P_{n-1} - P_{n}) = k(R_{0} - R_{1})
+							$$
+							</li>
+						</ul>
+					</section>
 				</section>
 
 				<section>
-					<h2>Bézierovy kubiky</h2>
+					<section>
+						<h2>Bézierovy kubiky</h2>
+					</section>
+					<section>
+						<h3>Bézierova křivka 3. stupně</h3>
+						$$
+						Q(t) = \sum_{i=0}^{3} P_{i} B_{i}(t)
+						$$
+						<p>Bernstainovy polynomy 3. stupně:</p>
+						$$
+						\begin{align}
+						B_{0}(t) &= (1 - t)^{3} \\
+						B_{1}(t) &= 3t(1 - t)^{2} \\
+						B_{2}(t) &= 3t^{2}(1 - t) \\
+						B_{3}(t) &= t^{3} \\
+						\end{align}
+						$$
+					</section>
+					<section>
+						<h3>Maticový zápis Bézierovy kubiky</h3>
+						$$
+						Q(t) =
+						\begin{bmatrix}
+						t^{3} & t^{2} & t & 1 \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						-1 &  3 & -3 & 1 \\
+						 3 & -6 &  3 & 0 \\
+						-3 &  3 &  0 & 0 \\
+						 1 &  0 &  0 & 0 \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						P_{0} \\
+						P_{1} \\
+						P_{2} \\
+						P_{3} \\
+						\end{bmatrix}
+						$$
+					</section>
 				</section>
 
 				<section>
