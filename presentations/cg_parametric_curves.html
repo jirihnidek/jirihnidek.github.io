@@ -720,6 +720,7 @@ ctx.stroke();
 					<h2>Uniformní kubický B-spline</h2>
 					<p>Vzniká navazováním Coonsových kubik na sebe. Poslední tři řídící body jednoho segmentu jsou první tři řídíci body následujícího segmentu.</p>
 					<p>Pokud máme v nějaké části křivky trojnásobný bod (tři body leží na sobě), tak křivka tímto bodem prochází.</p>
+					<p>Uzlový vektor určuje hodnoty parametru $ t $ v uzlových bodech, přičemž platí $ t_{i+1} - t \eq c$</p>
 				</section>
 
 				<section>
@@ -733,7 +734,7 @@ ctx.stroke();
 						<h3>NURBS křivky</h3>
 						<ul>
 							<li>Zobecněním uniformních kubických B-splinů</li>
-							<li><i>Neuniformita</i> říká, že vzdálenost uzlů (koncových bodů segmentů), ve smyslu parametru t, nemusí být konstantní.</li>
+							<li><i>Neuniformita</i> říká, že vzdálenost uzlů (koncových bodů segmentů), ve smyslu parametru t, nemusí být konstantní: $ t_{i+1} - t_{i} \neq c$</li>
 							<li><i>Racionalita</i> říká, že řídící body jsou dány svými homogeními souřadnicemi.</li>
 							<li>NURBs křivka je tedy určena $ n + 1 $ řídícími body $ P_{i}; i = 0, 1, \dots, n $, řádem B-spline $ k $ a uzlovým vektorem $ U $ délky $ n + k + 1$.</li>
 						</ul>
