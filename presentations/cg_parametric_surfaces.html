@@ -6,7 +6,7 @@
 
 		<title>Počítačová grafika - souborové formáty</title>
 
-		<meta name="description" content="Souborové formáty používané v počítačové grafice">
+		<meta name="description" content="Parametrické plochy">
 		<meta name="author" content="Jiří Hnídek">
 
 		<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -65,6 +65,64 @@
 						<li>CAD/CAM aplikace</li>
 						<li>Grafický design</li>
 					</ul>
+				</section>
+				<section>
+					<h2>Bodová rovnice parametrických ploch</h2>
+					<p>U plochy máme dva nezávislé parametry $ u,v \in <0, 1>$, které definují bodovou rovnici:</p>
+					$$
+					Q(u,v) = [x(u,v), y(u,v), z(u,v)]
+					$$
+					<p>funkce $x(u,v), y(u,v), z(u,v)$ jsou většinou polynomiální.</p>
+				</section>
+				<section>
+					<section>
+						<h2>Tečné vektory parametrických ploch</h2>
+						<p>Každá parametrická plocha má definované dva tečné vektory:</p>
+						$$
+						\begin{align}
+						\vec{q}_{u}(u,v) &= \frac{\partial Q(u,v)}{\partial u} =
+											\left( \frac{\partial x(u,v)}{\partial u}, \frac{\partial y(u,v)}{\partial u}, \frac{\partial z(u,v)}{\partial u} \right) \\
+						\vec{q}_{v}(u,v) &= \frac{\partial Q(u,v)}{\partial v} =
+											\left( \frac{\partial x(u,v)}{\partial v}, \frac{\partial y(u,v)}{\partial v}, \frac{\partial z(u,v)}{\partial v} \right) 
+						\end{align}
+						$$
+					</section>
+					<section>
+						<h2>Normálový vektor</h2>
+						<p>Normálový vektor je následně určený:</p>
+						$$
+						\vec{n} = \frac{\vec{q}_{u} \times \vec{q}_{v}}{\left| \vec{q}_{u} \times \vec{q}_{v} \right|}
+						$$
+						<p class="fragment">
+							Otázka: Je vždy normálový vektor definovaný pro každý bod parametrické plochy?
+						</p>
+						<p class="fragment">
+							Odpověď: Nemusí tomu tak být vždy. Pokud jsou vektory $\vec{q}_{u}$, $\vec{q}_{v}$ v nějakém bodě plochy kolineární, tak zde není normálový vektor definován.
+						</p>
+					</section>
+				</section>
+				<section>
+					<h2>Hlavní křivky plochy</h2>
+					<p>Hlavní křivkou plochy $Q(u, v)$ ve směru $u$ se rozumí, taková křivka, kde je parametr $v$ roven nějaké konstantě $k$, která může být rovna hodnotě v rozsahu $<0, 1>$.</p>
+					<p>Analogicky je definovaná hlavní křivka plochy $Q(u,v)$ ve směru $v$.</p>
+				</section>
+				<section>
+					<h2>Pláty neboli patche</h2>
+					<p>Stejně jako je výhodné navazovat kubiky, tak je výhodné vytvářet výslednou plochu z jednoduchých plátů neboli patchů. Při navazování plátů je důležitá jejich spojitost.</p>
+				</section>
+				<section>
+					<h2>Navazování a spojitost plátů</h2>
+					<p>U ploch je podobně jako u křivek definovan parametrická (C) a geometrická (G) spojitost.</p>
+					<p>Plochy musí mít společnou stranu, která je minimálně křivkou třídy $C^{0}$.</p>
+				</section>
+				<section>
+					<h2>Interpolační a aproximační plochy</h2>
+					<p>Interpolarční plochy se téměř nepoužívají, protože interolace v dimenzích vyšších než dvě je komplikovaná.</p>
+					<p>Nejčastěji se používají aproximační plochy, kdy bázové funkce jsou polynomy stupně tři. Tím se rozumí, že hlavní křivky jsou kubiky.</p>
+				</section>
+				<section>
+					<h2>Bikubické plochy</h2>
+					<p>Nejčastěji se používají plochy, kde hlavní křivky v</p>
 				</section>
 			</div>
 
