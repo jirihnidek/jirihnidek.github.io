@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>Počítačová grafika - souborové formáty</title>
+		<title>Počítačová grafika - parametrické plochy</title>
 
 		<meta name="description" content="Parametrické plochy">
 		<meta name="author" content="Jiří Hnídek">
@@ -121,9 +121,126 @@
 					<p>Nejčastěji se používají aproximační plochy, kdy bázové funkce jsou polynomy stupně tři. Tím se rozumí, že hlavní křivky jsou kubiky.</p>
 				</section>
 				<section>
-					<h2>Bikubické plochy</h2>
-					<p>Teoreticky můžeme vytvořit, kde hlavní křivky v jednom směru jsou úsečky a druhém směru jsou hlavní křivky polynomiální křivky.</p>
-					<p>Nejčastěji se používají plochy, kde hlavní křivky jsou polynomiální křivky stupně tři (kubiky).</p>
+					<section>
+						<h2>Bikubické plochy</h2>
+						<p>Teoreticky můžeme vytvořit plochu, kde hlavní křivky v jednom směru jsou úsečky a druhém směru polynomiální křivky.</p>
+						<p>Nejčastěji se ovšem používají plochy, kde hlavní křivky jsou polynomiální křivky stupně tři (kubiky).</p>
+					</section>
+					<section>
+						<h2>Obecné vyjádření bikubické plochy</h2>
+						<p>Podobně jako u parametrických křivek se nepožívá vyjádření pomocí koeficientů jednotlivých polynomů, ale požívá se maticové vyjádření:</p>
+						$$
+						Q(u,v) = U M_{B} P M_{B}^{T} V^{T} = \begin{bmatrix} u^{3} & u^{2} & u & 1 \end{bmatrix} M_{B} P M_{B}^{T} \begin{bmatrix} v^{3} \\ v^{2} \\ v \\ 1 \end{bmatrix} 
+						$$
+						<p>$M_{B}$ je bázová matice a $P$ je vektor řídících bodů/vektorů</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Bézierovy plochy</h2>
+						<p>Hodně rozšířené parametrické plochy.</p>
+						<p>Používají pouze řídící body a procházejí některými řídícími body.</p>
+					</section>
+					<section>
+						<h2>Obecná Bézierova plocha</h2>
+						$$
+						Q(u,v) = \sum_{i=0}^{n} \sum_{j=0}^{m} P_{i,j} B_{i}^{n}(u) B_{j}^{m}(v)
+						$$
+						<p>Je dána $(n + 1).(m + 1)$ řídícími body $P_{i,j}$ a Bernstainovými polynomy: $B_{i}^{n}$ $B_{j}^{m}$</p>
+					</section>
+					<section>
+						<h2>Vlastnosti Bézierových ploch</h2>
+						<ul style="padding-bottom: 30px;">
+							<li>Strany Bézierovy plochy jsou Bézierovy křivky.</li>
+							<li>Plocha leží uvnitř konvexní obálky řídících bodů.</li>
+							<li>Změnou jednoho řídícího bodu dojde ke změně celé plochy. Proto se používá navazování plátů nízkého řádu (nejčastěji bikubické Bézierovy pláty)</li>
+							<li>Plocha prochází krajními řídícími body:</li>
+						</ul>
+						$$
+						\begin{align}
+						P_{0,0} &= Q(0,0), P_{0,m} = Q(0,1) \\
+						P_{n,0} &= Q(1,0), P_{n,m} = Q(1,1) \\
+						\end{align}
+						$$
+					</section>
+					<section>
+						<h2>Navazování Bézierových plátů</h2>
+						<ul>
+							<li>Máme-li dva Bézierovy pláty: $Q^{(1)}(u,v)$ s řídícími body: $P^{(1)}_{i,j}, i=0, \dots ,s; j=0, \dots, m$ a $Q^{(2)}(u,v)$ s řídícími body: $P^{(2)}_{i,j}, i=0, \dots ,t; j=0, \dots, m$</li>
+							<li>Ve směru kolmém na směr navazování musí mít oba pláty stejný stupeň, aby bylo možné vždy zaručit spojitost alespoň $C^{0}$</li>
+							<li>Pokud navazujeme dva pláty ve směru $u$, tak musí platit rovnost: $Q^{(1)}(1,v) = Q^{(2)}(0, v)$</li>
+							<li>Tudíž musí platit i: $P^{(1)}_{s,0} = P^{(2)}_{0,0}, \dots, P^{(1)}_{s,m} = P^{(2)}_{0,m}$</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Spojité navázání Bézierových plátů</h2>
+						<ul>
+							<li>Při spojitém navázání plátů nám nestačí rovnost společných hran.</li>
+							<li>Musí být spojité i hlavní křivky ve směru návázání.</li>
+							<li>Pokud jsou všechny hlavní křivky ve směru navázání $C^{1}$ spojité, tak i oba pláty jsou $C^{1}$ spojité.</li>
+							<li>Stejné pravidlo platí pro geometrickou spojitost.</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Bézierovy bikubické plochy</h2>
+						$$
+						Q(u,v) = \sum_{i=0}^{3} \sum_{j=0}^{3} P_{i,j} B_{i}^{3}(u) B_{j}^{3}(v)
+						$$
+						<p>Bikubická ploch je dána pouze 16-ti řídícími body. Maticový zápis:</p>
+						$$
+						Q(u,v) = U M_{B} P M_{B}^{T} V^{T}
+						$$
+						<p>pak můžeme rozepsat do tvaru:</p>
+					</section>
+					<section>
+						$$
+						\begin{align}
+						Q(u,v) =
+						&
+						\begin{bmatrix}
+						u^{3} & u^{2} & u & 1 \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						-1 &  3 & -3 & 1 \\
+						 3 & -6 &  3 & 0 \\
+						-3 &  3 &  0 & 0 \\
+						 1 &  0 &  0 & 0 \\
+						\end{bmatrix}
+						\\
+						&
+						\begin{bmatrix}
+						P_{0,0} & P_{0,1} & P_{0,2} & P_{0,3} \\
+						P_{1,0} & P_{1,1} & P_{1,2} & P_{1,3} \\
+						P_{2,0} & P_{2,1} & P_{2,2} & P_{2,3} \\
+						P_{3,0} & P_{3,1} & P_{3,2} & P_{3,3} \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						-1 &  3 & -3 & 1 \\
+						 3 & -6 &  3 & 0 \\
+						-3 &  3 &  0 & 0 \\
+						 1 &  0 &  0 & 0 \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						v^{3} \\
+						v^{2} \\
+						v \\
+						1 \\
+						\end{bmatrix}
+						\end{align}
+						$$
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>B-spline plochy</h2>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>NURBs plochy</h2>
+					</section>
 				</section>
 			</div>
 
