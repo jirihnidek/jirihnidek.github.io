@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="cs">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Python &amp; C/C++</title>
+
+		<meta name="description" content="Parametrické plochy">
+		<meta name="author" content="Jiří Hnídek">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!-- Analytics -->
+		<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-52302083-5', 'auto');
+		ga('send', 'pageview');
+		</script>
+		<!-- End Analytics -->
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Python &amp; C/C++</h1>
+					<h3>Programovací jazyk Python</h3>
+					<p>
+						<small>Autor: <a href="http://jirihnidek.github.io">Jiří Hnídek</a> / <a href="mailto:jiri.hnidek@tul.cz">jiri.hnidek@tul.cz</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Proč psát moduly v C/C++</h2>
+					<ul>
+						<div class="fragment">
+						<li>Python je interpretovaný</li>
+						<ul>
+							<li>Kód je pomalejší než kompilovaný kód</li>
+						</ul>
+						</div>
+						<div class="fragment">
+						<li>20% kódu zabírá 80% času procesoru</li>
+						<ul>
+							<li>Kritickou část přepíšeme do C/C++</li>
+						</ul>
+						</div>
+						<div class="fragment">
+						<li>Máme kód (knihovnu) napsanou v C/C++</li>
+						<ul>
+							<li>Chceme ho použít v Pythonu</li>
+							<li>Nechceme kód přepisovat do Pythonu</li>
+						</ul>
+						</div>
+						<li class="fragment">Chceme integrovat Python do C/C++ aplikace jako skriptovací jazyk</li>
+					</ul>
+				</section>
+
+				<section>
+					<section>
+						<h2>Optimalizace Python kódu</h2>
+						<ul>
+							<li>Přepsat pomocí Python/C API</li>
+							<ul>
+								<li>2.7: <a href="https://docs.python.org/2.7/c-api/index.html">hhttps://docs.python.org/2.7/c-api/index.html</a></li>
+								<li>3.5: <a href="https://docs.python.org/3.5/c-api/index.html">https://docs.python.org/3.5/c-api/index.html</a></li>
+							</ul>
+							<li>Cython: <a href="http://www.cython.org/">http://www.cython.org/</a></li>
+						</ul>
+					</section>
+					<section>
+						<h3>Python/C API</h3>
+						<ul>
+							<li>Základ pro všechna ostatní řešení (Cython, wrappery)</li>
+							<li>Výsledný kód je pod kontrolou programátora</li>
+							<li>Integrace Pythonu jako skriptovacího jazyka do aplikace napsané v C/C++</li>
+							<li>Pro velké projekty pracné</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Python/C API &amp; Linux</h2>
+						<p>Instalaci lze jednoduše provést pomocí:</p>
+						<code data-trim contenteditable>
+						yum install python-devel make gcc cmake
+						</code>
+					</section>
+					<section>
+						<h2>Python/C API &amp; Windows</h2>
+						<a href="https://docs.python.org/2.7/extending/windows.html">https://docs.python.org/2.7/extending/windows.html</a>
+					</section>
+				</section>
+
+				<section>
+					<h2>Cython</h2>
+					<ul>
+						<li>Z modulu napsaného v Pythonu vygeneruje zdrojový kód v jazyku C a přeloží ho</li>
+						<li>Snadné na použití</li>
+						<li>Vygenerovaný kód není "vždy" optimální</li>
+						<li>Výsledný modul může být až o několik řádů rychlejší</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Wrappery</h2>
+					<ul>
+						<li>Swig</li>
+						<li>Boost:Python</li>
+						<li>Pyrex</li>
+						<li>Cython</li>
+						<li>A mnohé další</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Swig</h2>
+					<ul>
+						<li>Umožňuje vytvořit modul/knihovnu pro několik programovacích jazyků</li>
+						<li>Modul je vytvořen jednoduše na základě interface souboru</li>
+						<li>Funguje pro jednoduché funkce</li>
+						<li>Pro složitější případy selhává</li>
+						<li>Nutno řešit kódem v Python/C API</li>
+						<li>Není univerzální pro ostatní prog. jazyky</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Integrování Pythonu do aplikace</h2>
+					<ul>
+						<li>Python/C API</li>
+						<ul>
+							<li>
+							<a href="http://docs.python.org/2.7/extending/embedding.html">http://docs.python.org/2.7/extending/embedding.html</a>
+							</li>
+						</ul>
+						<li>PythonQt</li>
+						<ul>
+							<li>
+							<a href="http://pythonqt.sourceforge.net/">http://pythonqt.sourceforge.net/</a>
+							</li>
+						</ul>
+					</ul>
+				</section>
+
+				<section>
+					<h2>CTypes</h2>
+					<ul>
+						<li>Umožňuje volat funkce z dynamicky zaváděných knihoven (.dll, .so)</li>
+						<ul>
+							<li><a href="http://docs.python.org/2/library/ctypes.html">http://docs.python.org/2/library/ctypes.html</a></li>
+						</ul>
+					</ul>
+					<pre><code data-trim contenteditable>
+>>> import ctypes
+>>> libm = ctypes.CDLL(‘libm.so’)
+>>> sin = getattr(libm, ‘sin’)
+>>> sin.argtypes = [ctypes.c_double]
+>>> sin.restype = ctypes.c_double
+>>> y = sin(1.0)
+>>> print(y)
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>CFFI</h2>
+					<ul>
+						<li>Umožňuje volat C kód přímo s Pythonu</li>
+						<ul>
+							<li><a href="https://cffi.readthedocs.org">https://cffi.readthedocs.org</a></li>
+						</ul>
+					</ul>
+					<pre><code data-trim contenteditable>
+>>> from cffi import FFI
+>>> ffi = FFI()
+>>> ffi.cdef("int printf(const char *format, ...);")
+>>> C = ffi.dlopen(None) # No library
+>>> arg = ffi.new("char[]", "World")
+>>> C.printf("Hello %s!\n", arg)
+Hello World!
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>That's all Folks!</h2>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				math: {
+					mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js', //'/plugin/math/MathJax.js',
+					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+				},
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
