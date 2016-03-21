@@ -23,11 +23,19 @@ Install shibboleth using:
 yum -y install shibboleth
 ```
 
+Then you can try to enable, start and print status of shibboleth daemon:
+
+```bash
+systemctl enable shibd
+systemctl start shibd
+systemctl status shibd
+```
+
 ## Configuration of Shibboleth (SP)
 
 You need to have Apache web server configured and running. It should be available at [FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) address using HTTPS protocol. Yes, you need certificate for your server and you can't test shibboleth configuration at virtual machine with private address (e.g. 192.168.1.10). When your organization is member of [CESNET](http://www.cesnet.cz), then you can use [CESNET CA](https://pki.cesnet.cz/) for generating certificate for your server.
 
-Example of apache configuration file (no Shibboleth authentication yet):
+Example of apache configuration file (include simple Shibboleth configuration):
 
     <VirtualHost 147.230.18.79:80>
         ServerName fqdn.address.tul.cz
