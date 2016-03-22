@@ -8,10 +8,13 @@ url: "http://localhost:4000"
 
 exclude: ['Gemfile', 'Gemfile.lock', 'README.md']
 paginate: 4
-# markdown: kramdown
-markdown: redcarpet
-redcarpet:
-  extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "strikethrough", "superscript"]
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+# markdown: redcarpet
+# redcarpet:
+#   extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "strikethrough", "superscript"]
 permalink: pretty
 highlighter: rouge
 gems: ["jekyll-paginate"]
