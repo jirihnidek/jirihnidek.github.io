@@ -10,16 +10,12 @@ Requirements
 
 You have to have running Linux server. You can use many web server, but I prefer o use Apache or Nginx. You have to enable port 80 (protocol HTTP) and 443 (protocol HTTPS). You can do it using:
 
-```bash
-firewall-cmd --add-service=http
-firewall-cmd --add-service=https
-```
+    $ firewall-cmd --add-service=http
+    $ firewall-cmd --add-service=https
 
 To check results type:
 
-```bash
-firewall-cmd --list-all
-```
+    $ firewall-cmd --list-all
 
 It should include something like this:
 
@@ -35,30 +31,24 @@ It should include something like this:
 
 You will probably want to add previous firewall rules a permenent rules:
 
-```bash
-firewall-cmd --permanent --add-service=http
-firewall-cmd --permanent --add-service=https
-```
+    $ firewall-cmd --permanent --add-service=http
+    $ firewall-cmd --permanent --add-service=https
 
 ## Install and Start Apache
 
 If you want to install and run ([apache](http://www.apache.org/) web server, then you can install it using:
 
-```bash
-yum -y install httpd mod_ssl openssl
-systemctl enable httpd
-systemctl start httpd
-```
+    $ yum -y install httpd mod_ssl openssl
+    $ systemctl enable httpd
+    $ systemctl start httpd
 
 ## Install and Start Nginx
 
 If your prefer [nginx](http://nginx.org/), you can install, enable and start it using similar commands:
 
-```bash
-yum -y install nginx openssl
-systemctl enable httpd
-systemctl start httpd
-```
+    $ yum -y install nginx openssl
+    $ systemctl enable httpd
+    $ systemctl start httpd
 
 Generating of Certificate
 -------------------------
@@ -86,41 +76,31 @@ At the first time you will need to create request of certificate. You can use on
 
 Then you can create own request file using following command (you will be asked for passphrase for `serverkey.pem`):
 
-```bash
-openssl req -new -keyout serverkey.pem -out serverreq.pem -config server-req.cfg
-```
+    $ openssl req -new -keyout serverkey.pem -out serverreq.pem -config server-req.cfg
 
 When your request is created, then you can submit it on address: [https://tcs.cesnet.cz/requestform/form](https://tcs.cesnet.cz/requestform/form).
 
 Keep in mind that `serverkey.pem` will be encrypted (using passphrase you typed) and encrypted secret key file is not feasible for production, because web server would require to type this passphrase everytime, when web server is started or restarted. For this reason it is wise to decrypt `serverkey.pem` and grant feasible access permissions for this file:
 
-```bash
-openssl rsa -in serverkey.pem -out domain_tul_cz.key.pem
-chmod go-rwx domain_tul_cz.key.pem
-```
+    $ openssl rsa -in serverkey.pem -out domain_tul_cz.key.pem
+    $ chmod go-rwx domain_tul_cz.key.pem
 
 When certificate file will be generated, then you will receive notification e-mail with link to certificate file and you will be able to download it to your server. You will also need CA chain. It will be probably this file:
 
-```bash
-wget -q https://pki.cesnet.cz/certs/chain_TERENA_SSL_CA_3.pem
-```
+    $ wget -q https://pki.cesnet.cz/certs/chain_TERENA_SSL_CA_3.pem
 
 When you will want to use Nginx web server, then you will also need to create bundled certificate file, because nginx can't use certificate file and CA chain file for some reasons. You have to place them into one file using these commands:
 
-```bash
-cp domain_tul_cz.cert.pem domain_tul_cz.bundle.cert.pem
-cat chain_TERENA_SSL_CA_3.pem >> domain_tul_cz.bundle.cert.pem
-```
+    $ cp domain_tul_cz.cert.pem domain_tul_cz.bundle.cert.pem
+    $ cat chain_TERENA_SSL_CA_3.pem >> domain_tul_cz.bundle.cert.pem
 
 When you have all required files (`domain_tul_cz.cert.pem`, `domain_tul_cz.key.pem` and `chain_TERENA_SSL_CA_3.pem`), then you should copy it to appropriate directories:
 
-```bash
-cp domain_tul_cz.cert.pem /etc/pki/tls/certs/            # Certificate
-cp chain_TERENA_SSL_CA_3.pem /etc/pki/tls/certs/         # CA chain
-cp domain_tul_cz.bundle.cert.pem /etc/pki/tls/certs/     # Optionally
-cp domain_tul_cz.key.pem /etc/pki/tls/private/           # Secret key
-chmod go-rwx /etc/pki/tls/private/domain_tul_cz.key.pem  # Make sure it is secret
-```
+    $ cp domain_tul_cz.cert.pem /etc/pki/tls/certs/            # Certificate
+    $ cp chain_TERENA_SSL_CA_3.pem /etc/pki/tls/certs/         # CA chain
+    $ cp domain_tul_cz.bundle.cert.pem /etc/pki/tls/certs/     # Optionally
+    $ cp domain_tul_cz.key.pem /etc/pki/tls/private/           # Secret key
+    $ chmod go-rwx /etc/pki/tls/private/domain_tul_cz.key.pem  # Make sure it is secret
 
 ## Configuration of Apache
 
@@ -159,9 +139,7 @@ Configuration of Apache web server could look like this. I add configuration for
 
 This configuration "redirect" any request from port 80 (HTTP) to port 443 (HTTPS). You can also add some `index.html` file to directory `/var/www/html/domain_tul_cz/`. After any change of apache configuration file, you have to reload configuration files:
 
-```bash
-systemctl reload httpd
-```
+    $ systemctl reload httpd
 
 ## Configuration of Nginx
 
