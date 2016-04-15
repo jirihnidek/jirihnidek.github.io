@@ -162,6 +162,10 @@ code {
     white-space: nowrap;
 }
 
+code.highlighter-rouge {
+    border: 1px solid #93a1a1;
+}
+
 pre {
     display: block;
     margin: 30px 50px;
