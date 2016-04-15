@@ -62,9 +62,11 @@ When all resolution of icons are installed in proper directories, then we can in
     $ cd /opt/sublime_text
     $ sudo xdg-desktop-menu install --novendor --mode system sublime_text.desktop
 
-After this you will be able to launch SublimeText using menu or other favorite application launcher. When you install .desktop file using `xdg-desktop-menu`, then desktop file will be copied to `/usr/local/share/applications` and not to `/usr/share/applications`. When you don not have root account or you are not in sudousers, then you can install desktop menu using:
+After this you will be able to launch SublimeText using menu or other favorite application launcher. When you install .desktop file using `xdg-desktop-menu`, then desktop file will be copied to `/usr/local/share/applications`. When you don not have root account or you are not in sudousers, then you can install desktop menu using:
 
     $ xdg-desktop-menu install --novendor --mode user sublime_text.desktop
+
+> Note: When some desktop application is installed from RPM package, then corresponding desktop file(s) are installed to directory `/usr/share/applications` and command `update-desktop-database /usr/share/applications` is called. This command is also internally called by `xdg-desktop-menu`.
 
 Desktop Icon File
 -----------------
