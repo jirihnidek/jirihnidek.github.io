@@ -1,5 +1,6 @@
 @import url(../../lib/font/league-gothic/league-gothic.css);
-@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic);
+/*@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic);*/
+@import url(../../lib/font/lato/latofonts.css);
 /**
  * League theme for reveal.js.
  *
@@ -21,7 +22,7 @@ body {
   background-color: #2b2b2b; }
 
 .reveal {
-  font-family: 'Lato', sans-serif;
+  font-family: 'LatoWebMedium', sans-serif;
   font-size: 36px;
   font-weight: normal;
   color: #eee; }
