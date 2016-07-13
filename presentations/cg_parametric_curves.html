@@ -647,6 +647,42 @@ while(x < x2) {
 
 				<section>
 					<section>
+						<h2>Průsečíky</h2>
+						<p>V počítačové grafice má smysl se zabývat následujícími případy</p>
+						<ul>
+							<li>Průsečík dvou 2D křivek</li>
+							<li>Průsečík 3D křivky s plochou</li>
+							<li>Průsečík dvou ploch</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Průsečík dvou 2D křivek</h2>
+						<ul>
+						<li>Snažíme se nalézt množinu bodů (průsečíků)</li>
+						<li>Pokud je možné křivky vyjádřit jako dvě funkce: $ y = f_{1}(x) $ a $ y = f_{2}(x) $, tak na výsledek nalezneme řešením rovnice: $ f_{1}(x) - f_{2}(x) = 0 $.</li>
+						<li>Pokud jsou obě křivky vyjádřeny implicitně: $ f_{1}(x,y) = 0 $ a $ f_{2}(x,y) = 0 $, tak jejich průsečíky můžme nalézt vyřešením soustavy rovnic.</li>
+						<li>Pokud je jedna křivka vyjádřena implicitně: $ f(x,y) = 0 $ a druhá parametricky: $ x = x(t), y=y(t)$, tak řešení je: $f(x(t), y(t)) = 0 $ </li>
+						</ul>
+					</section>
+					<section>
+						<h2>Průsečík Bézierovy křivky s přímkou</h2>
+						<p>Implicitní vyjádření přímky: $ y - kx - q = 0$</p>
+						<p>Parametrické vyjádření Bézierovy křivky:</p>
+						$$
+						\begin{align}
+						x &= a_{x}t^{3} + b_{x}t^2 + c_{x}t + d_{x} \\
+						y &= a_{y}t^{3} + b_{y}t^2 + c_{y}t + d_{y}
+						\end{align}
+						$$
+						<p>Obecné rovnice má tvar:</p>
+						$$
+						(a_{y} - ka_{x})t^{3} + (b_{y} - kb{x})t^{2} + (c_{y} - kc_{y})t \\ + (d_{y} - kd_{x} - q) = 0
+						$$
+					</section>
+				</section>
+
+				<section>
+					<section>
 						<h2>Bézierovy kubiky a HMTL5 - Canvas</h2>
 						<div style="width: 100%; overflow: hidden;">
 						<div style="float: left; width: 70%;">
