@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="cs">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Počítačová grafika - barevné modely</title>
+
+		<meta name="description" content="Parametrické plochy">
+		<meta name="author" content="Jiří Hnídek">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!-- Analytics -->
+		<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-52302083-5', 'auto');
+		ga('send', 'pageview');
+		</script>
+		<!-- End Analytics -->
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Barevné modely</h1>
+					<h3>Kurz počítačové grafiky</h3>
+					<p>
+						<small>Autor: <a href="http://jirihnidek.github.io">Jiří Hnídek</a> / <a href="mailto:jiri.hnidek@tul.cz">jiri.hnidek@tul.cz</a></small>
+					</p>
+				</section>
+
+				<section>
+					<section>
+						<h2>Světlo</h2>
+						<blockquote>
+							&ldquo;
+							A řekl Bůh: Budiž světlo. A bylo světlo.
+							&ldquo;
+						</blockquote>
+					</section>
+					<section>
+						<h3>Podstata světla</h3>
+						<ul>
+							<li>Korpuskulární charakter</li>
+							<ul>
+								<li>Elektromagnetické vlnění</li>
+								<li>Proud částic - fotonů</li>
+							</ul>
+							<li>Ve vákuu má konečnou rychlost: 299 792 458 m/s</li>
+							<li>Jediná vlastnost fotonu: vlnová délka ~ energie</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Elektromagnetické spektrum</h3>
+						<p>Elektromagnetické vlnění (fotony) se rozděluje podle jeho vlnové délky:</p>
+						<ul>
+							<li>Rádiové vlny (delší jak 1m)</li>
+							<li>Mikrovlny (1mm - 1m)</li>
+							<li>Infračervené záření (760nm - 1mm)</li>
+							<li>Viditelné světlo (390nm - 790nm)</li>
+							<li>Ultrafialové záření (10nm - 400nm)</li>
+							<li>Rentgenové záření (0,1nm - 10nm)</li>
+							<li>Gamma záření (kratší jak 0,1nm)</li>
+						</ul>
+					</section>
+					<section>
+						<img src="./img/EM_spectrum.svg">
+					</section>
+					<section>
+						<h3>Spektrum viditelného světla</h3>
+						<img src="./img/Visible_Spectrum.svg">
+					</section>
+					<section>
+						<h3>Bílé světlo</h3>
+						<p>Každý "bílý" světelný zdroj má rozdílné barevné spektrum.</p>
+						<ul>
+							<li>Sluneční světlo</li>
+							<li>Zamračená obloha</li>
+							<li>Žárovka</li>
+							<li>Zářivka</li>
+							<li>Svíčka</li>
+							<li>Laser</li>
+							<li>Atd.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Záření ideálně černého tělesa a teplota chromatičnosti</h3>
+					</section>
+					<section>
+						<h3>Světelné efekty</h3>
+						<ul>
+							<li>Odraz</li>
+							<li>Lom</li>
+							<li>Disperze (např. duha)</li>
+							<li>Difrakce (např. ohyb na mřížce)</li>
+							<li>Interference</li>
+							<li>Polarizace (např. IMAX)</li>
+							<li>Luminiscence (např. světlušky)</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Lidkské oko</h2>
+					</section>
+					<section>
+						<h3></h3>
+					</section>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				math: {
+					mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js', //'/plugin/math/MathJax.js',
+					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+				},
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
