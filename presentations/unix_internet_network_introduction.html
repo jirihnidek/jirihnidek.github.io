@@ -84,19 +84,52 @@
 				</section>
 				<section>
 					<h2>Referenční model OSI</h2>
+					<p class="fragment">Definuje všeobecné principy sedmivrstevné síťové architektury. Jednotlivé vrstvy mezi sebou komunikují pomocí API. V praxi se u TCP/IP používají jenom 4 vrstvy.</p>
+					<ul>
+						<li class="fragment">Fyzická vrstva</li>
+						<li class="fragment">Linková (spojová) vrstva (Ethernet)</li>
+						<li class="fragment">Síťová vrstva (IPv4, IPv6)</li>
+						<li class="fragment">Transportní (TCP, UDP)</li>
+						<li class="fragment">Relační vrstva</li>
+						<li class="fragment">Prezentační vrstva</li>
+						<li class="fragment">Aplikační vrstva (HTTP)</li>
+					</ul>
 				</section>
 				<section>
-					<h2>MAC adresa</h2>
+					<h2>Ethernet</h2>
+					<p class="fragment">Realizuje fyzickou a linkové vrstvu RM OSI. Přenosovým médiem může být kroucená dvoulinka, optický kabel, koaxiální kabel. Kroucená dvoulinka používá konektor RJ-45. Ethernetový rámece</p>
+				</section>
+				<section>
+					<section>
+						<h2>MAC adresa</h2>
+						<ul>
+							<li class="fragment">48 bitů (6 bytů)</li>
+							<li class="fragment">Příklad zápisu: 00-11-09-95-26-FE, 00:11:09:95:26:fe</li>
+							<li class="fragment">Univerzálně a lokálně spravované adresy</li>
+							<li class="fragment">V případě univerálních adres první tři oktety identifikují výrobce zařízení</li>
+							<li class="fragment">Lokální adresy lze využít v případě virtualizace</li>
+							<li class="fragment">Broadcast(ff:ff:ff:ff:ff)/Unicast/Multicast</li>
+						</ul>
+					</section>
+					<section>
+						<img src="https://upload.wikimedia.org/wikipedia/commons/9/94/MAC-48_Address.svg" style="background-color: #fff;">
+					</section>
 				</section>
 				<section>
 					<h2>Protokol ARP</h2>
+					<p>Slouží pro zjišťování MAC adresy příjemce na lokální síti. K odesílání dotazu používá právě MAC Broadcast adresu (ff:ff:ff:ff:ff). Všechna zařízení v podsíti si cachují dotazy.</p>
 				</section>
 				<section>
 					<section>
-						<h2>IP adresy</h2>
+						<h2>Protokol IP</h2>
+						<p class="fragment">Protokol síťové vrstvy, zodpovědný za směrování protokolu, dvě verze</p>
 					</section>
 					<section>
 						<h2>IPv4</h2>
+						<ul>
+							<li class="fragment">IP datagram: číslo, TTL, fragment, zdrojová a cílová adresa, ToS (QoS), příznaky</li>
+							<li cklass="fragment"></li>
+						</ul>
 					</section>
 					<section>
 						<h2>IPv6</h2>
