@@ -67,14 +67,14 @@
 							<li>Sockety</li>
 							<li>Konfigurace síťových rozhraní, síťové nástroje</li>
 							<li>Firewall</li>
-							<li>QoS, traffic control, shaduling, shaping</li>
+							<li>QoS, traffic control, sheduling, shaping</li>
 							<li>Docker</li>
 							<li>SSH, RSA</li>
 							<li>HTTP server (Apache, Nginx)</li>
 							<li>Samba server</li>
 							<li>LDAP</li>
 							<li>NFS, iSCSI</li>
-							<li>Monitoring</li>
+							<li>Monitoring (Icinga)</li>
 							<li>RHEV, OpenShift, OpenStack, AWS</li>
 						</ol>
 					</section>
@@ -86,7 +86,7 @@
 					<h2>Referenční model OSI</h2>
 					<p class="fragment">Definuje všeobecné principy sedmivrstevné síťové architektury. Jednotlivé vrstvy mezi sebou komunikují pomocí API. V praxi se u TCP/IP používají jenom 4 vrstvy.</p>
 					<ul>
-						<li class="fragment">Fyzická vrstva</li>
+						<li class="fragment">Fyzická vrstva (Ethernet)</li>
 						<li class="fragment">Linková (spojová) vrstva (Ethernet)</li>
 						<li class="fragment">Síťová vrstva (IPv4, IPv6)</li>
 						<li class="fragment">Transportní (TCP, UDP)</li>
@@ -117,64 +117,106 @@
 				</section>
 				<section>
 					<h2>Protokol ARP</h2>
-					<p>Slouží pro zjišťování MAC adresy příjemce na lokální síti. K odesílání dotazu používá právě MAC Broadcast adresu (ff:ff:ff:ff:ff). Všechna zařízení v podsíti si cachují dotazy.</p>
+					<p class="fragment">Slouží pro zjišťování MAC adresy příjemce na lokální síti. K odesílání dotazu používá právě MAC Broadcast adresu (ff:ff:ff:ff:ff). Všechna zařízení v podsíti si cachují dotazy.</p>
 				</section>
 				<section>
 					<section>
-						<h2>Protokol IP</h2>
+						<h2>Internet Protokol</h2>
 						<p class="fragment">Protokol síťové vrstvy, zodpovědný za směrování protokolu, dvě verze</p>
 					</section>
 					<section>
 						<h2>IPv4</h2>
 						<ul>
 							<li class="fragment">IP datagram: číslo, TTL, fragment, zdrojová a cílová adresa, ToS (QoS), příznaky</li>
-							<li cklass="fragment"></li>
+							<li class="fragment">Adresa má délku 24 bitů (4 byty)</li>
+							<li class="fragment">Fragmentace</li>
+							<li class="fragment">Třídy adrees, maska sítě</li>
+							<li class="fragment">NAT, privátní adresa, globální adresa</li>
 						</ul>
 					</section>
 					<section>
 						<h2>IPv6</h2>
+						<li class="fragment">IP datagram: číslo, TTL, zdrojová a cílová adresa, ToS (QoS), rozšiřující hlavičky</li>
+						<li class="fragment">Adresa má délku 128 bitů (16 bytů)</li>
 					</section>
 					<section>
 						<h2>Unicast</h2>
+						<p class="fragment">Jeden příjemce jednoznačně určený svojí adresou</p>
+						<p class="fragment">Příklad IPv4: 147.230.16.1</p>
+						<p class="fragment">Příklad IPv6: 2001:718:1c01:e8b1:fc21:9976</p>
+					</section>
+					<section>
+						<h2>Loopback</h2>
+						<p class="fragment">Lokální adresa bez nutnosti mít v počítači fyzickou síťovou kartu</p>
+						<p class="fragment">Příklad IPv4: 127.0.0.1, 127.0.0.2, ...</p>
+						<p class="fragment">Příklad IPv4: ::1</p>
 					</section>
 					<section>
 						<h2>Broadcast</h2>
+						<p class="fragment">Na dané podsíti broadcastový datagram obdrží všechny stanice</p>
+						<p class="fragment">Příklad: 147.230.50.255</p>
 					</section>
 					<section>
 						<h2>Multicast</h2>
+						<p class="fragment">Jeden vysílající více příjemců v dané skupině</p>
+						<p class="fragment">Příklad: 244.1.1.1</p>
 					</section>
 					<section>
 						<h2>Anycast</h2>
+						<p class="fragment">Speciální adresa, kdy daný datagram obdrží nejbližší stanice.</p>
 					</section>
 				</section>
 				<section>
 					<h2>Směrování</h2>
+					<p class="fragment">OSPF, RIP, BGP</p>
 				</section>
 				<section>
 					<h2>Protokol DHCP</h2>
+					<p class="fragment">Slouží pro automatickou konfiguraci IP adresy</p>
 				</section>
 				<section>
 					<h2>Protokol ICMP</h2>
-				</section>
-				<section>
-					<h2>DNS</h2>
+					<p class="fragment">Protokol pro diagnostiku sítě a zasílání chybových zpráv</p>
 				</section>
 				<section>
 					<section>
 						<h2>Transportní protokoly</h2>
+						<p class="fragment">TCP, UDP (SCTP, DCCP, RTP, atd.)</p>
 					</section>
 					<section>
 						<h3>TCP</h3>
+						<p class="fragment">Spojovaný, proudový, garantuje doručení všech oktetů ve správném pořadí</p>
+						<p class="fragment">Port odesílatele a příjemce, příznaky, kontrolní součet</p>
+						<p class="fragment">Třícestný handshake, congestion control, flow control, ukončení spojení</p>
+						<p class="fragment">TCP tuning, sACK, ECN, TCP offload engine</p>
 					</section>
 					<section>
 						<h3>UDP</h3>
+						<p class="fragment">Nespojovaný, datagramový, nespolehlivý</p>
+						<p class="fragment">Port odesílatele a příjemce, délka, kontrolní součet</p>
 					</section>
 				</section>
 				<section>
-					<h2>Aplikační protokoly</h2>
+					<h2>DNS</h2>
+					<ul>
+						<li class="fragment">Systém pro překlad adres</li>
+						<li class="fragment">Transportní protokol: UDP (při velkém dotazu TCP), porty 53</li>
+						<li class="fragment">Kořenové servery, autoritativní, rekurzivní servery, reverzní dotaz</li>
+						<li class="fragment">Záznamy AA, AAAA, CNAME, NS, MX, atd., cache a TTL</li>
+						<li class="fragment">TLD: com, org, edu, cz, eu, sk, ...</li>
+						<li class="fragment">/etc/resolv.conf, /etc/hosts</li>
+					</ul>
 				</section>
 				<section>
-					<h2>Protokol HTTP, HTTPS, HTTP 2.0</h2>
+					<section>
+						<h2>Aplikační protokoly</h2>
+					</section>
+					<section>
+						<h2>Protokol HTTP, HTTPS, HTTP 2.0</h2>
+					</section>
+					<section>
+						<h2>POP3, IMAP</h2>
+					</section>
 				</section>
 			</div>
 
