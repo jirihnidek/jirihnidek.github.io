@@ -96,14 +96,19 @@
 					</ul>
 				</section>
 				<section>
+				<section>
 					<h2>Ethernet</h2>
-					<p class="fragment">Realizuje fyzickou a linkové vrstvu RM OSI. Přenosovým médiem může být kroucená dvoulinka, optický kabel, koaxiální kabel. Kroucená dvoulinka používá konektor RJ-45. Ethernetový rámece</p>
+					<p class="fragment">Realizuje fyzickou a linkové vrstvu RM OSI. Přenosovým médiem může být kroucená dvoulinka, optický kabel, koaxiální kabel. Kroucená dvoulinka používá konektor RJ-45. Ethernetový rámec.</p>
+				</section>
+				<section>
+					<img src="./img/Ethernet_frame.svg" style="background-color: #fff;" width="75%">
+				</section>
 				</section>
 				<section>
 					<section>
 						<h2>MAC adresa</h2>
 						<ul>
-							<li class="fragment">48 bitů (6 bytů)</li>
+							<li class="fragment">48 bitů (6 bytů alias oktetů)</li>
 							<li class="fragment">Příklad zápisu: 00-11-09-95-26-FE, 00:11:09:95:26:fe</li>
 							<li class="fragment">Univerzálně a lokálně spravované adresy</li>
 							<li class="fragment">V případě univerálních adres první tři oktety identifikují výrobce zařízení</li>
@@ -112,7 +117,7 @@
 						</ul>
 					</section>
 					<section>
-						<img src="https://upload.wikimedia.org/wikipedia/commons/9/94/MAC-48_Address.svg" style="background-color: #fff;">
+						<img src="./img/MAC-48_Address.svg" style="background-color: #fff;" width="75%">
 					</section>
 				</section>
 				<section>
@@ -136,8 +141,13 @@
 					</section>
 					<section>
 						<h2>IPv6</h2>
-						<li class="fragment">IP datagram: číslo, TTL, zdrojová a cílová adresa, ToS (QoS), rozšiřující hlavičky</li>
-						<li class="fragment">Adresa má délku 128 bitů (16 bytů)</li>
+						<ul>
+							<li class="fragment">IP datagram: verze, zdrojová a cílová adresa, Hop limit, třída provozu, rozšiřující hlavičky</li>
+							<li class="fragment">Adresa má délku 128 bitů (16 bytů)</li>
+							<li class="fragment">Chybí broadcast, podpora pro multicast</li>
+							<li class="fragment">Bezestavová autokonfigurace, místní linka</li>
+							<li class="fragment">Jumbogramy, mobilita, absence kontrolního součtu</li>
+						</ul>
 					</section>
 					<section>
 						<h2>Unicast</h2>
@@ -149,7 +159,7 @@
 						<h2>Loopback</h2>
 						<p class="fragment">Lokální adresa bez nutnosti mít v počítači fyzickou síťovou kartu</p>
 						<p class="fragment">Příklad IPv4: 127.0.0.1, 127.0.0.2, ...</p>
-						<p class="fragment">Příklad IPv4: ::1</p>
+						<p class="fragment">Příklad IPv6: ::1</p>
 					</section>
 					<section>
 						<h2>Broadcast</h2>
@@ -172,7 +182,11 @@
 				</section>
 				<section>
 					<h2>Protokol DHCP</h2>
-					<p class="fragment">Slouží pro automatickou konfiguraci IP adresy</p>
+					<ul>
+						<li class="fragment">Slouží pro automatickou konfiguraci síťových parametrů stanice.</li>
+						<li class="fragment">IP adresa, maska, výchozí brána, DNS, atd.</li>
+						<li class="fragment">Broadcast, UDP, port 63</li>
+					</ul>
 				</section>
 				<section>
 					<h2>Protokol ICMP</h2>
