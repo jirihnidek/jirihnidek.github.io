@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="cs">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>UNIX a Internet - Opakování počítačových sítí</title>
+
+		<meta name="description" content="Opakování počítačových sítí">
+		<meta name="author" content="Jiří Hnídek">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!-- Analytics -->
+		<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-52302083-5', 'auto');
+		ga('send', 'pageview');
+		</script>
+		<!-- End Analytics -->
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>UNIX a Internet</h1>
+					<h2>Sockety</h2>
+					<p>
+						<small>Autor: <a href="http://jirihnidek.github.io">Jiří Hnídek</a> / <a href="mailto:jiri.hnidek@tul.cz">jiri.hnidek@tul.cz</a></small>
+					</p>
+				</section>
+				<section>
+					<h2>Začneme lehce - komunikace mezi procesy</h2>
+					<ul>
+						<li class="fragment">Soubory</li>
+						<li class="fragment">Roury</li>
+						<li class="fragment">Signály</li>
+						<li class="fragment">Semafory</li>
+						<li class="fragment">Fronty zpráv (IPC)</li>
+						<li class="fragment">Sdílená paměť</li>
+						<li class="fragment">Sockety</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Historie Socketů</h2>
+					<ul>
+						<li>Prvně v BSD UNIXu (Berkeley Software Distribution)</li>
+						<li>Rozšíření roury z UNIXu umožňující obousměrnou komunikaci.</li>
+						<li>Je možné použít pro komunikaci mezi procesy na jednom počítači (UNIX socket)</li>
+						<li>Nejčastěji se používá pro komunikaci mezi procesy, které běží na různých počítačích.</li>
+						<li>Windows Sockets (WinSock)</li>
+					</ul>
+				</section>
+				<section>
+					<h2>UNIX socket</h2>
+					<ul>
+						<li>Historický relikt?</li>
+						<pre><code>
+# su netstat -l -x
+Active UNIX domain sockets (only servers)
+Proto RefCnt Flags       Type       State         I-Node   Path
+unix  2      [ ACC ]     STREAM     LISTENING     28162    /tmp/.X11-unix/X0
+						</code></pre>
+						<li>Architektura klient-server</li>
+						<li>Několik typů socketů</li>
+						<li>Popíšeme na příkladu:</li>
+					</ul>
+				</section>
+				<section>
+					<h3>API aneb systémová volání</h3>
+					<pre><code>int socket(int domain, int type, int protocol);</code></pre>
+					<pre><code>int bind(int sock_fd, struct sockaddr *addr);</code></pre>
+					<pre><code>int connect(int sock_fd, struct sockaddr *addr, int addr_len);</code></pre>
+					<pre><code>int listen(int sock_fd, int queue_len);</code></pre>
+					<pre><code>int accept(int sock_fd, struct sockaddr *addr, int addr_len);</code></pre>
+					<pre><code>int read(int sock_fd, char *buf, int buf_len);</code></pre>
+					<pre><code>int write(int sock_fd, char *buf, int buf_len);</code></pre>
+					<pre><code>int close(sock_fd);</code></pre>
+				</section>
+				<section>
+					<section>
+						<h3>Socket - deskriptor souborů</h3>
+						<p>Systémové volání socket vrací deskriptor souborů, který je potřeba spojit (bind) s adresou a následně je možné ho použít pro komunikaci.</p>
+						<p>Otázka: kolik deskriptorů souborů může mít proces otevřený (ve výchozím nastavení)?</p>
+					</section>
+					<section>
+						<h3>Socket - domain</h3>
+						<p>Určuje jmenný prostor, ve kterém se bude provádět komunikace. Přibližně odpovídá protokolu linkové vrstvy. Některé vybrané hodnoty:</p>
+						<ul>
+							<li>AF_UNIX (unixové sockety)</li>
+							<li>AF_INET (IPv4)</li>
+							<li>AF_INET6 (IPv6)</li>
+							<li>AF_PACKET ("vlastní" linkový protokol)</li>
+							<li>AF_NETLINK (komunikace s kernelem)</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Socket - type</h3>
+						<p>Typ protokolu určuje druh komunikace mezi koncovými body.</p>
+						<ul>
+							<li>SOCK_STREAM - proudový, spolehlivý, dvoucestný, spojovaný bytový proud</li>
+							<li>SOCK_DGRAM - datagramový, nespolehlivý, nespojovaný posílání zpráv</li>
+							<li>SOCK_RAW - vlastní transportní protokol</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Socket - protocol</h3>
+						<p>Specifikuje konrétní protokol, který bude použit pro komunikaci.</p>
+						<ul>
+							<li>IPPROTO_TCP</li>
+							<li>IPPROTO_UDP</li>
+							<li>IPPROTO_SCTP</li>
+							<li>IPPROTO_DCCP</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Socket - blokující/neblokující</h3>
+					</section>
+				</section>
+				<section>
+					<h3>Bind</h3>
+					<ul>
+						<li>Propojí socket s adresou</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Connect</h3>
+					<ul>
+						<li>Volá většinou pouze klient</li>
+						<li>Když je použit TCP jako transportní protokol, tak se klient pokusí udělat TCP handshake</li>
+						<li>Lze volitelně použít i UDP (pouze zjednodušuje další syst. volání)</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Listen</h3>
+					<ul>
+						<li>Nastavuje velikost fronty příchozích spojení</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Accept</h3>
+					<ul>
+						<li>Volá pouze server</li>
+						<li>Pokud je na transportní vrstvě použit TCP, tak se provede TCP handshake</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Read &amp; Write</h3>
+					<ul>
+						<li>Read načte data z bufferu příchozích dat. Write nakopíruje data do odchozího bufferu.</li>
+						<li>Pokud je socket v blokujícím režimu, tak funkce read() zablokuje program, pokud je buffer prázdný</li>
+						<li>Stejně tak funkce write() zablokuje program, pokud je odchozí buffer plný (congestion control, flow control)</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Close</h3>
+					<p>Provede TCP teardown</p>
+				</section>
+				<section>
+					<h2>Adresy</h2>
+					<ul>
+						<li>IPv4 (AF_INET): struct sockaddr_in addres;</li>
+						<pre><code>
+addres.sin_family = AF_INET;
+addres.sin_addr.s_addr = inet_addr("127.0.0.1");
+addres.sin_port = htons(PORT);
+						</code></pre>
+						<li>IPv6 (AF_INET6): struct sockaddr_in6 addres;</li>
+						<pre><code>
+addres.sin6_family = AF_INET6;
+inet_pton(AF_INET6, argv[1], &addres.sin6_addr);
+addres.sin6_port = htons(PORT);
+						</code></pre>
+						<li>INADDR_ANY, in6addr_any</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Big Endian vs. Little Endian</h3>
+					<p>htons(), htonl(), ntohs(), ntohl()</p>
+				</section>
+				<section>
+					<h3>Děkuji za pozornost. Nějaké otázky?</h3>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				math: {
+					mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js', //'/plugin/math/MathJax.js',
+					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+				},
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
