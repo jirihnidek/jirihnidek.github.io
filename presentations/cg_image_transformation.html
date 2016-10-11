@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="cs">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Počítačová grafika - souborové formáty</title>
+
+		<meta name="description" content="Souborové formáty používané v počítačové grafice">
+		<meta name="author" content="Jiří Hnídek">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!-- Analytics -->
+		<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-52302083-5', 'auto');
+		ga('send', 'pageview');
+		</script>
+		<!-- End Analytics -->
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Úpravy obrazu</h1>
+					<h3>Kurz počítačové grafiky</h3>
+					<p>
+						<small>Autor: <a href="http://jirihnidek.github.io">Jiří Hnídek</a> / <a href="mailto:jiri.hnidek@tul.cz">jiri.hnidek@tul.cz</a></small>
+					</p>
+				</section>
+				<section>
+					<h2>Omezování barevného prostoru</h2>
+					<p>Snahou tohoto procesu je dosáhnout podobného obrazového vjemu při omezení počtu barev v obraze.</p>
+					<ul>
+						<li>Použití barevné palety s omezenou velikostí</li>
+						<li>Filtry v grafických programech</li>
+						<li>Barevný i černobílý tisk</li>
+					</ul>
+					<p>Obecně platí:</p>
+					$$
+						V_{in} -> V_{out}; V_{in} \in \langle 0, s \rangle;
+						\quad
+						V_{out} \in \langle 0, t \rangle; t \leq s
+					$$
+				</section>
+				<section>
+					<section>
+						<h2>RGB na stupně šedi</h2>
+						<p>Existuje několik metod, které jsou vhodné pro různé případy.</p>
+					</section>
+					<section>
+						<h3>RGB na stupně šedi (YUV)</h3>
+						<p>Formáty splňující <a href="https://en.wikipedia.org/wiki/Rec._601">BT.601</a></p>
+						$$
+							Y = 0.299 R + 0.587 G + 0.114 B
+						$$
+					</section>
+					<section>
+						<h3>RGB na stupně šedi (Y'IQ)</h3>
+						<p>Formáty splňující <a href="https://en.wikipedia.org/wiki/Rec._709">BT.709</a></p>
+						$$
+							Y = 0.2126 R + 0.7152 G + 0.0722 B
+						$$
+					</section>
+					<section>
+						<h3>RGB na stupně šedi (HSV)</h3>
+						$$
+							V = \max(R, G, B)
+						$$
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Omezení barevného prostoru černobílých obrázků</h2>
+						<p>Nejprve si ukážeme omezení obrázků, které jsou v šedotónové stupnici
+						na obrázky, které obsahují pouze černé a bílé body.</p>
+					</section>
+					<section>
+						<h3>Příklady jednotlivých metod</h3>
+						<table>
+							<tr>
+								<td><img src="./img/David.png"></td>
+								<td><img src="./img/David_threshold.png"></td>
+								<td><img src="./img/David_random.png"></td>
+							</tr>
+							<tr>
+								<td><img src="./img/David_matrix-printer.png"></td>
+								<td><img src="./img/David_matrix-display.png"></td>
+								<td><img src="./img/David_Floyd-Steinberg.png"></td>
+							</tr>
+						</table>
+					</section>
+					<section>
+						<h3>Prahování</h3>
+						<p>Základní jednoduchá metoda vhodná například pro vytváření jednoduché masky.</p>
+<pre><code>
+for V_in in pixels.values():
+	if V_in > threshold:
+		V_out = max
+	else:
+		V_out = min
+</code></pre>
+					</section>
+					<section>
+						<h3>Náhodný rozptyl</h3>
+						<p>Výsledný obrázek více připomíná výslednou předlohu, ale je zatížen velkým šumem.</p>
+<pre><code>
+for V_in in pixels.values():
+	if V_in > random(min, max):
+		V_out = max
+	else:
+		V_out = min
+</code></pre>
+					</section>
+					<section>
+						<h3>Maticový rozptyl</h3>
+						<ul>
+							<li>Tato metoda se stále používá v tiskárnách.</li>
+							<li>Vstupní hodnota je nahrazena odpovídající maticí.</li>
+							<li>Základní metoda násobně zvětšuje velikost obrázku podle velikosti použité matice.</li>
+							<li>Způsob generování matice se liší podle použití (tisk/monitor).</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Algoritmus nezvětšujícího maticového rozptylu</h3>
+						<p>Vstupní hodnoty i hodnoty v matici k.M musí být ve stejném rozsahu.</p>
+<pre><code>
+for pixel in pixels:
+	V_in = pixel.value
+	x = pixel.x
+	y = pixel.y
+	if V_in > k*M[x mod n, y mod n]:
+		V_out = max
+	else:
+		V_out = min
+</code></pre>
+					</section>
+					<section>
+						<h2>Matice vhodná pro displeje</h2>
+						<p>Matice je čtverocvá a její řád je vždy mocnou 2. Lze ji generovat rekurzivně pomocí:</p>
+						$$
+						M_{(2n)} = 
+						\begin{bmatrix}
+						4M_{(n)} &            4M_{(n)} + 3J_{(n)} \\
+						4M_{(n)} + 2J_{(n)} & 4M_{(n)} + J_{(n)} \\
+						\end{bmatrix}
+						$$
+						<p>kde $J_{(n)}$ čtvercová matici obsahující samé jedničky a $M_{(1)}$ je jednoprvková matice obsahující nulu.</p>
+					</section>
+					<section>
+						<h2>Příklady matice pro displeje</h2>
+						$$
+						M_{2} =
+						\begin{bmatrix}
+						0 & 3 \\
+						2 & 1 \\
+						\end{bmatrix}
+						$$
+						<p></p>
+						$$
+						M_{4} = 
+						\begin{bmatrix}
+						 0 & 12 &  3 & 15 \\
+						 8 &  4 & 11 &  7 \\
+						 2 & 14 &  1 & 13 \\
+						10 &  6 &  9 &  5 \\
+						\end{bmatrix}
+						$$
+					</section>
+					<section>
+						<h2>Příklad matici pro tiskárny</h2>
+						<p>Povšimňete si, že hodnoty narůstají v zavírající se spirále. Ve výsledku výsledný obrázek obsahuje puntíky.</p>
+						$$
+						M_{4} = 
+						\begin{bmatrix}
+						 1 &  5 &  9 &  2 \\
+						 8 & 12 & 13 &  6 \\
+						 4 & 15 & 14 & 10 \\
+						 0 & 11 &  7 &  3 \\
+						\end{bmatrix}
+						$$
+					</section>
+					<section>
+						<h3>Distribuce zaokrouhlovací chyby</h3>
+						<p>Tato metoda vychází z prahování a základní myšlenka algoritmu spočívá v tom, že chyba způsobená omezením vstupní barevné informace jednoho pixelu se distribuuje na dosud nezpracované okolní pixely.</p>
+<pre><code>
+for pixel in pixels:
+	V_in = pixel.value
+	x = pixel.x
+	y = pixel.y
+	if V_in > threshold:
+		V_out = max
+	else:
+		V_out = min
+	chyba = V_out - V_in
+	pixels[x+1,y] += (7/16)*chyba
+	pixels[x-1,y+1] += (3/16)*chyba
+	pixels[x,y+1] += (5/16)*chyba
+	pixels[x+1,y+1] += (1/16)*chyba
+</code></pre>
+					</section>
+					<section>
+						<h3>Disribuční matice</h3>
+						<p>Distribuci zaokrouhlovací chyby lze použít i u maticového rozptylu.</p>
+						$$
+						\frac{1}{16}
+						\begin{bmatrix}
+						0 & 0 & 0 \\
+						0 & 0 & 7 \\
+						3 & 5 & 1
+						\end{bmatrix}
+						$$
+					</section>
+					<section>
+						<h3>Příklad distribuce zaokrouhlovací chyby</h3>
+						<table>
+							<tr>
+								<td><img src="./img/Dithering_example_undithered.png"></td>
+								<td><img src="./img/Dithering_example_undithered_web_palette.png"></td>
+								<td><img src="./img/Dithering_example_undithered_16color.png"></td>
+							</tr>
+							<tr>
+								<td><img src="./img/Dithering_example_dithered_web_palette.png"></td>
+								<td><img src="./img/Dithering_example_dithered_16color.png"></td>
+								<td><img src="./img/Dithering_example_dithered_256color.png"></td>
+							</tr>
+						</table>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Adaptivní barevná paleta</h2>
+						<p>Barevná paleta je vytvořena, tak aby v ní byly zastoupeny nejčastěji se vyskytující barvy ve vstupním obrázku.</p>
+						<p>V algoritmu se využívá RGB krychle. Nejprve krychli naplníme body podle pixelů v daném obrázku a určíme krajní body ohraničující obálky:</p>
+						<pre><code>
+x_min = y_min = z_min = 1.0
+x_max = y_max = z_max = 0.0
+for pixel in pixels:
+	pnt.x, pnt.y, pnt.z = pixel.r, pixel.g, pixel.b
+	x_min = (x_min > pnt.x) ? pnt.x : x_min
+	y_min = ...
+	x_max = (x_max < pnt.x) ? pnt.x : x_max
+	y_max = ...
+						</code></pre>
+					</section>
+					<section>
+						<p>Následne určíme nejdelší stranu ohraničující obálky:</p>
+						<pre><code>
+diff_x = x_max - x_min
+diff_y = y_max - y_min
+diff_z = z_max - y_min
+						</code></pre>
+						<p>Ohraničující obálku rozděl kolmým řezem na vybranou souřadnicovou osu. Místo řezu nutné volit tak, aby v obou nových částech byl přibližně stejný počet barev (lze předpočítat v předchozím kroku).</p>
+					</section>
+					<section>
+						<p>Následně aktualizujeme ohraničující obálky pro nové oblasti.</p>
+						<p>Dělení ohraničujících obálek se opakuje dokud celkový počet ohraničujících obálek není roven požadovanému počtu barev v barevné paletě.</p>
+						<p>Každé ohraničující obálce přiřaď barvu (medián, případně průměrná barva).</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Geometrické transformace</h2>
+						<p>Často se místo kartézské soustavy souřané používají homogenní souřadnice. Každý bod $P=[X, Y]$ má učitou váhu: w</p>
+						<p>Převod z homogenních souřadnice do kartézské soustavy souřadné:</p>
+						$$
+						\begin{align}
+						X' &= \frac{X}{w} \\
+						Y' &= \frac{Y}{w} \\
+						\end{align}
+						$$
+					</section>
+					<section>
+						<h3>Transformační matice</h3>
+						<p>Obecná transformační matice pro 2D transformace má následující tvar:</p>
+						$$
+						\begin{bmatrix}
+						X' \\
+						Y' \\
+						w' \\
+						\end{bmatrix}
+						=
+						\begin{bmatrix}
+						m_{1,1} & m_{1,2} & m_{1,3} \\
+						m_{2,1} & m_{2,2} & m_{2,3} \\
+						m_{3,1} & m_{3,2} & m_{3,3} \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						X \\
+						Y \\
+						w \\
+						\end{bmatrix}
+						$$
+					</section>
+					<section>
+						<h3>Posun</h3>
+						<p>Posun můžeme vyjádřit vektorem posunutí $(dx, dy)$ a maticovým násobením:</p>
+						$$
+						\begin{bmatrix}
+						X' \\
+						Y' \\
+						w' \\
+						\end{bmatrix}
+						=
+						\begin{bmatrix}
+						1 & 0 & dx \\
+						0 & 1 & dy \\
+						0 & 0 &  1 \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						X \\
+						Y \\
+						w \\
+						\end{bmatrix}
+						$$
+					</section>
+					<section>
+						<h3>Zvětšení/zmenšení</h3>
+						<p>Zvětšení nebo zmenšení může být ve směru os různé a je vztažené vůči počátku soustavy souřadné:</p>
+						$$
+						\begin{bmatrix}
+						X' \\
+						Y' \\
+						w' \\
+						\end{bmatrix}
+						=
+						\begin{bmatrix}
+						S_{x} & 0 & 0 \\
+						0 & S_{y} & 0 \\
+						0 & 0 &  1 \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						X \\
+						Y \\
+						w \\
+						\end{bmatrix}
+						$$
+					</section>
+					<section>
+						<h3>Zkosení</h3>
+						<p>Zkosení ve směru jedné osy. V tomto případě ve směru osy x</p>
+						$$
+						\begin{bmatrix}
+						X' \\
+						Y' \\
+						w' \\
+						\end{bmatrix}
+						=
+						\begin{bmatrix}
+						1 & s_{x} & 0 \\
+						0 & 1 & 0 \\
+						0 & 0 &  1 \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						X \\
+						Y \\
+						w \\
+						\end{bmatrix}
+						$$
+					</section>
+					<section>
+						<h3>Otočení</h3>
+						<div class="fragment">
+						<p>Transformační matice pro otočení vůči počátku soustavy souřadné:</p>
+						$$
+						\begin{bmatrix}
+						X' \\
+						Y' \\
+						w' \\
+						\end{bmatrix}
+						=
+						\begin{bmatrix}
+						\cos\alpha & -\sin\alpha & 0 \\
+						\sin\alpha & \cos\alpha & 0 \\
+						0 & 0 &  1 \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						X \\
+						Y \\
+						w \\
+						\end{bmatrix}
+						$$
+						</div>
+					</section>
+					<section>
+						<h3>Skládání transformací</h3>
+						<p>Transformační matice se skládají násobením matice, ale v opačném pořadí než se aplikují.</p>
+						<div class="fragment">
+						<p>Příklad: Chceme-li vytvořit matici otočení o $\pi$ vůči bodu $P=[3,4]$, tak výslednou matici vytvoříme následovně:</p>
+						$$
+						M =
+						\begin{bmatrix}
+						1 & 0 & 3 \\
+						0 & 1 & 4 \\
+						0 & 0 &  1 \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						\cos\pi & -\sin\pi & 0 \\
+						\sin\pi & \cos\pi & 0 \\
+						0 & 0 &  1 \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						1 & 0 & -3 \\
+						0 & 1 & -4 \\
+						0 & 0 &  1 \\
+						\end{bmatrix}
+						$$
+						</div>
+					</section>
+				</section>
+				<section>
+					<h2>Převzorkování</h2>
+				</section>
+				<section>
+					<h2>Lineární interpolace</h2>
+					<p>V případě, že máme pouze 1D signál:</p>
+					$$
+						y = \frac{y_{1} - y_{0}}{x_{1} - x_{0}}(x - x_{0}) + y_{0}
+					$$
+				</section>
+				<section>
+					<h2>Bilineární interpolace</h2>
+				</section>
+				<section>
+					<section>
+						<h2>Alfa míchání</h2>
+						<p>Uvažujme, že všechny hodnoty jsou v rozsahu $\langle 0, 1\rangle$</p>
+						$$
+							c = \alpha_{1} c_{1} + \alpha_{2} c_{2}; \quad \alpha_{1} + \alpha_{2} = 1
+						$$
+					</section>
+					<section>
+						<h3>Alpha Over</h3>
+						<p>Rastr s nenulovým alfa kanálem umisťujeme na rastr, kde uvažujeme všechny pixely neprůhledné.</p>
+						$$
+							c = \alpha c_{1} + (1 - \alpha) c_{2}
+						$$
+					</section>
+					<section>
+						<h3>Prolínačka</h3>
+						<p>Mějme dvě animované sekvence nebo dva statické obrázky a chceme je v čase $\Delta t$ postupně prolnout</p>
+						$$
+							\begin{align}
+							\alpha_{1} &= \frac{1}{\Delta t}t \\
+							\alpha_{2} &= 1 - \alpha_{2} \\
+							c &= \alpha_{1} c_{1} + \alpha_{2} c_{2}
+							\end{align}
+						$$
+					</section>
+				</section>
+				<section>
+					<h2>Klíčování</h2>
+					<p>Uvažujeme klíčování na zelené pozadí a rozsah hodnot barevných kanálů je: $\langle 0, 1\rangle$. Dále si stanovíme hodnoty $\alpha_{min}$ a $\alpha_{max}$, které odlišují pozadí od popředí. Přechod mezi popředím a pozadím je pozvolný a určený alfa kanálem:</p>
+					$$
+					\alpha = 1 - G - \max(R,B)
+					$$
+					<p>Pak je možné spočítat barvu jednotlivých barevných kanálů:</p>
+					$$
+					c =
+					\begin{cases}
+					\alpha > \alpha_{max}; & c_{fg} \\
+					\alpha < \alpha_{min}; & c_{bg} \\
+					\alpha \in \langle \alpha_{min}, \alpha_{max} \rangle; & \alpha c_{fg} + (1 - \alpha) c_{bg} 
+					\end{cases}
+					$$
+				</section>
+				<section>
+					<h2>Histogram</h2>
+					<p>Histogram lze vytvořit vždy pouze pro jeden barevný kanál. Hodnoty v daném kanále mohou nabývat pouze určitého počtu hodnot: N</p>
+					<pre><code>
+for i in range(0, N):
+	hist[i] = 0
+
+for V_in in pixels.values():
+	hist[V_in] += 1
+					</code></pre>
+				</section>
+				<section>
+					<h2>Děkuji za pozornost</h2>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				math: {
+					mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+					//mathjax: 'plugin/mathjax/MathJax.js',
+					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+				},
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
