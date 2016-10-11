@@ -111,6 +111,7 @@ unix  2      [ ACC ]     STREAM     LISTENING     28162    /tmp/.X11-unix/X0
 						<h3>Socket - deskriptor souborů</h3>
 						<p>Systémové volání socket vrací deskriptor souborů, který je potřeba spojit (bind) s adresou a následně je možné ho použít pro komunikaci.</p>
 						<p>Otázka: kolik deskriptorů souborů může mít proces otevřený (ve výchozím nastavení)?</p>
+						<p class="fragment">Defaultně může mít každý proces otevřeno 1024 deskriptorů souborů (viz. příkaz: <tt>ulimit -a</tt>).</p>
 					</section>
 					<section>
 						<h3>Socket - domain</h3>
@@ -141,9 +142,6 @@ unix  2      [ ACC ]     STREAM     LISTENING     28162    /tmp/.X11-unix/X0
 							<li>IPPROTO_SCTP</li>
 							<li>IPPROTO_DCCP</li>
 						</ul>
-					</section>
-					<section>
-						<h3>Socket - blokující/neblokující</h3>
 					</section>
 				</section>
 				<section>
@@ -208,10 +206,47 @@ addres.sin6_port = htons(PORT);
 					<p>htons(), htonl(), ntohs(), ntohl()</p>
 				</section>
 				<section>
+					<h3>Návratové hodnoty</h3>
+					<p>V produkčním kódu je nutné kontrolovat návratové hodnoty všech systémových volání a patřičným způsobem na ně reagovat. V případě, že návratová hodnota bude ignorována může být výsledný kód nespolehlivý i nebezpečný.</p>
+					<p>Dokumentaci k návratovým hodnotám hledejte v manuálových stránkách, např.: man 2 accept</p>
+				</section>
+				<section>
+					<section>
+						<h2>Socket - blokující/neblokující</h2>
+						<p>Pokud je socket v blokujícím režimu, tak každé systémové volání bude zablokování v případě, kdy to nedovoluje některá ze síťových vrstev.</p>
+						<p>Příkladem může být systémové volání write() v případě, že dojde k ucpání přenosových cest nebo dojde k zahlcení příjemce.</p>
+						<p>Takové chování je ve většině případu nevhodné.</p>
+					</section>
+					<section>
+						<h3>Přepnutí do neblokujícího režimu</h3>
+						<p>Socket se do neblokujícího režimu musí přepnout explicitně:</p>
+						<pre><code>
+int flag;
+flag = fcntl(listen_sock_fd, F_GETFL, 0);
+fcntl(listen_sock_fd, F_SETFL, flag | O_NONBLOCK);
+						</code></pre>
+						<p>Výhoda tohoto přístupu spočívá v tom, že proces se vám nemůže na systémovém volání zablokovat. Nevýhodou je, že je nutné reagovat na více variant (viz manuálové stránky).</p>
+					</section>
+					<section>
+						<h3>Čekání na vstup</h3>
+						<p>Proces (server i klient) mohou čekat na událost pomocí některého systémového volání (select, pselect, poll, epoll, atd.)</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Více procesů a vláken</h2>
+						<p>Pokud má server efektivně vyřizovat požadavky klientů, tak je vhodné to dělat paralelně. V některých případech je lepší použít víceprocesový přístup (např.: HTTP). V jiných případech je lepší použít vícevláknový přístup (např.: server sdílené virt. reality).</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Buffer odchozích a příchozích paketů</h2>
+					</section>
+				</section>
+				<section>
 					<h3>Děkuji za pozornost. Nějaké otázky?</h3>
 				</section>
 			</div>
-
 		</div>
 
 		<script src="lib/js/head.min.js"></script>
