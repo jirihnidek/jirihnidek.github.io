@@ -450,6 +450,14 @@ diff_z = z_max - y_min
 				</section>
 				<section>
 					<h2>Bilineární interpolace</h2>
+					<p>V případě, že máme 2D signál, tak hodnotu $v_{R}$ na souřadnici $R = [x_{R}, y_{R}]$ spočítáme pomocí 3 lineárních interpolací ze 4 okolních bodů $P_{i} = [x_{Pi}, y_{Pi}]$:</p>
+					$$
+						\begin{align}
+						v_{Q0} &= \frac{v_{P1} - v_{P0}}{x_{P1} - x_{P0}}(x - x_{P0}) + v_{P0} \\
+						v_{Q1} &= \frac{v_{P3} - v_{P2}}{x_{P3} - x_{P2}}(x - x_{P2}) + v_{P2} \\
+						v_{R}  &= \frac{v_{Q1} - v_{Q0}}{y_{Q1} - y_{Q0}}(y - y_{Q0}) + v_{Q0} \\
+						\end{align}
+					$$
 				</section>
 				<section>
 					<section>
@@ -461,19 +469,19 @@ diff_z = z_max - y_min
 					</section>
 					<section>
 						<h3>Alpha Over</h3>
-						<p>Rastr s nenulovým alfa kanálem umisťujeme na rastr, kde uvažujeme všechny pixely neprůhledné.</p>
+						<p>Rastr s nenulovým alfa kanálem (fg) umisťujeme na rastr, kde uvažujeme všechny pixely neprůhledné (bg).</p>
 						$$
-							c = \alpha c_{1} + (1 - \alpha) c_{2}
+							c = \alpha c_{fg} + (1 - \alpha) c_{bg}
 						$$
 					</section>
 					<section>
 						<h3>Prolínačka</h3>
-						<p>Mějme dvě animované sekvence nebo dva statické obrázky a chceme je v čase $\Delta t$ postupně prolnout</p>
+						<p>Mějme animovanou sekvenci (start) a tu chceme od času $t_{0}$ postupně prolnout s animovanou sekvencí (end) za dobu: $\Delta t$</p>
 						$$
 							\begin{align}
-							\alpha_{1} &= \frac{1}{\Delta t}t \\
-							\alpha_{2} &= 1 - \alpha_{2} \\
-							c &= \alpha_{1} c_{1} + \alpha_{2} c_{2}
+							\alpha_{end} &= \frac{1}{\Delta t}(t - t_{0}) \\
+							\alpha_{start} &= 1 - \alpha_{end} \\
+							c &= \alpha_{end} c_{end} + \alpha_{start} c_{start}
 							\end{align}
 						$$
 					</section>
@@ -496,7 +504,7 @@ diff_z = z_max - y_min
 				</section>
 				<section>
 					<h2>Histogram</h2>
-					<p>Histogram lze vytvořit vždy pouze pro jeden barevný kanál. Hodnoty v daném kanále mohou nabývat pouze určitého počtu hodnot: N</p>
+					<p>Histogram lze vytvořit vždy pouze pro jeden barevný kanál (jas, R, G, B, apod.). Hodnoty v daném kanále mohou nabývat pouze určitého počtu hodnot: N</p>
 					<pre><code>
 for i in range(0, N):
 	hist[i] = 0
