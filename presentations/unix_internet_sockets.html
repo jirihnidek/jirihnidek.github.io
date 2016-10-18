@@ -240,11 +240,103 @@ fcntl(listen_sock_fd, F_SETFL, flag | O_NONBLOCK);
 				</section>
 				<section>
 					<section>
-						<h2>Buffer odchozích a příchozích paketů</h2>
+						<h2>Buffer odchozích a příchozích dat</h2>
+						<p>Např. při neblokujícím režimu socketů je vhodné pravidelně zjišťovat kolik dal je možné odeslat.</p>
+						<p>Velikost bufferu pro odchozího a příchozí data (jednoho spojení) při použití protokolu TCP/UDP lze zjistit mnoha způsoby.</p>
+					</section>
+					<section>
+						<h3>TCP Buffer odchozích a příchozích dat</h3>
+						<p>Informace o bufferu lze zjistit například v adresáři /proc: </p>
+						<pre><code>
+cat /proc/sys/net/ipv4/tcp_rmem
+						</code></pre>
+						Tento soubor obsahuje 3 hodnoty (v bytech): minimální, aktuální a maximální velikost bufferu pro příchozí data.
+						<pre><code>
+cat /proc/sys/net/ipv4/tcp_wmem
+						</code></pre>
+						Informace pro odchozí data jednoho spojení.
+					</section>
+					<section>
+						<h3>Aktuální velikost bufferu</h3>
+						<p>V programu můžeme získat aktuální velikost bufferu pomocí:</p>
+						<pre><code>
+int rcv_buf_size, send_buf_size;
+unsigned int int_size = sizeof(rcv_buf_size);
+
+getsockopt(sock_fd, SOL_SOCKET, SO_RCVBUF,
+	(void *)&rcv_buf_size, &int_size);
+getsockopt(sock_fd, SOL_SOCKET, SO_SNDBUF,
+	(void *)&send_buf_size, &int_size);
+						</code></pre>
+					</section>
+					<section>
+						<h3>Buffer odchozích dat - volné místo</h3>
+						<p>Na Linuxu lze zjistit využité místo v bufferu odchozích dat pomocí:</p>
+						<pre><code>
+ioctl(sock_fd, SIOCOUTQ, &buf_size);
+						</code></pre>
+					</section>
+					<section>
+						<h3>Velikost bufferu a propustnost</h3>
+						<pre><code>
+throughput = buffer_size / latency;
+						</code></pre>
+					</section>
+					<section>
+						<h3>Změna velikost bufferu</h3>
+						<p>Pokud nám velikost bufferu nestačí, tak ji můžeme navýšit pomocí:</p>
+						<pre><code>
+setsockopt(sock_fd, SOL_SOCKET, SO_RCVBUF,
+	(void *)&rcv_buf_size, int_size);
+setsockopt(sock_fd, SOL_SOCKET, SO_SNDBUF,
+	(void *)&send_buf_size, int_size);
+						</code></pre>
+						<p class="fragment">Pozor: kernel násobí nastavovanou hodnotu dvěmi.</p>
+					</section>
+					<section>
+						<h3>Doporučovaná velikost bufferu</h3>
+						<pre><code>buffer_size = RTT * bandwidth;</code></pre>
+					</section>
+					<section>
+						<h3>Buffer UDP socketu</h3>
+						<p>I protokol UDP má samozřejmě omezení na bufferu:</p>
+						<pre><code>
+cat /proc/sys/net/ipv4/udp_mem
+						</code></pre>
+						<p>Velikosti bufferu lze nastavovat/zjišťovat analogicky jako u TCP.</p>
 					</section>
 				</section>
 				<section>
-					<h3>Děkuji za pozornost. Nějaké otázky?</h3>
+					<section>
+						<h2>Transportní protokol UDP</h2>
+						<p>Jelikož se jedná o nespojovaný protokol, tak mnohá systémová volání postrácejí smysl (listen, accept).</p>
+						<p>Na druhou stranu se některé věci komplikují.</p>
+						<p>Datagramy lze odesílat pomocí send(), sendto(), sendmsg().</p>
+						<p>Přijímat datagramy lze analogicky pomocí recv(), recvfrom(), recvmsg().</p>
+					</section>
+					<section>
+						<h3>UDP Socket</h3>
+						<ul>
+							<li>Klient může použít jeden socket pro komunikaci s více servery.</li>
+							<li>Server často musí použít jeden socket pro komunikaci se všemi klienty.</li>
+							<li>Lze používat broadcast (IPv4) a multicast (IPv4 i IPV6) adresy.</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>Démon a server</h2>
+					<p>Produkční server budeme chtít tzv. démonizovat:</p>
+					<ul>
+						<li>Odpojit proces od terminálu a spustit na pozadí.</li>
+						<li>Double fork.</li>
+						<li>Změnit aktuální adresář na: /</li>
+						<li>Přesměrovat stdin, stdout a stderr do /dev/null</li>
+						<li>Lze jednoduše naprogramovat pomocí: daemon(0, 0)</li>
+					</ul>
+					<p>Server budeme chtít pravidelně spouštět při startu, elegantně zastavovat či restartovat, atd. K tomu je potřeba udělat několik "drobných" změn a vytvořit spouštěcí skripty.</p>
+				</section>
+				<section>
+					<h2>Děkuji za pozornost. Nějaké otázky?</h2>
 				</section>
 			</div>
 		</div>
