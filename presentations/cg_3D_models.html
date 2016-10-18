@@ -91,28 +91,86 @@
 					</ul>
 				</section>
 				<section>
-					<h2>Síť trojúhelníků</h2>
-					<p>Síť trojúhelníků i libovolných n-úhelníků má vždy dvě části:</p>
-					<p style="text-align: left;"><b>Geometrická struktura</b></p>
-					<ul>
-						<li>Obsahuje pouze souřadnice vertexů</li>
-					</ul>
-					<p style="text-align: left;"><b>Topologická struktura</b></p>
-					<ul>
-						<li>Obsahuje informace o tom, jak jsou vertexy pospojovány do hran a plošek.</li>
-					</ul>
+					<section>
+						<h2>Síť trojúhelníků</h2>
+						<p>Síť trojúhelníků i libovolných n-úhelníků má vždy dvě části:</p>
+						<p style="text-align: left;"><b>Geometrická struktura</b></p>
+						<ul>
+							<li>Obsahuje pouze souřadnice vertexů</li>
+						</ul>
+						<p style="text-align: left;"><b>Topologická struktura</b></p>
+						<ul>
+							<li>Obsahuje informace o tom, jak jsou vertexy pospojovány do hran a plošek.</li>
+						</ul>
+					</section>
 				</section>
 				<section>
 					<h2>Optimalizace sítě trojúhelníků</h2>
+					<p>Síť je někdy vhodné převést na pruh trojúhelníků nebo vějíř trojúhelníků</p>
+					<ul>
+						<li>Není nutné přenášet takové množství dat na grafický akcelerátor</li>
+						<li>Nutná podpora na grafickém akcelátoru a použitém API (OpenGL, WebGL, atd.)</li>
+					</ul>
 				</section>
 				<section>
 					<h2>Manifoldní a non-manifoldní objekty</h2>
+					<p>Manifoldní objekt je tzv. vyrobitelný objekt a jeho topologická struktura musí splňovat následující 3 podmínky:</p>
+					 <ul>
+					 	<li>Každá hrana musí být sdílena pouze dvěma ploškami.</li>
+					 	<li>Žádná hrana neprotíná jinou plošku.</li>
+					 	<li>Žádný vertex nespojuje dvě části objektu.</li>
+					 </ul>
 				</section>
 				<section>
-					<h2>Hranová reprezentace těles</h2>
-				</section>
-				<section>
-					<h2>Jednoduchá plošková reprezentace těles</h2>
+					<section>
+						<h2>Jednoduchá plošková reprezentace těles</h2>
+						<ul>
+							<li>Předpokladem je uložení objektu, který splňuje alespoň některá kritérie pro manifoldní objekt.</li>
+							<li>Obsahuje informace pouze o poloze vertexů a jejich propojení do plošek.</li>
+							<li>Tato struktura je vhodná pro uložení do souboru, případně paměti.</li>
+							<li>Je hrubě nevhodná pro úpravu geometrické/topologické struktury.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Příklad - Krychlička</h3>
+						<pre><code>
+				   4+----+7
+				   /|   /|
+				 5+----+6|
+				  | |  | |
+				  |0+--|-+3
+				  |/   |/
+				 1+----+2
+						</code></pre>
+					</section>
+					<section>
+						<h3>Příklad sítě trojúhelníků</h3>
+						<h4>Geometrická struktura - vetexy</h4>
+						<table>
+							<tr>
+								<td>0.0, 0.0, 0.0</td>
+								<td>1.0, 0.0, 0.0</td>
+								<td>1.0, 1.0, 0.0</td>
+								<td>0.0, 1.0, 0.0</td>
+								<td>0.0, 0.0, 1.0</td>
+								<td>1.0, 0.0, 1.0</td>
+								<td>1.0, 1.0, 1.0</td>
+								<td>0.0, 1.0, 1.0</td>
+							</tr>
+						</table>
+						<h4>Topologická struktura - plošky</h4>
+						<table>
+							<tr>
+								<td>0, 3, 2, 1</td>
+								<td>0, 1, 5, 4</td>
+								<td>1, 2, 6, 5</td>
+								<td>2, 3, 7, 6</td>
+								<td>3, 0, 4, 7</td>
+								<td>4, 5, 6, 7</td>
+								<td>4, 5, 9, 8</td>
+							</tr>
+						</table>
+					</section>
 				</section>
 				<section>
 					<h2>Normálový vektor</h2>
@@ -126,15 +184,61 @@
 				<section>
 					<section>
 						<h2>Datová struktura okřídlené hrany</h2>
+						<ul>
+							<li>Datová struktura vhodná pro dynamickou úpravu geometrie a topologie.</li>
+							<li>Lze ji použít pouze pro uložení manifoldních objektů.</li>
+							<li>Obsahuje jednak geometrickou strukturu (vertexy).</li>
+							<li>Většina informací o topologii je uložena na hranách.</li>
+							<ul>
+								<li>Dva odkazy na oba vertexy</li>
+								<li>Dva odkazy na sousedící plošky</li>
+								<li>Čtyři odkazy na přilehlé plošky</li>
+							</ul>
+							<li>Ploška obsahuje pouze odkaz na jednu ze svých hran.</li>
+						</ul>
 					</section>
 					<section>
 						<h2>Příklad okřídlené hrany</h2>
+						<div style="width: 100%; overflow: hidden;">
+							<div style="float: left; width: 50%; padding-top: 75px;">
+								<table>
+									<tr>
+										<td>$E_{1}$</td><td></td>
+									</tr>
+									<tr>
+										<td>$V_{1}$</td><td>$V_{2}$</td>
+									</tr>
+									<tr>
+										<td>$F_{1}$</td><td>$F_{2}$</td>
+									</tr>
+									<tr>
+										<td>$E_{3}$</td><td>$E_{4}$</td>
+									</tr>
+									<tr>
+										<td>$E_{2}$</td><td>$E_{5}$</td>
+									</tr>
+								</table>
+							</div>
+							<div style="float: left; width: 50%;">
+								<img src="./img/winged_edge.png" alt="Okřídlená hrana" title="Okřídlená hrana" height="400px" />
+							</div>
+						</div>
 					</section>
 					<section>
 						<h2>Vlastnosti okřídlených hran</h2>
+						<ul>
+							<li>Lze jednoduše nalézt všechny sousední plošky</li>
+							<li>Lze jednoduše nalézt smyčku hran/plošek</li>
+							<li>Ploška nemusí být konvexní</li>
+							<li>Ploška může obsahovat díry</li>
+						</ul>
 					</section>
 					<section>
 						<h2>Datová struktura půlhrany</h2>
+						<ul>
+							<li>Odstraňuje omezení okřídlených hran na manifoldní objekty.</li>
+							<li>Každá hrana je rozdělena na N "půlhran".</li>
+						</ul>
 					</section>
 				</section>
 				<section>
@@ -152,17 +256,59 @@
 					</section>
 					<section>
 						<h3>Vlastnosti hran</h3>
+						<ul>
+							<li>Ostrost hran</li>
+							<li>UV mapování ("šev")</li>
+						</ul>
 					</section>
 					<section>
 						<h3>Vlastnosti plošek</h3>
+						<ul>
+							<li>Typ stínování</li>
+							<li>Textura</li>
+							<li>Barva</li>
+						</ul>
 					</section>
 					<section>
 						<h3>Vlastnosti rohů plošek</h3>
+						<ul>
+							<li>UV souřadnice</li>
+							<li>Barva</li>
+						</ul>
 					</section>
 				</section>
 				<section>
-					<h2>Dělené plošky</h2>
+					<section>
+						<h2>Dělené plošky</h2>
+						<ul>
+							<li>Algoritmu, který vyhlazuje povrch tělesa s ploškovou reprezentací.</li>
+							<li>Existuje několik dělících schémat (aproximační a interpolační).</li>
+							<li>Nejčastěji se používí dělící schéma : Catmull-Clark</li>
+							<ul>
+								<li>Rekurzivní algoritmus</li>
+								<li>Generuje čtvercovou síť.</li>
+								<li>Výsledná ploch má spojitost $C^{2}$</li>
+							</ul>
+						</ul>
+					</section>
+					<section>
+						<h3>Dělící schéma Catmull-Clark</h3>
+						<p>Výsledná plocha jedné iterace je tvořena ploškovými, hranovými a vrcholovými vertexy.</p>
+						<p>Ploškový vertex $V_{F_{i}}$ je průměrem všech vertexů tvořící danou plošku $F_{i}$.</p>
+						<p>Hranový vertex se spočítá podle následujícího vztahu:</p>
+						$$
+						V_{E} = \frac{E_{1} + E_{2} + V_{F_{1} + V_{F_{2}}}}{4}
+						$$
+					</section>
+					<section>
+						<p>Vrcholový vertex se spočítá podle následujícího vztahu:</p>
+						$$
+						V_{V} = \frac{1}{N}(\frac{1}{N}\sum_{i=1}^{N}V_{F_{i}} + \frac{1}{N}\sum_{i=1}^{N}V_{E_{i}} + \frac{(N-3)}{N}V)
+						$$
+						<p>kde $V$ je půvdní vertex</p>
+					</section>
 				</section>
+<!--
 				<section>
 					<h2>Bodová reprezentace</h2>
 				</section>
@@ -177,6 +323,10 @@
 				</section>
 				<section>
 					<h2>Algoritmus pochodujících krychlý</h2>
+				</section>
+-->
+				<section>
+					<h2>Děkuji za pozornost.</h2>
 				</section>
 			</div>
 
@@ -198,8 +348,8 @@
 				transition: 'slide', // none/fade/slide/convex/concave/zoom
 
 				math: {
-					//mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
-					mathjax: 'plugin/mathjax/MathJax.js',
+					mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+					//mathjax: 'plugin/mathjax/MathJax.js',
 					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
 				},
 
