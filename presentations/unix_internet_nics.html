@@ -60,7 +60,7 @@
 				</section>
 				<section>
 					<section>
-						<h2>Síťové rozhraní (Network Interfaces)</h2>
+						<h2>Síťová rozhraní (Network Interfaces)</h2>
 						<ul>
 							<li>Nejčastěji se jedná o síťovou kartu, ale může jít také o loopback, bridge, tunel, apod.</li>
 							<li>Rozhraní přijímá a vysílá IP datagramy.</li>
@@ -68,9 +68,9 @@
 						</ul>
 					</section>
 					<section>
-						<h3>Ovladače síťových zařízení</h3>
+						<h3>Ovladače síťových rozhraní</h3>
 						<ul>
-							<li>Seznam síťových zařízení zveřejňuje jádro:</li>
+							<li>Seznam síťových rozhraní zveřejňuje jádro:</li>
 							<ul>
 								<li>cat /proc/net/dev</li>
 							</ul>
@@ -106,7 +106,6 @@
 						<li>Podporováno na všech OS</li>
 						<li>IPv4 umožňuje vytvářet další loopbacky (127.0.0.2, 127.0.0.3, atd.)</li>
 						<li>MTU: 65536 Bytů</li>
-						<li>Délka odchozí fronty: 1</li>
 					</ul>
 				</section>
 				<section>
@@ -169,6 +168,27 @@ $ ip route show
 					</code></pre>
 				</section>
 				<section>
+					<h2>Další nástroje</h2>
+					<ul>
+						<li>lspci, lsusb, lspcmcia</li>
+						<ul>
+							<li>Výpis zařízení připojených na sběrnici PCI (PCIe), USB, PCMCIA</li>
+						</ul>
+						<li>lsmod, modprobe, indmod, rmmod</li>
+						<ul>
+							<li>Příkazy na manipulaci s jadernými moduly</li>
+						</ul>
+						<li>dmesg</li>
+						<ul>
+							<li>Výpis hlášení jádra Linuxu</li>
+						</ul>
+						<li>mii-tool, ethtool</li>
+						<ul>
+							<li>Správa fyzických síťových zařízení</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
 					<h2>Aliasy</h2>
 					<p>Aliasy umožňují, aby jedno síťové zařízení může mít více IP adres.</p>
 					<p>Nejčastěji se využívá v případě virtualizace serverů.</p>
@@ -218,7 +238,7 @@ $ ip route show
 							<li>Virtualizace</li>
 							<li>Testování</li>
 						</ul>
-						<p>Lze implementovat pomocí lo, dummy, tuntap</p>
+						<p>Lze implementovat pomocí lo, dummy, tuntap, atd.</p>
 					</section>
 					<section>
 						<h3>Nové síťového rozhraní - modul dummy</h3>
