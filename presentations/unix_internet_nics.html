@@ -59,18 +59,295 @@
 					</p>
 				</section>
 				<section>
-					<h2>Síťové rozhraní (Network Interfaces)</h2>
+					<section>
+						<h2>Síťové rozhraní (Network Interfaces)</h2>
+						<ul>
+							<li>Nejčastěji se jedná o síťovou kartu, ale může jít také o loopback, bridge, tunel, apod.</li>
+							<li>Rozhraní přijímá a vysílá IP datagramy.</li>
+							<li>IP datagramy vytváří a plánuje TCP/UDP stack.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Ovladače síťových zařízení</h3>
+						<ul>
+							<li>Seznam síťových zařízení zveřejňuje jádro:</li>
+							<ul>
+								<li>cat /proc/net/dev</li>
+							</ul>
+							<li>Každému síťovému rozhraní přísluší jaderný ovladač:</li>
+							<ul>
+								<li>ls -l /sys/class/net/&lt;network_interface&gt;/device/driver</li>
+							</ul>
+							<li>Seznam všech modulů pro síťové ovladače je v adresáři:</li>
+							<ul>
+								<li>/lib/modules/${uname -r}/kernel/drivers/net/</li>
+							</ul>
+						</ul>
+					</section>
+					<section>
+						<h3>Automatické závadění jaderných modulů</h3>
+						<ul>
+							<li>O zavádění modulů se většinou stará démon udevd nebo jeho obdoba.</li>
+							<ul>
+								<li>Při startu si přečte z nainstalovaných ovladačů tabulku podporovaných ID zařízení.</li>
+								<li>Pokud je do systému připojeno nové zařízení, tak podle jeho ID zavede příslušný ovladač.</li>
+								<li>viz.: lspci -n (případně: lsusb -v)</li>
+							</ul>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>Loopback</h2>
+					<p>Virtuální síťové rozhraní, které je v počítači přítomné vždy, přestože počítač není připojen k síťi ani nemá žádnou síťovou kartu.</p>
 					<ul>
-						<li>Nejčastěji se jedná o síťovou kartu, ale může jít také o loopback, bridge, tunel, apod.</li>
-						<li>Rozhraní přijímá a vysílá IP datagramy</li>
-						<li>Seznam síťových zařízení zveřejňuje jádro:</li>
+						<li>IPv4 adresa: 127.0.0.1, maska 255.0.0.0</li>
+						<li>IPv6 adresa: ::1, délka prefixu: 128</li>
+						<li>IP datagram s adresou 127.x.x.x nesmí opustit počítač</li>
+						<li>Podporováno na všech OS</li>
+						<li>IPv4 umožňuje vytvářet další loopbacky (127.0.0.2, 127.0.0.3, atd.)</li>
+						<li>MTU: 65536 Bytů</li>
+						<li>Délka odchozí fronty: 1</li>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>Správa síťových rozhraní</h2>
+						<p>Názvy rozhraní jsou určeny:</p>
 						<ul>
-							<li>cat /proc/net/dev</li>
+							<li>Podle preferencí tvůrců ovladačů</li>
+							<li>Podle MAC adresy při vzniku zařízení</li>
+							<ul>
+								<li>/etc/udev/rules.d/70-persistent-net.rules</li>
+							</ul>
+							<li>Pomocí příkazu ip</li>
+							<li>Startovací skripty distribuce</li>
+							<li>NetworkManager</li>
 						</ul>
-						<li>Každému síťovému rozhraní přísluší jaderný ovladač:</li>
+					</section>
+					<section>
+						<h3>Konfigurace síťových rozhraní</h3>
 						<ul>
-							<li>ls -l /sys/class/net/&lt;network_interface&gt;/device/driver</li>
+							<li>Stále používaný: ifconfig</li>
+							<li>Náhrada za ifconfig: ip</li>
+							<ul>
+								<li>Univerzální nástroj, který umí kromě správy rozhraní i další věci: směrování, tunely, apod.</li>
+							</ul>
+							<li>Pro práci s wi-fi sítěmi lze použít: iwconfig, iwlist, iwspy, atd.</li>
 						</ul>
+					</section>
+					<section>
+						<h3>Konfigurační soubory</h3>
+						<p>Na RedHat, CentOS a Fedoře se nacházejí v adresáři /etc/sysconfig/network-scripts/. Příklad konfiguračního souboru pro loopback (ifcfg-lo):</p>
+<pre><code>
+EVICE=lo
+IPADDR=127.0.0.1
+NETMASK=255.0.0.0
+NETWORK=127.0.0.0
+BROADCAST=127.255.255.255
+ONBOOT=yes
+NAME=loopback
+</code></pre>
+					</section>
+				</section>
+				<section>
+					<h2>Příkaz ifconfig</h2>
+					<p>Často používané parametry příkazu ifconfig:</p>
+					<pre><code>
+ifconfig
+ifconfig eth0
+					</code></pre>
+				</section>
+				<section>
+					<h2>Příkaz ip</h2>
+					<p>Často používané parametry příkazu ip:</p>
+					<pre><code>
+$ ip link show
+$ sudo ip link set eth0 up
+$ sudo ip link set eth0 down
+$ ip addr show
+$ ip route show
+					</code></pre>
+				</section>
+				<section>
+					<h2>Aliasy</h2>
+					<p>Aliasy umožňují, aby jedno síťové zařízení může mít více IP adres.</p>
+					<p>Nejčastěji se využívá v případě virtualizace serverů.</p>
+				</section>
+				<section>
+					<section>
+					<h2>Směrování</h2>
+					<p>Soubor pravidel pro doročuvání IP datagramu k cílovému prvku.</p>
+					<ul>
+						<li>Statické směrování</li>
+						<li>Dynamické směrování</li>
+					</ul>
+					</section>
+					<section>
+						<h3>Statické směrování</h3>
+						<ul>
+							<li>Pevně nastavené správcem systému</li>
+							<li>Vhodné pro malé síťě nebo koncové stanice</li>
+							<li>Příklad: ip route show, ip -6 route show</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Dynamické směrování</h3>
+						<ul>
+							<li>Protokoly RIP, BGB, OSPF, ...</li>
+							<li>Adaptuje se na aktuální situaci</li>
+							<li>Autonomní systémy v zodpovědnosti příslušných providerů</li>
+							<li>Automatická propagace nových podsítí</li>
+							<li>V praxi realizováno specializovanými síťovými prvky. Výrobci: Cisco, Juniper, atd.</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>MTU</h2>
+					<p>Hodnota MTU (Maximum Transission Unit) udává maximální velikost přenosového rámce. To je například užitečné, pokud síťový rámec podporuje tzv. JumboFrames, nebo máme virtuální síťové rozhraní používané pouze pro komunikaci mezi virtuálními stroji.</p>
+				</section>
+				<section>
+					<h2>Velikost Transmit Queue</h2>
+					<p>Velikost Transimt Queue (txqueue) udává počet IP datagramů, které na daném síťovém rozhraní čekají na odeslání.</p>
+				</section>
+				<section>
+					<section>
+						<h2>Virtuální síťová rozhraní</h2>
+						<p>Umožňují vytvořit virtuální síťová zařízení, které nemá fyzický ekvivalent. Taková rozhraní jsou vhodná pro:</p>
+						<ul>
+							<li>Loopback</li>
+							<li>Virtualizace</li>
+							<li>Testování</li>
+						</ul>
+						<p>Lze implementovat pomocí lo, dummy, tuntap</p>
+					</section>
+					<section>
+						<h3>Nové síťového rozhraní - modul dummy</h3>
+						<p>Nejprve zjistíme, jestli je zaveden jaderný modul dummy</p>
+<pre><code>
+$ sudo lsmod | grep dummy
+</code></pre>
+						<p>Pokud zaveden není, tak se ho pokusíme zavést:</p>
+<pre><code>
+$ sudo modprobe dummy
+</code></pre>
+						<p>Ještě jednou otestujeme:</p>
+<pre><code>
+$ sudo lsmod | grep dummy
+dummy  16384  0
+</code></pre>
+					</section>
+					<section>
+						<h3>Nové síťové rozhraní - vytvoření</h3>
+						<p>Nové rozhraní (dummy0) se automaticky vytvoří při zavedení modulu. Můžeme ho přejmenovat pomocí:</p>
+<pre><code>
+$ sudo ip link set name dum0 dev dummy0
+</code></pre>
+						<p>Otestujeme, že virtuální síťové rozhraní existuje (zatím bez adresy):</p>
+<pre><code>
+$ ip link show dum0
+11: dum0: &lt;BROADCAST,NOARP&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether 52:9b:85:b4:d6:dc brd ff:ff:ff:ff:ff:ff
+</code></pre>
+					</section>
+					<section>
+						<h3>Další síťová rozhraní</h3>
+						<p>Můžeme si vytvořit libovolný počet virtuálních síťových rozhraní:</p>
+<pre><code>
+$ ip link add dum1 type dummy
+$ ip link add dum2 type dummy
+</code></pre>
+					</section>
+					<section>
+						<h3>Nové síťové rozhraní - IPv4 adresa</h3>
+						<p>Statickou síťovou adresu (IPvč) je možné nastavit pomocí:</p>
+<pre><code>
+$ sudo ip addr add 192.168.100.1/24 dev dum0
+</code></pre>
+						<p>Síťové rozhraní má adresu přidělenou, ale musíme ho aktivovat:</p>
+<pre><code>
+$ sudo ip link set dum0 up
+</code></pre>
+					</section>
+					<section>
+						<h3>Nové síťové rozhraní - Broadcast</h3>
+						<p>Příkaz ip defaultně nenastavuje síťovému rozhraní broadcast adresu. Pokud broadcast požadujeme, tak jej můsíme explicitně nastavit:</p>
+<pre><code>
+$ sudo ip addr add 192.168.100.1/24 broadcast 192.168.100.255 dev dum0
+</code></pre>
+					</section>
+					<section>
+						<h3>Nové síťové rozhraní - IPv6 adresa</h3>
+						<p>Statickou globální IPv6 adresu je možné nastavit pomocí:</p>
+<pre><code>
+$ sudo ip -6 addr add 2001:0db8:0:f101::1/64 dev dum0
+</code></pre>
+					</section>
+					<section>
+						<h3>Nové síťové rozhraní - alias</h3>
+						<p>Síťovému zařízení můžeme přidat alias s novou IPv4 adresou následovně:</p>
+<pre><code>
+$ ip addr add 192.168.100.2/24 dev dum0 label dum0:1
+</code></pre>
+						<p>Výsledek si můžeme ověřit pomocí:</p>
+<pre><code>
+$ ip link show
+$ ip addr show
+</code></pre>
+					</section>
+					<section>
+						<h3>Nové síťové rozhraní - MTU</h3>
+						<p>Síťovému rozhraní můžeme změnit MTU pomocí:</p>
+<pre><code>
+$ ip link set mtu 9000 dev dum0
+</code></pre>
+					</section>
+					<section>
+						<h3>Nové síťové rozhraní - TXQueue</h3>
+						<p>Velikost odchozí fronty lze upravit pomocí:</p>
+<pre><code>
+$ ip link set txqueuelen 10000 dev dum0
+</code></pre>
+					</section>
+					<section>
+						<h3>Nové síťové rozhraní - odstranění</h3>
+						<p>Nejprve síťové rozhraní vypneme:</p>
+<pre><code>
+$ ip link set dum0 down
+</code></pre>
+						<p>Následně odstraníme všechny adresy:</p>
+<pre><code>
+$ sudo ip addr del 192.168.100.1/24 brd + dev dum0 label dum0:0
+</code></pre>
+						<p>A nakonec odstraníme vlastní síťové rozhraní:</p>
+<pre><code>
+$ ip link delete dum0 type dummy
+$ rmmod dummy
+</code></pre>
+					</section>
+				</section>
+				<section>
+					<h2>ARP</h2>
+					<ul>
+						<li>Address Resolution Protocol</li>
+						<li>Překlad IP na MAC adresu na podsíti, aby počítače mohli komunikovat napřímo.</li>
+						<li>Odesílatel posílá na broadcast dotaz kdo má IP adresu 192.168.100.1</li>
+						<li>Nezapezpečený protokol</li>
+						<li>Příkazy: arp -an, ip neigh show</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Resolver</h2>
+					<p>Zajišťuje služby okolo DNS</p>
+					<ul>
+						<li>Překlad doménového jména na IP adresu a zpět</li>
+						<li>Konfigurace v /etc/resolv.conf, např:</li>
+<pre><code>
+domain tul.cz
+search tul.cz
+nameserver 147.230.16.1
+nameserver 147.230.200.1
+</code></pre>
+					<li>Soubor /etc/hosts</li>
 					</ul>
 				</section>
 				<section>
