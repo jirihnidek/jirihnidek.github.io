@@ -98,7 +98,7 @@
 				</section>
 				<section>
 					<h2>Loopback</h2>
-					<p>Virtuální síťové rozhraní, které je v počítači přítomné vždy, přestože počítač není připojen k síťi ani nemá žádnou síťovou kartu.</p>
+					<p>Virtuální síťové rozhraní, které je v počítači přítomné vždy, přestože počítač není připojen k síti ani nemá žádnou síťovou kartu.</p>
 					<ul>
 						<li>IPv4 adresa: 127.0.0.1, maska 255.0.0.0</li>
 						<li>IPv6 adresa: ::1, délka prefixu: 128</li>
@@ -196,7 +196,7 @@ $ ip route show
 				<section>
 					<section>
 					<h2>Směrování</h2>
-					<p>Soubor pravidel pro doročuvání IP datagramu k cílovému prvku.</p>
+					<p>Soubor pravidel pro doručování IP datagramu k cílovému prvku.</p>
 					<ul>
 						<li>Statické směrování</li>
 						<li>Dynamické směrování</li>
@@ -206,7 +206,7 @@ $ ip route show
 						<h3>Statické směrování</h3>
 						<ul>
 							<li>Pevně nastavené správcem systému</li>
-							<li>Vhodné pro malé síťě nebo koncové stanice</li>
+							<li>Vhodné pro malé sítě nebo koncové stanice</li>
 							<li>Příklad: ip route show, ip -6 route show</li>
 						</ul>
 					</section>
@@ -290,7 +290,7 @@ $ sudo ip link set dum0 up
 					</section>
 					<section>
 						<h3>Nové síťové rozhraní - Broadcast</h3>
-						<p>Příkaz ip defaultně nenastavuje síťovému rozhraní broadcast adresu. Pokud broadcast požadujeme, tak jej můsíme explicitně nastavit:</p>
+						<p>Příkaz ip defaultně nenastavuje síťovému rozhraní broadcast adresu. Pokud broadcast požadujeme, tak jej musíme explicitně nastavit:</p>
 <pre><code>
 $ sudo ip addr add 192.168.100.1/24 broadcast 192.168.100.255 dev dum0
 </code></pre>
@@ -351,7 +351,7 @@ $ rmmod dummy
 						<li>Address Resolution Protocol</li>
 						<li>Překlad IP na MAC adresu na podsíti, aby počítače mohli komunikovat napřímo.</li>
 						<li>Odesílatel posílá na broadcast dotaz kdo má IP adresu 192.168.100.1</li>
-						<li>Nezapezpečený protokol</li>
+						<li>Nezabezpečený protokol</li>
 						<li>Příkazy: arp -an, ip neigh show</li>
 					</ul>
 				</section>
