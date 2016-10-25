@@ -309,6 +309,260 @@
 						<p>kde $V$ je půvdní vertex</p>
 					</section>
 				</section>
+				<section>
+					<section>
+						<h2>Transformace objektů</h2>
+						<p>Stejně jako v případě 2D transformací i ve 3D se transformace objektů (posun, rotace, atd.) realizují pomocí transformačních matic a homogenních souřadnic:</p>
+						$$
+						\begin{align}
+						X' &= \frac{X}{w} \\
+						Y' &= \frac{Y}{w} \\
+						Z' &= \frac{Z}{w} \\
+						\end{align}
+						$$
+					</section>
+					<section>
+						<h3>Transformační matice</h3>
+						<p>Obecná transformační matice pro 3D transformace má následující tvar:</p>
+						$$
+						\begin{bmatrix}
+						X' \\
+						Y' \\
+						Z' \\
+						w' \\
+						\end{bmatrix}
+						=
+						\begin{bmatrix}
+						m_{1,1} & m_{1,2} & m_{1,3} & m_{1,4} \\
+						m_{2,1} & m_{2,2} & m_{2,3} & m_{2,4} \\
+						m_{3,1} & m_{3,2} & m_{3,3} & m_{3,4} \\
+						m_{4,1} & m_{4,2} & m_{4,3} & m_{4,4} \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						X \\
+						Y \\
+						Z \\
+						w \\
+						\end{bmatrix}
+						$$						
+					</section>
+					<section>
+						<h3>Posun</h3>
+						<p>Posun můžeme vyjádřit vektorem posunutí $(dx, dy, dz)$ a maticovým násobením:</p>
+						$$
+						\begin{bmatrix}
+						X' \\
+						Y' \\
+						Z' \\
+						w' \\
+						\end{bmatrix}
+						=
+						\begin{bmatrix}
+						1 & 0 & 0 & dx \\
+						0 & 1 & 0 & dy \\
+						0 & 0 & 1 & dz \\
+						0 & 0 & 0 & 1 \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						X \\
+						Y \\
+						Z \\
+						w \\
+						\end{bmatrix}
+						$$
+						<p class="fragment">Kontrolní otázka: Je posunutí lineární transformace?</p>
+						<p class="fragment">Nikoliv! Poloha není lineární kombinací původních souřadnic. Na posunutí můžeme pohlížet jako na zkosení ve čtyřrozměrném prostoru.</p>
+					</section>
+					<section>
+						<h3>Zvětšení/zmenšení</h3>
+						<p>Zvětšení nebo zmenšení může být ve směru os různé a je vztažené vůči počátku soustavy souřadné:</p>
+						$$
+						\begin{bmatrix}
+						X' \\
+						Y' \\
+						Z' \\
+						w' \\
+						\end{bmatrix}
+						=
+						\begin{bmatrix}
+						S_{x} & 0 & 0 & 0 \\
+						0 & S_{y} & 0 & 0 \\
+						0 & 0 & S_{z} & 0 \\
+						0 & 0 & 0     & 1 \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						X \\
+						Y \\
+						Z \\
+						w \\
+						\end{bmatrix}
+						$$
+						<p class="fragment">Kontrolní otázka: Jak by vypadala transformační matice pro zrcadlení vůči rovině XZ?</p>
+						<p class="fragment">Odpověď: $S_{x} = 1, S_{y} = -1, S_{z} = 1$</p>
+					</section>
+					<section>
+						<h3>Zkosení</h3>
+						<p>Zkosení ve směru jedné osy. V tomto případě ve směru osy x</p>
+						$$
+						\begin{bmatrix}
+						X' \\
+						Y' \\
+						Z' \\
+						w' \\
+						\end{bmatrix}
+						=
+						\begin{bmatrix}
+						1 & s_{x} & 0 & 0 \\
+						0 & 1     & 0 & 0 \\
+						0 & 0     & 1 & 0 \\
+						0 & 0     & 0 & 1 \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						X \\
+						Y \\
+						Z \\
+						w \\
+						\end{bmatrix}
+						$$
+					</section>
+					<section>
+						<h3>Otočení (kolem osy Z)</h3>
+						<p>Transformační matice pro otočení není tak triviální jako ve 2D. Transformace se opět provádí vůči počátku soustavy souřadné kolem osy, ale je nutné určit kolem jaké osy otočení provádíme.</p>
+						$$
+						\begin{bmatrix}
+						X' \\
+						Y' \\
+						Z' \\
+						w' \\
+						\end{bmatrix}
+						=
+						\begin{bmatrix}
+						\cos\gamma & -\sin\gamma & 0 & 0 \\
+						\sin\gamma & \cos\gamma  & 0 & 0 \\
+						0          & 0           & 1 & 0 \\
+						0          & 0           & 0 & 1 \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						X \\
+						Y \\
+						Z \\
+						w \\
+						\end{bmatrix}
+						$$
+					</section>
+					<section>
+						<h3>Otočení (kolem osy X)</h3>
+						$$
+						\begin{bmatrix}
+						X' \\
+						Y' \\
+						Z' \\
+						w' \\
+						\end{bmatrix}
+						=
+						\begin{bmatrix}
+						1 & 0          & 0           & 0 \\
+						0 & \cos\alpha & -\sin\alpha & 0 \\
+						0 & \sin\alpha & \cos\alpha  & 0 \\
+						0 & 0          & 0           & 1 \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						X \\
+						Y \\
+						Z \\
+						w \\
+						\end{bmatrix}
+						$$
+					</section>
+					<section>
+						<h3>Otočení (kolem osy Y)</h3>
+						$$
+						\begin{bmatrix}
+						X' \\
+						Y' \\
+						Z' \\
+						w' \\
+						\end{bmatrix}
+						=
+						\begin{bmatrix}
+						\cos\beta & 0 & -\sin\beta & 0 \\
+						0         & 1 & 0          & 0 \\
+						\sin\beta & 0 & \cos\beta  & 0 \\
+						0         & 0 & 0          & 1 \\
+						\end{bmatrix}
+						\begin{bmatrix}
+						X \\
+						Y \\
+						Z \\
+						w \\
+						\end{bmatrix}
+						$$
+					</section>
+					<section>
+						<h3>Otočení - pořadí transformací</h3>
+						<p>Je zřejmé, že pro obecné ototčení záleží na tom v jakém pořadí se jednotlivé parciální transformace otočení provádí. Tím se myslí, jestli se nejprve provede otočení vůči ose X, následně otočení vůči ose Y a nakonec vůči ose Z.</p>
+						<p>Různé aplikace i API mohou mít různé pořadí a konvence.</p>
+						<p>Z tohoto důvodu je vhodné kromě úhlů otočení $(\alpha, \beta, \gamma)$ uvádět i pořadí jednotlivých otočení, např.: XYZ, ZXY, atd.</p>
+						<p>Rotace vyjádřené pomocí úhlů a pořadí operací se také špatně skládají a interpolují.</p>
+					</section>
+					<section>
+						<h3>Otočení - Kvaterniony (Quaternions)</h3>
+						<p>Z důvodu z míňěné výše se často používá matematický aparát nazývaný kvaterniony.</p>
+						<p class="fragment">Kvaterniony trochu připomínají komplexní čísla</p>
+						<p class="fragment">Kvaternion obsahuje hned 3 "imaginární" složky:</p>
+						<div class="fragment">
+							$$
+							q = w + ix + jy + kz
+							$$
+						</div>
+						<p class="fragment">kde $w, x, y, z$ jsou reálná čísla a $i, j, k$ jsou kvaternionové jednotky.</p>
+					</section>
+					<section>
+						<h3>Kvaterniony - základní pravidla</h3>
+						<p>Kvaterniony mají definováno několik základních pravidel:</p>
+						$$
+							i^{2} = j^{2} = k^{2} = ijk = -1;
+						$$
+						$$
+							ij = -ji = k, jk = -kj = i, ki=-ik = j
+						$$
+						<p>Někdy se kvaterniony vyjadřují pomocí:</p>
+						$$
+							q = (s, \vec{v})
+						$$
+						<p>,kde $s$ je skalární část a $\vec{v}$ je vektorová část</p>
+					</section>
+					<section>
+						<h3>Sdružený kvaternion</h3>
+						<p>Ke kvaternionu $q = w + ix + jy + kz$ definujeme kvaternion sdružený:</p>
+						$$
+							q^{*} = w - ix - jy - kz
+						$$
+						<p>Velikost kvaternionu spočítáme pomocí:</p>
+						$$
+							|q| = \sqrt{w^{2} + x^{2} + y^{2} + z^{2}}
+						$$
+						<p>Kvaternion, jehož velikost je jedna se nazývá jednotkový kvaternion a platí pro něj:</p>
+						$$
+							|q| = 1; \quad q^{*}q = qq^{*} = 1
+						$$
+					</section>
+					<section>
+						<h3>Rotace vyjádřená kvaterniony</h3>
+						<p>Rotaci o úhel $\alpha$ kolem vektoru $\vec{v} = (v_{x}, v_{y}, v_{z})$ lze vyjádřit pomocí:</p>
+						$$
+							q = \cos(\alpha/2) + v_{x}\sin(\alpha/2)i + v_{y}\sin(\alpha/2)j + v_{z}\sin(\alpha/2)k
+						$$
+					</section>
+					<section>
+						<h3>Rotace pomocí kvaternionu</h3>
+						<p>Mějme bod $P = [p_{x}, p_{y}, p_{z}]$, a jeho polohový vektor $\vec{p} = (p_{x}, p_{y}, p_{z})$ můžeme chápat jako kvaternion s nulovou skalární částí. Otočení vektoru $\vec{p}$ kolem vektoru $\vec{v}$ o úhel $\alpha$ můžeme vyjádřit jako:</p>
+						$$
+							\vec{p}' = q v q^{*}
+						$$
+						<p>Další informace o kvaternionech naleznete v monografii Moderní počítačová grafika na str. 549.</p>
+					</section>
+				</section>
 <!--
 				<section>
 					<h2>Bodová reprezentace</h2>
