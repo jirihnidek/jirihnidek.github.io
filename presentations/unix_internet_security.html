@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="cs">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>UNIX a Internet - Opakování počítačových sítí</title>
+
+		<meta name="description" content="Opakování počítačových sítí">
+		<meta name="author" content="Jiří Hnídek">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!-- Analytics -->
+		<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-52302083-5', 'auto');
+		ga('send', 'pageview');
+		</script>
+		<!-- End Analytics -->
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>UNIX a Internet</h1>
+					<h2>Šifrování</h2>
+					<p>
+						<small>Autor: <a href="http://jirihnidek.github.io">Jiří Hnídek</a> / <a href="mailto:jiri.hnidek@tul.cz">jiri.hnidek@tul.cz</a></small>
+					</p>
+				</section>
+				<section>
+					<h2>Šifrování</h2>
+					<h3>Kryptografie</h3>
+					<p>Utajení obsahu zprávy pomocí tajemství</p>
+					<h3>Kryptoanalýza</h3>
+					<p>Snaha číst zprávu bez znalosti tajemství</p>
+				</section>
+				<section>
+					<h2>Něco z Historie</h2>
+					<h3>Césarova šifra</h3>
+					<p>Substituční šifra</p>
+					<h3>Enigma</h3>
+					<p>Německý elekricko-machnický stroj podobný dálnopisu.</p>
+					<p>Utajovaný šifrovací mechanismus i šifrovací klíče.</p>
+				</section>
+				<section>
+					<h2>Dělení šifer</h2>
+					<p>Podle použití šifrovacích klíčů</p>
+					<ul>
+						<li>Symetrické - stejný klíč pto kódování i dekódování</li>
+						<ul>
+							<li>Rychlé</li>
+							<li>Problém přenosu klíče, který musí být tajný.</li>
+						</ul>
+						<li>Asymetrické - dva klíče</li>
+						<ul>
+							<li>Pomalejší</li>
+							<li>Pro kódování a dekódování není nutné sdílet tajemství</li>
+						</ul>
+					</ul>
+					<p>Podle množství zpracované informace</p>
+					<ul>
+						<li>Blokové - pracují s bloky dat</li>
+						<li>Proudové - pracují s proudy dat</li>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>Symetrické šifry</h2>
+						<ul>
+							<li>Tajný klíč sloučí slouží pro šifrování i dešifrování.</li>
+							<li>Problém přenosu tajného klíče</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Vermanova šifra</h3>
+						<ul>
+							<li>Pro zašifrování se používá klíč a funkce XOR</li>
+							<li>Klič musí být minimálně dlouhý jako zpráva</li>
+							<li>Klíč musí být dokonale náhodný</li>
+							<li>Klíč může být použit pouze jednou</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Klíč symetrické šifry</h3>
+						<ul>
+							<li>Generátor klíče by měl být v ideálním případě zcela náhodný</li>
+							<li>V praxi se komninuje několik zdrojů náhodného i pseudonáhodného signálu.</li>
+							<li>Přerušení od síťové karty, šum zvukové karty, klávesnice, myš, specializovaná zařízení.</li>
+							<li>V Linuxu: /dev/random a /dev/urandom</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Diffie-Hellmann</h3>
+						<ul>
+							<li>Algoritmus bezbečné výměny klíče symetrické šifry</li>
+							<li>Klíč nikdy neputuje v otevřené formě</li>
+							<li>Neumí řešit sám o sobě MITM útok</li>
+							<li>Používán v SSL/TLS</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Typy symetrických šifer</h3>
+						<h4>Bloková</h4>
+						<ul>
+							<li>Operují s blokem konstantní délky</li>
+							<li>Na každý blok je aplikována stejná transformace</li>
+							<li>Př: DES, 3DES, AES</li>
+						</ul>
+						<h4>Proudová</h4>
+						<ul>
+							<li>Kombinace datového toku s keastreamem (XOR)</li>
+							<li>Rychlejší ale náchylnější na prolomení</li>
+							<li>Př: RC-4</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>MITM (Man in the Middle)</h2>
+					<ul>
+						<li>Mezi dvěma komunikujícími stranami je útočník, který se vydává za obě protistrany.</li>
+						<li>Útočník dešifruje a znovu zašifruje komunikaci</li>
+						<li>Lze odhalit podle nesprávného certifikátu (např. self-signed).</li>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>Asymetrická šifra</h2>
+						<ul>
+							<li>Pro šifrování a dešifrování se používají dva klíče</li>
+							<li>Privátní (P) - utajuje se</li>
+							<li>Veřejný (V) - dostupný v PKI</li>
+							<li>Jedním klíčem se šifruje, druhým dešifruje</li>
+							<li>Klíče mají těsnou vazbu (generují se společně)</li>
+							<li>Z jednoho klíče nelze v polynomiálním čase odvodit druhý klíč</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Jednosměrné funkce</h3>
+						<ul>
+							<li>Takové funke jsou základem moderní kryptografie</li>
+							<li>Jednoduše lze spočítat funkční hodnotu ze vstupních dat</li>
+							<li>Inverzní funke je výpočetně extrémně náročná</li>
+							<li>Např: rozklad velkých čísel na prvočísla, eliptické křivky (ECC), apod.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Algoritmus RSA</h3>
+						<ul>
+							<li>Autoři: Rivest, Shamir, Adleman</li>
+							<li>Využívá výpočetní náročnosti rozkladu velkých čísel na prvočísla.</li>
+							<li>Je nutné zvolit dostatečně velký klíč (alespoň 2048 bitů). Dopručení pro rok 2016.</li>
+							<li>V brzké budoucnosti (současnosti?) bude možné dopočítat tajný klíč z veřejného klíče v polynomiálním čase na kvantových počítačích (Shorův algoritmus).</li>
+							<li>Algoritmus sám o sobě nemůže řešit MITM útok.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Algoritmus RSA</h3>
+						<h4>Generování klíčů</h4>
+						<ul>
+							<li>Zvolímě dvě velká náhodná prvočísla: $p$ a $q$.</li>
+							<li>Spočítáme: $n = pq$.</li>
+							<li>Spočítáme hodnotu Eulerovy funkce: $\varphi(n) = (p - 1)(q - 1)$.</li>
+							<li>Zvolíme číslo $e$ menší jak $\varphi(n)$ s tímto číslem nesoudělné.</li>
+							<li>Nalezneme číslo $d$, aby platilo: $de \equiv 1 (\mod \varphi(n))$</li>
+							<li>Veřejný klíč: $(n, e)$</li>
+							<li>Tajný klíč: $(m, d)$</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Algoritmus RSA</h3>
+						<h4>Šifrování a dešifrování</h4>
+						<ul>
+							<li>Šifrování zprávy (převedená dohodnutým způsobem na číslo $m < n$) provedeme pomocí:</li>
+							$$
+								c = m^{e} \mod n
+							$$
+							<li>Dešifrování původní zprávy provedeme pomocí:</li>
+							$$
+								m = c^{d} \mod n
+							$$
+						</ul>
+					</section>
+					<section>
+						<h3>Algoritmus RSA</h3>
+						<h4>Digitální podpis</h4>
+						<ul>
+							<li>Digitální podpis vytvoříme z hashe: $m_{hash} = f_{hash}(m)$ zprávy pomocí:</li>
+							$$
+								c_{sign} = m_{hash}^{d} \mod n
+							$$
+							<li>Digitální podpis ověříme porovnáním $m_{hash}$ s:</li>
+							$$
+								m_{hash} = c_{sign}^{e} \mod n
+							$$
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>Křížová šifra</h2>
+					<ul>
+						<li>Obě strany komunikace mají svůj tajný a veřejný klíč</li>
+						<li>Oba mohou zprávy šifrovat i podepisovat</li>
+						<li>Samo o sobě neřejí problém MITM</li>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>Hashovací funkce</h2>
+						<ul>
+							<li>Jednosměrná funkce, která z libovolně dlouhého vstupního proudu dat vytvoří vytvoří výstup stejné délky.</li>
+							<li>Při malé změně vstupu se výrazně změní výstup.</li>
+							<li>Z výstupní hodnoty by nemělo být možné dopočítat kolizní proud dat v polynomiálním čase.</li>
+							<li>Příklady:</li>
+							<ul>
+								<li>MD5: (128 bitů) kolize možné počítat na běžném PC v řádu minut. Nepoužívat!</li>
+								<li>SHA-1 (160 bitů) také považovaný za málo bezpečný</li>
+								<li>SHA-2 (SHA-256, SHA-512, atd.)</li>
+							</ul>
+						</ul>
+					</section>
+					<section>
+						<h3>Ukázka hashe</h3>
+<pre><code>
+$ echo -n "Ahoj lidi." | md5sum
+f5cc93e818bca8cfd4169b575d7eec1f  -
+
+$ echo -n "Ahoj lidi." | sha256sum
+1ae927bf031f252903fb5c10676db9d8d1168af876427adfd193ac4c6b6e7687  -
+
+$ echo -n "Ahoj lidi." | sha512sum
+9fd887a45bf46a3fabe3f254b5d336488fdf756564a87cbab6e3398a5e50bd15a51f0e357e00d7dca9c8520fc6192a993555cd5a15d617a2075cfee9488db436  -
+</code></pre>
+					</section>
+					<section>
+						<h3>Ukázka kolize MD5 hashe</h3>
+<pre><code>
+d131dd02c5e6eec4693d9a0698aff95c 2fcab58712467eab4004583eb8fb7f89 
+55ad340609f4b30283e488832571415a 085125e8f7cdc99fd91dbdf280373c5b 
+d8823e3156348f5bae6dacd436c919c6 dd53e2b487da03fd02396306d248cda0 
+e99f33420f577ee8ce54b67080a80d1e c69821bcb6a8839396f9652b6ff72a70
+
+d131dd02c5e6eec4693d9a0698aff95c 2fcab50712467eab4004583eb8fb7f89 
+55ad340609f4b30283e4888325f1415a 085125e8f7cdc99fd91dbd7280373c5b 
+d8823e3156348f5bae6dacd436c919c6 dd53e23487da03fd02396306d248cda0 
+e99f33420f577ee8ce54b67080280d1e c69821bcb6a8839396f965ab6ff72a70
+
+MD5: 79054025255fb1a26e4bc422aef54eb4
+</code></pre>
+					</section>
+				</section>
+				<section>
+					<h2>Digitální certifikát</h2>
+					<ul>
+						<li>Veřejný klíč podepsaný (jiným) veřejným klíčem</li>
+						<li>Musíme věřit nějakému veřejnému klíči. Kde se bere?</li>
+						<li>Operační systémy a prohlížeče mají svoji databázi certifikátů (důvěrných veřejných klíčů).</li>
+						<li>Využívá se přenosu důvěry: typicky certifikační autorita (CA)</li>
+						<li>Doba platnosti certifikátu</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Certifikační autorita (CA)</h2>
+					<ul>
+						<li>Hierarchická struktura přenosu důvěry</li>
+						<li>Typicky komerční záležitost</li>
+						<ul>
+							<li>Zákazník (např. majitel web serveru) platí za vytvoření digitálního certifikátu</li>
+							<li>CA platí za uložení svého veřejného klíče do uložiště</li>
+							<li>Firmy: Comodo, Symantec, Verisign, Thawte</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<h2>PKI (Public Key Infrastructure)</h2>
+					<ul>
+						<li>Infrastruktura distribuce veřejných klíčů</li>
+						<li>Umožňuje ukládání, získávání a revokování klíčů</li>
+						<li>PKI je součástí systému (Windows, Linux, Mac, atd.) nebo aplikace (Firefox, Chrome, atd.)</li>
+						<li>Aktualizace seznamu klíčů skrze aktualizace systému nebo aplikace.</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Revokace klíče</h2>
+					<ul>
+						<li>Zneplatnění klíče z důvodu: kompromitace systému (ukradení tajného klíče), zapomenutí bezpečnostní fráze, atd.</li>
+						<li>Revokace zneplatňuje oba klíče (veřejný i tajný)</li>
+						<li>Distribuce revokací skrze PKI</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Self-signed certifikát</h2>
+					<ul>
+						<li>Digitáltní certifikát podepsaný sám sebou</li>
+						<li>Po vygenerování páru tajného a veřejného klíče je veřejný klíč je podepsaný tajným klíčem</li>
+						<li>Použitelné pro: testování, interní síť (veřejný klíč nutné předat jinou cestou)</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Vytvoření certifikátu pro web</h2>
+					<ul>
+						<li>Majitel serveru vygeneruje tajný a veřejný klíč</li>
+						<li>Vytvoří se žádost a s veřejným klíčem se pošle zabezpečeným kanálem (např. HTTPS) do CA.</li>
+						<li>CA ověří žadatele (telefonicky, whois, ACME, apod.)</li>
+						<li>CA podepíše veřejný klíč - vznikne certifikát</li>
+						<li>Webový server tajný i podepsaný veřejný klíč používá pro křížovou šifru</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Formáty klíčů</h2>
+					<ul>
+						<li>X.509 - umožňuje přidávat ke klíči i metadata</li>
+						<li>Distribuční formáty:</li>
+						<ul>
+							<li>DER: binární</li>
+							<li>PEM: textový formát používající kódování base64</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<h2>ACME a Let's Encrypt</h2>
+					<ul>
+						<li>ACME - protokol pro ověření uživatele a distribuci klíče</li>
+						<li>Let's Encrypt - CA, která poskytuje certifikáty zadarmo pomocí ACME</li>
+						<li>Podporováno: Firefox, Akamai, Cisco, EFF, atd.</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Děkuji za pozornost. Nějaké otázky?</h2>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				math: {
+					mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js', //'/plugin/math/MathJax.js',
+					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+				},
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
