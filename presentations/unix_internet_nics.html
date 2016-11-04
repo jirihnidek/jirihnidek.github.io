@@ -124,6 +124,15 @@
 						</ul>
 					</section>
 					<section>
+						<h3>NetworkManager</h3>
+						<ul>
+							<li>Démon poskytující rozhraní pro práci se síťovými rozhraními</li>
+							<li>Několik grafických front-endů</li>
+							<li>Příkaz: <code>nmcli</code> pro správu síťových rozhraní</li>
+							<li>Konfigurační nástroj s textovým uživatelským rozhraním: <code>nmtui</code></li>
+						</ul>
+					</section>
+					<section>
 						<h3>Konfigurace síťových rozhraní</h3>
 						<ul>
 							<li>Stále používaný: ifconfig</li>
@@ -372,6 +381,20 @@ nameserver 147.230.16.1
 nameserver 147.230.200.1
 </code></pre>
 					<li>Soubor /etc/hosts</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Hostname &amp; FQDN</h2>
+					<ul>
+						<li>Počítač i mimo strom DNS může mít nastaveno jméno hostname</li>
+						<li>Hostname můžeme nastavit pomocí např. pomocí:</li>
+						<ul>
+							<li>Příkazu: <code>hostname</code></li>
+							<li>Systémové proměné: <code>$HOSTNAME</code></li>
+							<li>Příkazu: <code>hostnamectl</code></li>
+							<li>Konfiguračního souboru: <code>/etc/hostname</code></li>
+						</ul>
+						<li>FQDN: Fully Qualified Domain Name - přesně určuje umístění počítače ve stromové struktuře DNS</li>
 					</ul>
 				</section>
 				<section>

@@ -194,20 +194,21 @@
 							<li>Zvolíme číslo $e$ menší jak $\varphi(n)$ s tímto číslem nesoudělné.</li>
 							<li>Nalezneme číslo $d$, aby platilo: $de \equiv 1 (\mod \varphi(n))$</li>
 							<li>Veřejný klíč: $(n, e)$</li>
-							<li>Tajný klíč: $(m, d)$</li>
+							<li>Tajný klíč: $(n, d)$</li>
 						</ul>
 					</section>
 					<section>
 						<h3>Algoritmus RSA</h3>
 						<h4>Šifrování a dešifrování</h4>
 						<ul>
-							<li>Šifrování zprávy (převedená dohodnutým způsobem na číslo $m < n$) provedeme pomocí:</li>
+							<li>Zprávu, kterou chceme šifrovat nejprve převedená dohodnutým způsobem na číslo $m < n$.</li>
+							<li>Šifrování zprávy $m$ provedeme pomocí veřejného klíče $(n, e)$:</li>
 							$$
-								c = m^{e} \mod n
+								c = m^{e} \bmod n
 							$$
-							<li>Dešifrování původní zprávy provedeme pomocí:</li>
+							<li>Dešifrování původní zprávy provedeme pomocí tajného klíče $(n, d)$:</li>
 							$$
-								m = c^{d} \mod n
+								m = c^{d} \bmod n
 							$$
 						</ul>
 					</section>
@@ -215,14 +216,16 @@
 						<h3>Algoritmus RSA</h3>
 						<h4>Digitální podpis</h4>
 						<ul>
-							<li>Digitální podpis vytvoříme z hashe: $m_{hash} = f_{hash}(m)$ zprávy pomocí:</li>
+							<li>Využívá se toho, že llgoritmus je z hlediska šifrování a dešifrování záměný (lze prohodit d a e).</li>
+							<li>Digitální podpis vytvoříme z hashe: $m_{hash} = f_{hash}(m)$ zprávy pomocí tajného klíče $(n, d)$:</li>
 							$$
-								c_{sign} = m_{hash}^{d} \mod n
+								c_{sign} = m_{hash}^{d} \bmod n
 							$$
 							<li>Digitální podpis ověříme porovnáním $m_{hash}$ s:</li>
 							$$
-								m_{hash} = c_{sign}^{e} \mod n
+								m_{hash}' = c_{sign}^{e} \bmod n
 							$$
+							<li>Pokud se zpráva během přenosu nezměnila, tak $m_{hash}' = m_{hash}$</li>
 						</ul>
 					</section>
 				</section>
@@ -319,22 +322,53 @@ MD5: 79054025255fb1a26e4bc422aef54eb4
 					</ul>
 				</section>
 				<section>
-					<h2>Self-signed certifikát</h2>
-					<ul>
-						<li>Digitáltní certifikát podepsaný sám sebou</li>
-						<li>Po vygenerování páru tajného a veřejného klíče je veřejný klíč je podepsaný tajným klíčem</li>
-						<li>Použitelné pro: testování, interní síť (veřejný klíč nutné předat jinou cestou)</li>
-					</ul>
+					<section>
+						<h2>Self-signed certifikát</h2>
+						<ul>
+							<li>Digitáltní certifikát podepsaný sám sebou</li>
+							<li>Po vygenerování páru tajného a veřejného klíče je veřejný klíč je podepsaný tajným klíčem</li>
+							<li>Použitelné pro: testování, interní síť (veřejný klíč nutné předat jinou cestou)</li>
+						</ul>
+					</section>
+					<section>
+						<h3>OpenSSL: Self-signed certifikát</h3>
+						<p>Self-signed certifikát lze vygenerovat pomocí příkazu openssl:</p>
+<pre><code>openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes</code></pre>
+						<p>Následně je nutné vyplnit některé informace:</p>
+<pre><code>Generating a 2048 bit RSA private key
+................+++
+......................................+++
+writing new private key to 'key.pem'
+Country Name (2 letter code) [XX]:CZ
+State or Province Name (full name) []:Czech Republic
+Locality Name (eg, city) [Default City]:Liberec
+Organization Name (eg, company) [Default Company Ltd]:Technical University of Liberec
+Organizational Unit Name (eg, section) []:Institut of Novel Technologies and Applied Informatics
+Common Name (eg, your name or your server's hostname) []:computer.nti.tul.cz
+Email Address []:jiri.hnidek@tul.cz</code></pre>
+					</section>
+					<section>
+						<h3>OpenSSL: Vypsání obsahu certifikátu</h3>
+						<p>Obsah X.509 certifikátu lze v čitelné formě vypsat například pomocí:</p>
+<pre><code>openssl x509 -in localhost.crt -text -noout</code></pre>
+					</section>
 				</section>
 				<section>
-					<h2>Vytvoření certifikátu pro web</h2>
-					<ul>
-						<li>Majitel serveru vygeneruje tajný a veřejný klíč</li>
-						<li>Vytvoří se žádost a s veřejným klíčem se pošle zabezpečeným kanálem (např. HTTPS) do CA.</li>
-						<li>CA ověří žadatele (telefonicky, whois, ACME, apod.)</li>
-						<li>CA podepíše veřejný klíč - vznikne certifikát</li>
-						<li>Webový server tajný i podepsaný veřejný klíč používá pro křížovou šifru</li>
-					</ul>
+					<section>
+						<h2>Vytvoření certifikátu pro web</h2>
+						<ul>
+							<li>Majitel serveru vygeneruje tajný a veřejný klíč</li>
+							<li>Vytvoří se žádost a s veřejným klíčem se pošle zabezpečeným kanálem (např. HTTPS) do CA.</li>
+							<li>CA ověří žadatele (telefonicky, whois, ACME, apod.)</li>
+							<li>CA podepíše veřejný klíč - vznikne certifikát</li>
+							<li>Webový server tajný i podepsaný veřejný klíč používá pro křížovou šifru</li>
+						</ul>
+					</section>
+					<section>
+						<h3>CA CESNET</h3>
+						<p>Na této adrese naleznete postup, jak vytvořit certifikát u <a href="https://pki.cesnet.cz/">CA CESNET</a> a jak ho nainstalovat do systému:</p>
+						<p><a href="http://jirihnidek.github.io/2016/03/21/certificates-and-web-servers/">http://jirihnidek.github.io/2016/03/21/certificates-and-web-servers/</a></p>
+					</section>
 				</section>
 				<section>
 					<h2>Formáty klíčů</h2>
