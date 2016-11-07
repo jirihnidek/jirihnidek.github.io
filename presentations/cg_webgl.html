@@ -74,7 +74,7 @@
 								<li>Plně interaktivní aplikace skriptovatelné v Pythonu</li>
 								<li>Obsah nutné vytvářet v jedné aplikaci</li>
 							</ul>
-							<li>Flash: není nutné komentovat</li>
+							<li>Flash: snad ani není nutné komentovat</li>
 						</ul>
 					</section>
 					<section>
@@ -88,9 +88,321 @@
 				</section>
 				<section>
 					<h2>HTML5 &amp; WebGL</h2>
+					<img src="./img/WebGL_Logo.svg" width="400px" style="border: 0px; background: transparent; box-shadow: 0 0 0;">
+					<p><a href="https://www.khronos.org/webgl/">WebGL</a> je standard pro 3D grafiku odvozený z <a href="https://www.khronos.org/opengles/">OpenGL ES 2.0</a> (OpenGL for Embeded Systems). O standardizaci se stará <a href="https://www.khronos.org/">Khronos Group.</a></p>
 				</section>
 				<section>
-					<h2>Podpora ve webových prohlížečích</h2>
+					<section>
+						<h2>Podpora ve webových prohlížečích</h2>
+						<p>V současnosti (2016) podporují WebGL 1.0.4 všechny hlavní prohlížeče (jejich poslední verze). Statisticky 92% uživatelů má zapnutou podporu WebGL. Aktuální statistika je dostupná na <a href="http://webglstats.com/">webglstats.com</a> (průkaznost statistických dat?).</p>
+						<p>Podpora pro WebGL 2.0 (založeno na OpenGL ES 3.0) je experimentálně dostupná pouze v některých prohlížečích a musí být explicitně povolená.</p>
+					</section>
+					<section>
+						<h3>Důvod nefunkčnosti WebGL</h3>
+						<ul>
+							<li>Stará verze prohlížeče.</li>
+							<li>Neaktualizovaný a nebezpečný ovladač grafické karty (blacklisting).</li>
+							<li>Vypnutá podpora WebGL v nastavení prohlížeče.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Test funkčnosti WebGL</h3>
+						<ul>
+							<li><a href="https://sketchfab.com">sketchfab.com</a></li>
+							<li><a href="https://p3d.in/">p3d.in</a></li>
+							<li><a href="http://webglreport.com/">webglreport.com</a></li>
+						</ul>
+					</section>
+					<section>
+						<h3>Khronos Conformance testy</h3>
+						<p>Khronos Group vytvořil sadu testů podobných ACID testům od W3C. Svůj prohlížeč si můžete otestovat na adrese:</p>
+						<a href="https://www.khronos.org/registry/webgl/sdk/tests/webgl-conformance-tests.html">https://goo.gl/LMJfC6</a>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Canvas &amp; Javascript &amp; WebGL</h2>
+						<ul>
+							<li>Nutná je nejprve podpora por HTML5 elelement <code>canvas</code></li>
+							<li>Následně je nezbytné, aby Javascript API mělo přístup k 3D kontextu canvasu ("webgl"/"experimental-webgl")</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Minimální WebGL aplikace</h3>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;&lt;body&gt;
+&lt;canvas id="c01"&gt;&lt;/canvas&gt;
+&lt;script type="text/javascript"&gt;
+	var canvas = document.getElementById("c01");
+	var gl = canvas.getContext("webgl");
+	gl.clearColor(0.3, 0.8, 0.3, 1.0);
+	gl.clear(gl.COLOR_BUFFER_BIT);
+&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;
+</code></pre>
+<canvas id="c01"></canvas>
+<script type="text/javascript">
+	var canvas = document.getElementById("c01");
+	var gl = canvas.getContext("webgl");
+	gl.clearColor(0.3, 0.8, 0.3, 1.0);
+	gl.clear(gl.COLOR_BUFFER_BIT);
+</script>
+					</section>
+				</section>
+				<section>
+					<h2>Zobrazovací řetězec WebGL</h2>
+					<ul>
+						<li>WebGL nepoužívá pevně danou zobrazovací řetězec jako má OpenGL (viz. <a href="./cg_render_pipeline.html">předchozí přednáška</a>)</li>
+						<li>WebGL vyžaduje použití vertex a fragment shaderů</li>
+						<img src="./img/webgl_render_pipeline.jpg">
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>Vertex &amp; Fragment Shader</h2>
+						<ul>
+							<li>Speciální programovací jazyk podobný jazyku C</li>
+							<li>Kompilovaný na grafické kartě</li>
+							<li>Vykonávaný na grafické kartě</li>
+							<li>Grafická karta (2016): masivně paralelní stroj (stovky až tisíce výpočetních jader) - velmi rychlý běh</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Vertex Shader</h3>
+						<ul>
+							<li>Každý vrchol vstupující do vertex shaderu je tímto shaderem transformován. Zde mohou být prováděny například tyto operace:</li>
+							<ul>
+								<li>Transformace (rotace, zvětšní, posun, atd.)</li>
+								<li>Transformace do souř. systému kamery</li>
+								<li>Promítání (perspektivní/roviné)</li>
+								<li>Mnohé další</li>
+							</ul>
+							<li>Výstupem je čtyřprvkový vektor a nastavení hodnot pro proměnné typu varying.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Minimální Vertex Shader</h3>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;&lt;body&gt;
+&lt;canvas id="c02"&gt;&lt;/canvas&gt;
+&lt;script type="text/javascript"&gt;
+	var canvas = document.getElementById("c02");
+	var gl = canvas.getContext("webgl");
+	var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+	gl.shaderSource(vertexShader,
+		'void main(void) { gl_Position = vec4(0, 0, 0, 1);}');
+	gl.compileShader(vertexShader);
+	var program = gl.createProgram();
+	gl.attachShader(program, vertexShader);
+	gl.linkProgram(program); gl.useProgram(program);
+	gl.clearColor(0.3, 0.3, 0.8, 1.0);
+	gl.clear(gl.COLOR_BUFFER_BIT);
+&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;
+</code></pre>
+					</section>
+					<section>
+						<h3>Příklad minimálního Vertex Shaderu</h3>
+<canvas id="c02"></canvas>
+<script type="text/javascript">
+	var canvas = document.getElementById("c02");
+	var gl = canvas.getContext("webgl");
+	var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+	gl.shaderSource(vertexShader,
+		'void main(void) { gl_Position = vec4(0, 0, 0, 1);}');
+	gl.compileShader(vertexShader);
+	var program = gl.createProgram();
+	gl.attachShader(program, vertexShader);
+	gl.linkProgram(program); gl.useProgram(program);
+	gl.clearColor(0.3, 0.3, 0.8, 1.0);
+	gl.clear(gl.COLOR_BUFFER_BIT);
+</script>
+					<p class="fragment">Demonstrační program má drobnou nevýhodu: vertex shader nic nedělá, protože nemá žádná vstupní data a jeho výstup není vstupem do fragment shaderu.</p>
+					</section>
+					<section>
+						<h3>Tvorba primitiv a rasterizace</h3>
+						<ul>
+							<li>Po transformaci vertexů dojde k vytvoření jednotlivých primitiv (základních elementů):</li>
+							<ul>
+								<li>Body</li>
+								<li>Hrany</li>
+								<li>Trojúhelníky</li>
+							</ul>
+							<li>Následně dojde k rasterizaci těchto základních elementů do rastru fragmentů (pixelů).</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Fragment Shader</h3>
+						<ul>
+							<li>Fragment shader je aplikovaný na každý fragment (pixel) rasterizovaných elementů.</li>
+							<li>Výstup fragment shaderu se uloží do framebufferu a zobrazí</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Miniální Fragment Shader</h3>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;&lt;body&gt;
+&lt;canvas id="c03"&gt;&lt;/canvas&gt;
+&lt;script type="text/javascript"&gt;
+	var canvas = document.getElementById("c03");
+	var gl = canvas.getContext("webgl");
+	var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+	gl.shaderSource(fragmentShader,
+		'void main(void) {gl_FragColor = vec4(1, 1, 1, 1);');
+	gl.compileShader(fragmentShader);
+	var program = gl.createProgram();
+	gl.attachShader(program, fragmentShader);
+	gl.linkProgram(program); gl.useProgram(program);
+	gl.clearColor(0.8, 0.3, 0.3, 1.0);
+	gl.clear(gl.COLOR_BUFFER_BIT);
+&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;
+</code></pre>
+					</section>
+					<section>
+					<h3>Příklad minimálního Fragment Shaderu</h3>
+<canvas id="c03"></canvas>
+<script type="text/javascript">
+	var canvas = document.getElementById("c03");
+	var gl = canvas.getContext("webgl");
+	var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+	gl.shaderSource(fragmentShader,
+		'void main(void) {gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);');
+	gl.compileShader(fragmentShader);
+	var program = gl.createProgram();
+	gl.attachShader(program, fragmentShader);
+	gl.linkProgram(program); gl.useProgram(program);
+	gl.clearColor(0.8, 0.3, 0.3, 1.0);
+	gl.clear(gl.COLOR_BUFFER_BIT);
+</script>
+					<p class="fragment">Demonstrační program má opět drobnou nevýhodu: fragment shader nic nedělá, protože nemá žádné vstupní fragmenty.</p>
+					</section>
+					<section>
+						<h3>Příklad minimálního a funkčního vertex &amp; fragment shaderu</h3>
+<canvas id="c04"></canvas>
+</br>
+<a href="https://gist.github.com/jirihnidek/38e347234ff8509b9331ca8ca093fe65">https://goo.gl/p8UZor</a>
+
+<script type="text/javascript">
+	window.onload = function() {
+		// var gl = document.getElementById("c04").getContext("experimental-webgl");
+		var gl = document.getElementById("c04").getContext("webgl");
+
+		// Create vertex shader
+		var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+		var vertexShaderCode = '' +
+			'attribute vec2 pos;' +
+			'' +
+			'void main(void) {' +
+			'	gl_Position = vec4(pos, 0.0, 1.0);' +
+			'	gl_PointSize = 5.0;' +
+			'}';
+		gl.shaderSource(vertexShader, vertexShaderCode);
+		gl.compileShader(vertexShader);
+
+		// Create ragment shader
+		var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+		var fragmentShaderCode = '' +
+			'void main(void) {' +
+			'	gl_FragColor = vec4(0.3, 0.8, 0.3, 1.0);' +
+			'}';
+		gl.shaderSource(fragmentShader, fragmentShaderCode);
+		gl.compileShader(fragmentShader);
+
+		// Create program
+		var program = gl.createProgram();
+		gl.attachShader(program, vertexShader);
+		gl.attachShader(program, fragmentShader);
+		gl.linkProgram(program);
+		gl.useProgram(program);
+
+		// Use input value pos
+		var posLoc = gl.getAttribLocation(program, "pos");
+		gl.enableVertexAttribArray(posLoc);
+
+		// Create buffer
+		var posBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+		var vertices = [
+			0.0, 0.0,
+		];
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+		// Link buffer with shader
+		gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+		gl.clearColor(1.0, 1.0, 1.0, 1.0);
+		gl.clear(gl.COLOR_BUFFER_BIT);
+		gl.drawArrays(gl.POINTS, 0, vertices.length/2);
+	}
+</script>
+					</section>
+				</section>
+				<section>
+					<h2>Double-buffering</h2>
+					<blockquote>
+						&ldquo;WebGL: double-buffering batteries included!&rdquo;
+					</blockquote>
+					<ul>
+						<li>Framebuffer není ve skutečnosti jeden, ale jsou dva: přední a zadní.</li>
+						<li>Do zadního se postupně vykresluje</li>
+						<li>Přední je zobrazován uživateli</li>
+						<li>Při dokončení vykreslování se buffery prohodí</li>
+						<li>Zamezuje problikávání a vzniku rušivých artefaktů</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Z-Buffer alias paměť hloubky</h2>
+					<ul>
+						<li>Efektivně řeší problém viditelnosti objektů</li>
+						<li>Každý fragment si v sobě uchovává svoji vzdálenost od kamery v tzv. z-bufferu.</li>
+						<li>Vzdálený objekt nemůže překreslit objekty blíže ke kameře.</li>
+						<li><pre><code>gl.enable(gl.DEPTH_TEST);</code></pre></li>
+					</ul>
+				</section>
+				<section>
+					<h2>WebGL jako stavový automat</h2>
+					<ul>
+						<li>WebGL (i OpenGL) se občas chová jako stavový automat.</li>
+						<li>Nastavíme, že pracujeme například s nějakým bufferem a následná volání API se vstahují k danému bufferu.</li>
+						<li>Může to komplikovat kód, ale redukuje to počet parametrů funkcí.</li>
+					</ul>
+				</section>
+				<section>
+					<h2>ArrayBuffer &amp; typové pole</h2>
+					<ul>
+						<li>Data jsou mezi aplikací psanou v Javascriptu a shadery předávána v tzv. ArrayBufferech</li>
+						<li>ArrayBuffer se vytváří pomocí tzv. typového pole (novinka v HTML5).</li>
+						<li>Typové pole může obsahovat data pouze jednoho typu.</li>
+						<ul>
+							<li>Uint8Array, Uint16Array, Uint32Array</li>
+							<li>Int8Array, Int16Array, Int32Array</li>
+							<li>Float32Array, Float64Array</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<h2>Vstupní data: vertexy &amp; indexy</h2>
+				</section>
+				<section>
+					<h2>Souřadné systémy</h2>
+				</section>
+				<section>
+					<h2>Varying atributy</h2>
+				</section>
+				<section>
+					<h2>Uniform atributy</h2>
+				</section>
+				<section>
+					<h2>Textury</h2>
+				</section>
+				<section>
+					<h2>Buffery</h2>
+					<ul>
+						<li>DrawBuffer</li>
+						<li>FrameBuffer</li>
+						<li>RenderBuffer</li>
+						<li>StencilBuffer</li>
+					</ul>
 				</section>
 				<section>
 					<h2>Děkuji za pozornost.</h2>
