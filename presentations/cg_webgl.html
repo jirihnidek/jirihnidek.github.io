@@ -360,38 +360,186 @@
 					</ul>
 				</section>
 				<section>
-					<h2>WebGL jako stavový automat</h2>
-					<ul>
-						<li>WebGL (i OpenGL) se občas chová jako stavový automat.</li>
-						<li>Nastavíme, že pracujeme například s nějakým bufferem a následná volání API se vstahují k danému bufferu.</li>
-						<li>Může to komplikovat kód, ale redukuje to počet parametrů funkcí.</li>
-					</ul>
-				</section>
-				<section>
-					<h2>ArrayBuffer &amp; typové pole</h2>
-					<ul>
-						<li>Data jsou mezi aplikací psanou v Javascriptu a shadery předávána v tzv. ArrayBufferech</li>
-						<li>ArrayBuffer se vytváří pomocí tzv. typového pole (novinka v HTML5).</li>
-						<li>Typové pole může obsahovat data pouze jednoho typu.</li>
-						<ul>
-							<li>Uint8Array, Uint16Array, Uint32Array</li>
-							<li>Int8Array, Int16Array, Int32Array</li>
-							<li>Float32Array, Float64Array</li>
-						</ul>
-					</ul>
-				</section>
-				<section>
 					<h2>Vstupní data: vertexy &amp; indexy</h2>
+					<ul>
+						<li>Nejprve je nutné říci, že vertex shader bude používat nějaká vstupní data a jak je bude používat:</li>
+<pre><code>
+attribute vec3 pos;
+void main(void) { gl_Position = vec4(pos, 1); }
+</code></pre>
+						<li>Vstupní data je nutné předat do vertex shaderu pomocí ArrayBufferu</li>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>ArrayBuffer &amp; typové pole</h2>
+						<ul>
+							<li>Data jsou mezi aplikací psanou v Javascriptu a shadery předávána v tzv. ArrayBufferech</li>
+							<li>ArrayBuffer se vytváří pomocí tzv. typového pole (novinka v HTML5).</li>
+							<li>Typové pole může obsahovat data pouze jednoho typu.</li>
+							<ul>
+								<li>Uint8Array, Uint16Array, Uint32Array</li>
+								<li>Int8Array, Int16Array, Int32Array</li>
+								<li>Float32Array, Float64Array</li>
+							</ul>
+						</ul>
+					</section>
+					<section>
+						<h3>Předáváme data pomocí ArrayBuffer</h3>
+						<ul>
+							<li>Nejprve řekneme, do jakého atributu budeme data předávat</li>
+<pre><code>var posLoc = gl.getAttribLocation(program, "pos");
+gl.enableVertexAttribArray(posLoc);</code></pre>
+							<li>Následně vytvoříme ArrayBuffer, naplníme ho obsahem z typového pole a propojíme ho s atributem <code>pos</code></li>
+<pre><code>var posBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer); // aktivní buffer
+var vertices = [0.0, 0.0, 0.0];
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices),
+    gl.STATIC_DRAW);
+gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0)
+</code></pre>
+						</ul>
+					</section>
+					<section>
+						<h3>Předávaná data</h3>
+						<ul>
+							<li>Data předávaná do vertex shaderu nemusí a nejsou být pouze souřadnice vertexů.</li>
+							<li>Může jít o barvu vertexů, UV souřadnice, matice, normálové vektory, atd.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Vykreslení elementů</h3>
+						<ul>
+							<li>Elementy (v tomto případě body) následně vykreslíme pomocí (vykreslujeme data z aktivního bufferu):</li>
+<pre><code>gl.drawArrays(gl.POINTS, 0, vertices.length/3);</code></pre>
+							<li>Podporované typy elementů: <code>POINTS, LINE_STRIP, LINE_LOOP, LINES, TRIANGLE_STRIP, TRIANGLE_FAN, TRIANGLES</code></li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Elementy a ArrayBuffer</h2>
+						<ul>
+							<li>Složitější útvary než vertexy (hrany a trojúhelníky) je vhodné vykreslovat pomocí indexů do bufferu vertexů.</li>
+							<li>K tomu slouží ElementArrayBuffer:</li>
+<pre><code>
+var indexBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+var indices = [0, 1, 2];
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
+    new Uint8Array(indices), gl.STATIC_DRAW);
+</code></pre>							
+						</ul>
+					</section>
+					<section>
+						<h3>Vykreslení elementů</h3>
+						<ul>
+							<li>Elementy pomocí indexů vykreslujeme následovně (opět se data berou z aktuálního bufferu)</li>
+<pre><code>gl.drawElements(gl.LINES, 6, gl.UNSIGNED_BYTE, 0);</code></pre>
+							<li>Podporované typy elementů jsou stejné: <code>POINTS, LINE_STRIP, LINE_LOOP, LINES, TRIANGLE_STRIP, TRIANGLE_FAN, TRIANGLES</code></li>
+						</ul>
+					</section>
 				</section>
 				<section>
 					<h2>Souřadné systémy</h2>
+					<ul>
+						<li>Je dobré si povšimnout, že hodnoty, které vystupují z vertex shaderu jsou v homogenních souřadnicích a následně jsou převedeny ho kartézské soustavy souřadné.</li>
+						<li>Pohledové souřadnice mají počátek soustavy souřadné v prostředku a v pravém horním rohu je bod [1, 1, 0].</li>
+						<li>V neposlední řadě je třeba zmínit soustavu souřadnou canvasu. Počátek soustavné je v levém horním rohu. Bod [width, height] je v pravém dolním rohu.</li>
+					</ul>
 				</section>
 				<section>
-					<h2>Varying atributy</h2>
+					<h2>Varying proměnné</h2>
+					<ul>
+						<li>Pokud je nějaký atribut označen ve vertex shaderu klíčovým slovem varying, tak během rasterizaci elementů dochází k jeho lineární interpolaci.</li>
+<pre><code>varying vec3 color;</code></pre>
+					</ul>
+
+<canvas id="c05"></canvas>
+
+<script id="vs05" type="x-shader/x-vertex">
+attribute vec2 pos;
+attribute vec3 color;
+varying vec3 varyingColor;
+void main(void) {
+    gl_Position = vec4(pos, 0.0, 1.0);
+    varyingColor = color;
+}
+</script>
+
+<script id="fs05" type="x-shader/x-fragment">
+precision mediump float;
+varying vec3 varyingColor;
+void main(void) {
+    gl_FragColor = vec4(varyingColor, 1.0);
+}
+</script>
+
+<script type="text/javascript">
+
+	var gl = document.getElementById("c05").getContext("webgl");
+
+	var str = document.querySelector("#vs05").textContent;
+	var vs = gl.createShader(gl.VERTEX_SHADER);
+	gl.shaderSource(vs, str);
+	gl.compileShader(vs);
+
+	var str = document.querySelector("#fs05").textContent;
+	var fs = gl.createShader(gl.FRAGMENT_SHADER);
+	gl.shaderSource(fs, str);
+	gl.compileShader(fs);
+
+	var program = gl.createProgram();
+	gl.attachShader(program, vs);
+	gl.attachShader(program, fs);
+	gl.linkProgram(program);
+	gl.useProgram(program);
+
+	var colorLoc = gl.getAttribLocation(program, "color");
+	gl.enableVertexAttribArray(colorLoc);
+	var colorBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+	var colors = [
+	    1.0, 0.0, 0.0,
+	    0.0, 1.0, 0.0,
+	    0.0, 0.0, 1.0
+	];
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+	gl.vertexAttribPointer(colorLoc, 3, gl.FLOAT, false, 0, 0);
+
+	var posLoc = gl.getAttribLocation(program, "pos");
+	gl.enableVertexAttribArray(posLoc);
+	var vertexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+	var vertices = [
+	    0.5,  0.5,
+	   -0.5,  0.5,
+	    0.0, -0.5
+	];
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+	gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+	var indexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+	var indices = [0, 1, 1, 2, 2, 0];
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
+
+	gl.clearColor(0.1, 0.1, 0.1, 1.0);
+	gl.clear(gl.COLOR_BUFFER_BIT);
+
+	gl.lineWidth(3);
+	gl.drawElements(gl.LINES, 6, gl.UNSIGNED_BYTE, 0);
+
+</script>
 				</section>
 				<section>
-					<h2>Uniform atributy</h2>
+					<h2>Uniform proměnné</h2>
+					<ul>
+						<li>Proměnné označené klíovým slovem unform jsou neměné pro celý vertex nebo fragment shader.</li>
+						<li>Nejčastěji se používají pro matice</li>
+					</ul>
 				</section>
+<!--
 				<section>
 					<h2>Textury</h2>
 				</section>
@@ -404,6 +552,7 @@
 						<li>StencilBuffer</li>
 					</ul>
 				</section>
+-->
 				<section>
 					<h2>Děkuji za pozornost.</h2>
 				</section>
@@ -427,8 +576,8 @@
 				transition: 'slide', // none/fade/slide/convex/concave/zoom
 
 				math: {
-					//mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
-					mathjax: 'plugin/mathjax/MathJax.js',
+					mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+					//mathjax: 'plugin/mathjax/MathJax.js',
 					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
 				},
 
