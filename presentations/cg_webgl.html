@@ -154,8 +154,8 @@
 					<ul>
 						<li>WebGL nepoužívá pevně danou zobrazovací řetězec jako má OpenGL (viz. <a href="./cg_render_pipeline.html">předchozí přednáška</a>)</li>
 						<li>WebGL vyžaduje použití vertex a fragment shaderů</li>
-						<img src="./img/webgl_render_pipeline.jpg">
 					</ul>
+					<img src="./img/webgl_render_pipeline.jpg" style="padding: 10px; background-color: #fff;">
 				</section>
 				<section>
 					<section>
@@ -512,23 +512,23 @@ void main(void) {
 	var vertexBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
 	var vertices = [
-	    0.5,  0.5,
-	   -0.5,  0.5,
-	    0.0, -0.5
+	    0.0,  0.5,
+	   -0.5, -0.5,
+	    0.5, -0.5
 	];
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 	gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
 
 	var indexBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-	var indices = [0, 1, 1, 2, 2, 0];
+	var indices = [0, 1, 2];
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
 
 	gl.clearColor(0.1, 0.1, 0.1, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT);
 
 	gl.lineWidth(3);
-	gl.drawElements(gl.LINES, 6, gl.UNSIGNED_BYTE, 0);
+	gl.drawElements(gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 0);
 
 </script>
 				</section>
