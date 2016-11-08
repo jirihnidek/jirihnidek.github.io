@@ -177,7 +177,7 @@
 								<li>Promítání (perspektivní/roviné)</li>
 								<li>Mnohé další</li>
 							</ul>
-							<li>Výstupem je čtyřprvkový vektor a nastavení hodnot pro proměnné typu varying.</li>
+							<li>Výstupem je čtyřprvkový vektor <code>gl_Position</code>, velikost bodu <code>gl_PointSize</code> a případně nastavení hodnot pro proměnné typu varying.</li>
 						</ul>
 					</section>
 					<section>
@@ -338,6 +338,40 @@
 					</section>
 				</section>
 				<section>
+					<h2>Shadery a datové typy</h2>
+					<ul>
+						<li>Jednoduché datové typy: void, bool, int, float</li>
+						<li>Vektory floatů: vec2, vec3, vec4</li>
+						<li>Vektory booleanů: bvec2, bvec3, bvec4</li>
+						<li>Vektory integerů: ivec2, ivec3, ivec4</li>
+						<li>Čtvercové matice floatů: mat2, mat3, mat4</li>
+						<li>Textury: sampler2D, samplerCube</li>
+						<li>Jednorozměrné pole a struktury</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Konstrukce pro řízení shaderů</h2>
+					<ul>
+						<li>Cykly:</li>
+<pre><code>for(;;) {}
+while() {}
+do {} while()</code></pre>
+						<li>Podmínky:</li>
+<pre><code>if() {}
+if() {} else {}
+</code></pre>
+						<li>Skoky:</li>
+<pre><code>break, continue, return, discard</code></pre>
+						<li>V shader si můžete definovat vlastní funkce:</li>
+<pre><code>float add(float a, float) {return a + b};</code></pre>
+					</ul>
+				</section>
+				<section>
+					<h2>Vestavěné funkce shaderů</h2>
+					<p>Je jich cca 60. Příklady nejpoužívanějších: <code>sin(), asin(), cos(), acos(), tan(), atan(), pow(), exp(), log(), exp2(), log2(), sqrt(), abs(), floor(), ceil(), mod(), min(), max(), atd.</code></p>
+					<p>Kompletní seznam je například v <a href="https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf">Quick Reference Card</a> </p>
+				</section>
+				<section>
 					<h2>Double-buffering</h2>
 					<blockquote>
 						&ldquo;WebGL: double-buffering batteries included!&rdquo;
@@ -451,32 +485,31 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
 				<section>
 					<h2>Varying proměnné</h2>
 					<ul>
-						<li>Pokud je nějaký atribut označen ve vertex shaderu klíčovým slovem varying, tak během rasterizaci elementů dochází k jeho lineární interpolaci.</li>
+						<li>Pokud je nějaká promenná označena ve vertex shaderu klíčovým slovem varying, tak během rasterizaci elementů dochází k její lineární interpolaci. Pro každý fragment elementu (úsečka, trojúhelník) je spočítána hodnota.</li>
 <pre><code>varying vec3 color;</code></pre>
 					</ul>
 
 <canvas id="c05"></canvas>
 
 <script id="vs05" type="x-shader/x-vertex">
-attribute vec2 pos;
-attribute vec3 color;
-varying vec3 varyingColor;
-void main(void) {
-    gl_Position = vec4(pos, 0.0, 1.0);
-    varyingColor = color;
-}
+	attribute vec2 pos;
+	attribute vec3 color;
+	varying vec3 varyingColor;
+	void main(void) {
+	    gl_Position = vec4(pos, 0.0, 1.0);
+	    varyingColor = color;
+	}
 </script>
 
 <script id="fs05" type="x-shader/x-fragment">
-precision mediump float;
-varying vec3 varyingColor;
-void main(void) {
-    gl_FragColor = vec4(varyingColor, 1.0);
-}
+	precision mediump float;
+	varying vec3 varyingColor;
+	void main(void) {
+	    gl_FragColor = vec4(varyingColor, 1.0);
+	}
 </script>
 
 <script type="text/javascript">
-
 	var gl = document.getElementById("c05").getContext("webgl");
 
 	var str = document.querySelector("#vs05").textContent;
@@ -529,7 +562,6 @@ void main(void) {
 
 	gl.lineWidth(3);
 	gl.drawElements(gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 0);
-
 </script>
 				</section>
 				<section>
@@ -553,6 +585,10 @@ void main(void) {
 					</ul>
 				</section>
 -->
+				<section>
+					<h2>Quick Reference Card</h2>
+					<a href="https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf">WebGL Reference Card</a>
+				</section>
 				<section>
 					<h2>Děkuji za pozornost.</h2>
 				</section>
