@@ -33,7 +33,9 @@ body{
 }
 
 
-a{
+a,
+a:active,
+a:focus{
     color:#DE5E60;
     text-decoration: none;
     cursor: pointer;
@@ -44,11 +46,9 @@ a{
             transition: color 0.1s linear 0s;
 }
 
-a:hover,
-a:active,
-a:focus{
+a:hover{
     outline: 0;
-    color:#FFFFFF;
+    color:#ECA2A2;
     text-decoration:none;
 }
 
