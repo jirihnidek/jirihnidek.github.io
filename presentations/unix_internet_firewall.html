@@ -53,10 +53,149 @@
 			<div class="slides">
 				<section>
 					<h1>UNIX a Internet</h1>
-					<h2>Firewally</h2>
+					<h2>Firewally &amp; Proxy</h2>
 					<p>
 						<small>Autor: <a href="http://jirihnidek.github.io">Jiří Hnídek</a> / <a href="mailto:jiri.hnidek@tul.cz">jiri.hnidek@tul.cz</a></small>
 					</p>
+				</section>
+				<section>
+					<h2>Firewall</h2>
+					<blockquote>
+						&ldquo;Pojem firewall označoval původně protipožární zeď, která slouží pro oddělení ohně v budově, aby se nešířil dále.&rdquo;
+					</blockquote>
+				</section>
+				<section>
+					<h2>Proxy</h2>
+					<blockquote>
+						&ldquo;The authority to represent someone else, especially in voting.&rdquo;
+					</blockquote>
+				</section>
+				<section>
+					<section>
+						<h2>Dělení firewallů</h2>
+						<ul>
+							<li>Podle stavu: stavové/bezestavové</li>
+							<li>Podle síťové vrstvy, na které pracují</li>
+							<li>Podle implementace: kernel space/user space</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Bezestavové firewally</h3>
+						<ul>
+							<li>Firewall každý paket posuzuje zvlášť</li>
+							<li>Firewall si neudržuje informace o spojení (TCP spojení)</li>
+							<li>Vhodný na velké datové přenosy s velkým množstvím spojení, kdy není možné udržovat informace o každém spojení (paměť).</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Stavový firewall</h3>
+						<ul>
+							<li>Firewall si udržuje informace o stavu každého spojení.</li>
+							<li>Paměťově i implementačně náročnější.</li>
+							<li>Například u TCP si musí pamatovat: zdrojovu adresu+port, cílovou adresu+port, čas přijetí/odeslání posledního paketu.</li>
+							<li>U protokolu UDP nelze použít bez znalosti protokolu vyšší vrstvy (např. DNS)</li>
+							<li>Bezpečnější než bezestavový firewall - dokáže odfiltrovat pakety nepatřící do spojení.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Firewall a síťové vrstvy</h3>
+						<ul>
+							<li>Linková (MAC adresy)</li>
+							<ul>
+								<li>Většinou na routeru</li>
+								<li>Ochrana proti podvržení IP adresy: ARP Spoofing, DHCP Snooping, atd.</li>
+							</ul>
+							<li>Síťová vrstva (IPv4 a IPv6 adresy)</li>
+							<ul>
+								<li>Filtrování provozu ven/dovnitř síťové prvku</li>
+								<li>Předávání provozu</li>
+							</ul>
+							<li>Transportní vrstva (TCP, UDP, atd.)</li>
+							<ul>
+								<li>Filtrování provozu na základě portů. Úzce souvisí se stavovým firewallem (TCP).</li>
+							</ul>
+							<li>Aplikační vrstva (HTTP, FTP, SMTP, atd.)</li>
+							<ul>
+								<li>Je prozkoumáván obsah přenášených dat.</li>
+							</ul>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>Firewall v Linuxu</h2>
+					<ul>
+						<li>Pravěk: ipfwadm, ipchains</li>
+						<li>2016: netfilter</li>
+						<ul>
+							<li>Konfigurační nástroje: iptables, ip6tables, firewall-cmd</li>
+							<li>Další konfigurační nástroje: ebtables (linková vrstva), arptables (ARP), conntrack</li>
+						</ul>
+						<li>Budoucnost: nftables</li>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>netfilter</h2>
+						<ul>
+							<li>Framework pro filtrování paketu od Linuxu 2.4</li>
+							<li>Skládá se z jaderných modulů (ip_tables, iptable_filter, iptable_mangle, ...) a nástrojů iptables/ip6tables</li>
+							<li>Netfilter má na záchytných bodech v jádře zaregistrované callback funkce, které se volají pro každý paket procházející tímto bodem.</li>
+							<li>Nástroje iptables/ip6tables definují v uživatelském prostoru tabulku pravidel</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Vlastnosti netfilteru</h3>
+						<ul>
+							<li>Stavový i bezestavový IPv4/IPv6 paketový filter</li>
+							<li>NAT a maškaráda</li>
+							<li>Modulární systém</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Záchytné body netfilteru</h3>
+						<p>Netfilter definuje 5 záchytných bodů, kde se volají callback funkce:</p>
+						<ul>
+							<li><code>NF_IP_PRE_ROUTING</code>: při přijetí paketu před tím, než se rozhodne, jak se bude paket směrovat</li>
+							<li><code>NF_IP_LOCAL_IN</code>: paket má cíl na daném stroji</li>
+							<li><code>NF_IP_FORWARD</code>: paket se má předat dál</li>
+							<li><code>NF_IP_IP_LOCAL_OUT</code>: paket byl vytvořen na daném stroji</li>
+							<li><code>NF_IP_POST_ROUTING</code>: před odesláním mimo stroj.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Cesta paketu v jádře Linuxu</h3>
+						<p>Než paket dorazí do socketu, tak jeho cesta může být hodně komplikovaná:</p>
+						<img src="./img/Netfilter-packet-flow.svg">
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>IPTables</h2>
+						<ul>
+							<li>Tabulka řetězců pravidel jak zacházet v jádře.</li>
+							<li>5 základních řetězců odpovídají záchytným bodům netfilteru.</li>
+							<li>Lze definovat další řetězce pravidel.</li>
+							<li>Uživatel root může pravidla přidávat/měnit/mazat pomocí příkazu iptables a ip6tables</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Základní řetězce pravidel</h3>
+						<p>Iptables obsahují 5 základních řetězců pravidel:</p>
+						<ul>
+							<li><code>PREROUTING</code> je spouštěn: <code>NF_IP_PRE_ROUTING</code></li>
+							<li><code>INPUT</code> je spouštěn: <code>NF_IP_LOCAL_IN</code></li>
+							<li><code>FORWARD</code> je spouštěn: <code>NF_IP_FORWARD</code></li>
+							<li><code>OUTPUT</code> je spouštěn: <code>NF_IP_LOCAL_OUT</code></li>
+							<li><code>POSTROUTING</code> je spouštěn: <code>NF_IP_POST_ROUTING</code></li>
+						</ul>
+					</section>
+					<section>
+						<h3>Příklad pravidla</h3>
+						<p>Pravidla (pro IPv4) můžeme vypsat pomocí:</p>
+<pre><code>iptables -L -v -n --line-numbers</code></pre>
+						<p>Pro IPv6 pomocí:</p>
+<pre><code>ip6tables -L -v -n --line-numbers</code></pre>
+					</section>
 				</section>
 				<section>
 					<h2>Děkuji za pozornost. Nějaké otázky?</h2>
