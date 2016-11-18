@@ -82,18 +82,21 @@
 					<section>
 						<h3>Bezestavové firewally</h3>
 						<ul>
-							<li>Firewall každý paket posuzuje zvlášť</li>
-							<li>Firewall si neudržuje informace o spojení (TCP spojení)</li>
-							<li>Vhodný na velké datové přenosy s velkým množstvím spojení, kdy není možné udržovat informace o každém spojení (paměť).</li>
+							<li>Každý paket posuzuje zvlášť</li>
+							<li>Neudržuje si informace o spojení (např.: TCP spojení)</li>
+							<li>Vhodný na velké datové přenosy s velkým množstvím spojení (paměťová a výpočetní náročnost).</li>
 						</ul>
 					</section>
 					<section>
 						<h3>Stavový firewall</h3>
 						<ul>
-							<li>Firewall si udržuje informace o stavu každého spojení.</li>
+							<li>Udržuje si informace o stavu každého spojení.</li>
 							<li>Paměťově i implementačně náročnější.</li>
 							<li>Například u TCP si musí pamatovat: zdrojovu adresu+port, cílovou adresu+port, čas přijetí/odeslání posledního paketu.</li>
-							<li>U protokolu UDP nelze použít bez znalosti protokolu vyšší vrstvy (např. DNS)</li>
+							<li>U protokolu UDP nelze použít stejným způsobem (není to spojový protokol).</li>
+								<ul>
+									<li>Pokud ovšem klient pošle UDP paket na adresu+port, tak stavový firewall propustí "odpověď".</li>
+								</ul>
 							<li>Bezpečnější než bezestavový firewall - dokáže odfiltrovat pakety nepatřící do spojení.</li>
 						</ul>
 					</section>
@@ -139,8 +142,8 @@
 						<ul>
 							<li>Framework pro filtrování paketu od Linuxu 2.4</li>
 							<li>Skládá se z jaderných modulů (ip_tables, iptable_filter, iptable_mangle, ...) a nástrojů iptables/ip6tables</li>
-							<li>Netfilter má na záchytných bodech v jádře zaregistrované callback funkce, které se volají pro každý paket procházející tímto bodem.</li>
-							<li>Nástroje iptables/ip6tables definují v uživatelském prostoru tabulku pravidel</li>
+							<li>Netfilter má na záchytných bodech (hooks) v jádře zaregistrované callback funkce, které se volají pro každý paket procházející tímto záchytným bodem.</li>
+							<li>Nástroje iptables/ip6tables definují v uživatelském prostoru tabulky pravidel.</li>
 						</ul>
 					</section>
 					<section>
@@ -172,7 +175,7 @@
 					<section>
 						<h2>IPTables</h2>
 						<ul>
-							<li>Tabulka řetězců pravidel jak zacházet v jádře.</li>
+							<li>Tabulky řetězců (chains) pravidel jak zacházet s paketem.</li>
 							<li>5 základních řetězců odpovídají záchytným bodům netfilteru.</li>
 							<li>Lze definovat další řetězce pravidel.</li>
 							<li>Uživatel root může pravidla přidávat/měnit/mazat pomocí příkazu iptables a ip6tables</li>
@@ -190,12 +193,180 @@
 						</ul>
 					</section>
 					<section>
+						<h3>Tabulky pravidel</h3>
+						<p>Iptables obsahují 5 tabulek s řetězci pravidel</p>
+						<ul>
+							<li><code>filter</code>: výchozí tabulka k filtrování paketů. Obsahuje základní řetězce pravidel: INPUT, OUTPUT a FORWARD</li>
+							<li><code>nat</code>: tabulka pro NAT. Základní řetězce pravidel: PREROUTING, OUTPUT, POSTROUTING</li>
+							<li><code>mangle</code>: tabulka pro změnu paketů: PREROUTING, INPUT, OUTPUT, FORWARD, POSTROUTING</li>
+							<li><code>raw</code>: pravidla před tabulkou filter. Řetězce: PREROUTING, OUTPUT</li>
+							<li><code>security</code>: pro SELinux. Řetězce: INPUT, OUTPUT, FORWARD</li>
+						</ul>
+					</section>
+					<section>
+						<p>Teď se to trochu komplikuje, ale v praxi si člověk většinou vystačí s tabulkou filter a řetězcem INPUT.</p>
+					</section>
+					<section>
 						<h3>Příklad pravidla</h3>
 						<p>Pravidla (pro IPv4) můžeme vypsat pomocí:</p>
-<pre><code>iptables -L -v -n --line-numbers</code></pre>
+<pre><code>iptables -t filter -L -v -n --line-numbers</code></pre>
 						<p>Pro IPv6 pomocí:</p>
-<pre><code>ip6tables -L -v -n --line-numbers</code></pre>
+<pre><code>ip6tables -t filter -L -v -n --line-numbers</code></pre>
+						<p>Může vypsat spoustu pravidel. Jedním z nich bude třeba:</p>
+<pre><code>Chain IN_public_allow (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22 ctstate NEW
+</code></pre>
 					</section>
+					<section>
+						<h3>Cíl (TARGET) pravidla</h3>
+						<ul>
+							<li>Každé pravidlo je ukončeno nějakým cílem (TARGET). Základní cíle jsou</li>
+							<ul>
+								<li><code>ACCEPT</code>: paket je v dané tabulce řetězců přijat</li>
+								<li><code>DROP</code>: paket je zahozen</li>
+								<li><code>RETURN</code>: paket již neprochází daným řetězcem pravidel a jeho zpracování se vrací do nadřazeného řetězce</li>
+							</ul>
+							<li>Existují další cíle (LOG, MARK, TEE, TOS, REJECT, atd.). Více v <code>man iptables-extensions</code></li>
+							<li>Některé cíle lze použít pouze v některých tabulkách.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Implicitní cíl</h3>
+						<ul>
+							<li>U základních řetězců je implicitní cíl ACCEPT</li>
+							<li>Prázné tabulky propustí všechny pakety a žádný paket nezmění.</li>
+							<li>Ve výchozím nastavení jsou řetězce pravidel prázdné</li>
+							<li>Uživatelsky definované řetězce implicitní cíl nemají</li>
+							<ul>
+								<li>Můžeme využít cíl RETURN</li>
+							</ul>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Iptables - Best Practice</h2>
+						<ol>
+							<li class="fragment">Použít nějakou nadstavbu pro lidské bytosti</li>
+							<ul>
+								<li class="fragment"><code>firewall-cmd</code> příkaz pro definici pravidel.</li>
+								<li class="fragment"><code>firewall-config</code> dost nepovedený program s GUI.</li>
+							</ul>
+							<li class="fragment">Použít iptables s rozmyslem</li>
+							<ul>
+								<li class="fragment">V tabulce filter v chainu INPUT nastavit implicitní cíl na DROP.</li>
+								<li class="fragment">Povolit jen běžící služby</li>
+							</ul>
+						</ol>
+					</section>
+					<section>
+						<h3>Iptables - Příklad konfigurace</h3>
+						<p>Uvažujeme nastavení na serveru, kde chceme povolit: ping, spojení na webový server (port 80) a vzdálenou správu pomocí SSH (port 22). Budeme tudíž nastavovat pouze tabulku filter a řetěz pravidel INPUT.</p>
+					</section>
+					<section>
+						<h3>Iptables - s čistým štítem</h3>
+						<p>Začneme tím, že smažeme všechna pravidla (IPv4):</p>
+						<pre><code>iptables -t filter -F INPUT</code></pre>
+						<p>Toto musíme udělat i pro protokol IPv6:</p>
+						<pre><code>ip6tables -t filter -F INPUT</code></pre>
+						<p class="fragment">Kopírování příkazů pro IPv6 je pěkná otrava. Další příklady příkazů budou pouze pro IPv4.</p>
+						<p class="fragment">Jelikož tabulka filter je defaultní, tak není nutné psát neustále parametr: -t filter.</p>
+					</section>
+					<section>
+						<h3>Změna implicitního cíle</h3>
+						<p>Implicitní cíl je v základním řetězci ACCEPT. Změníme ho na DROP:</p>
+						<pre><code>iptables -P INPUT DROP</code></pre>
+					</section>
+					<section>
+						<h3>Povolujeme služby</h3>
+						<p>Začneme povolením ICMP paketu se zprávou "Echo Request":</p>
+						<pre><code>iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT</code></pre>
+						<p>Povolíme TCP pakety přicházející na porty (80 a 22)</p>
+						<pre><code>iptables -A INPUT -p tcp --dport 22 -j ACCEPT</code></pre>
+						<pre><code>iptables -A INPUT -p tcp --dport 80 -j ACCEPT</code></pre>
+						<p>Tím jsme získali bezestavová firewall.</p>
+					</section>
+					<section>
+						<h3>Iptables a stavový firewall</h3>
+						<p>Iptables se většinou používají ve funkci stavového firewallu. K tomu účelu slouží module conntrack.</p>
+						<p>Tento modul si pamatuje všechna TCP spojení. Příklad:</p>
+<pre><code>iptables -F INPUT
+iptables -P INPUT DROP
+# Povolíme pakety patřící k existujícím spojením
+iptables -A INPUT -m conntrack --state ESTABLISHED,RELATED -j ACCEPT
+# Povolíme ping
+iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+# Povolíme SYN pakety pro nová spojení na povolené služby
+iptables -A INPUT -m conntrack -ctstate NEW -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -m conntrack -ctstate NEW -p tcp --dport 80 -j ACCEPT
+</code></pre>
+					</section>
+					<section>
+						<h3>Conntrack a existující spojení</h3>
+						<p>Existující spojení lze vypsat pomocí:</p>
+<pre><code>cat /proc/net/nf_conntrack</code></pre>
+					</section>
+					<section>
+						<h3>Další omezení</h3>
+						<p>Například v případě SSH nechcete, aby bylo možné se na daný stroj přihlásit z celého internetu. Možnost připojit se je vhodné omezit na nějakou (důvěryhodnou) podsíť:</p>
+<pre><code>iptables -A INPUT -m conntrack -ctstate NEW -s 147.230.0.0/16 \
+	-p tcp --dport 22 -j ACCEPT</code></pre>
+						<p>Spojení lze omezit jen na vybrané síťové rozhraní:</p>
+<pre><code>iptables -A INPUT -i eth0 -m conntrack -ctstate NEW \
+	-p tcp --dport 80 -j ACCEPT</code></pre>
+					</section>
+					<section>
+						<h3>Omezujeme počet požadavků</h3>
+						<p>Počet požadavků za časové období (sekunda, minuta, atd.) lze omezit například pomocí modulu limit:</p>
+<pre><code>iptables -A INPUT -p icmp --icmp-type echo-request \
+	-m limit --limit 1/s --limit-burst 10 -j ACCEPT </code></pre>
+						<p>Omezí počet ICMP paketů "Echo Request" na 10 za sekundu.</p>
+					</section>
+					<section>
+						<p>V případě zahlcení od většího množství strojů z nějaké podsítě je možné použít modul connlimit:</p>
+<pre><code>iptables -p tcp --syn --dport 80 -s 147.230.0.0/16 \
+	-m connlimit --connlimit-above 16 -j REJECT</code></pre>
+						<p>Pozor: Používat s rozmyslem, aby nedošlo k omezení regulárního provozu.</p>
+					</section>
+					<section>
+						<h3>Iptables jako služba</h3>
+						<ul>
+							<li>Na starších linuxových distribucích (RedHat/CentOS 4/5/6 i jiných) se pravidla iptables nastavovalala pomocí init skriptu.</li>
+							<li>Tento init skript se staral i o restartování, znovunačtení konfigurace vypnutí, apod.</li>
+							<li>Restatování nebo znovunačtení konfigurace mělo za následek např. zrušení spojení, vynulování čítačů, apod.</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Firewalld a firewall-cmd</h2>
+						<ul>
+							<li>Na RedHat/CentOS 7 se o nastavení pravidel iptables stará démon firewalld.</li>
+							<li>Firewalld stále používá iptables pro nastavení řetězců pravidel.</li>
+							<li>Pro konfiguraci pravidel se ale používá příkaz firewall-cmd a jeho syntaxe je odlišná od iptables.</li>
+							<li>Firewalld přichází s koncepcí bezbečnostních zón.</li>
+							<ul>
+								<li>Příklad: na notebooku můžete mít jiná pravidla doma, v práci, v kavárně.</li>
+							</ul>
+							<li>Někteří staromilci firwalld vypínají a používají starý init skript iptables.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Firewall-cmd</h3>
+						<p>Další informace k nalezení na <a href="http://jirihnidek.github.io/2014/09/30/firewalld/">http://jirihnidek.github.io</a>.</p>
+					</section>
+				</section>
+				<section>
+					<h2>NAT</h2>
+					<blockquote>
+					&ldquo;Die, IPv4. Die!.&rdquo;
+					</blockquote>
+				</section>
+				<section>
+					<h2>Hole Punching</h2>
+					<p>Stavový firewall není všemocný. Na následujícím kódu si ukážeme, že se lze za určitých podmínek připojit na port, který není na stavovém firewallu explicitně povolen.</p>
+					<a href="https://gist.github.com/jirihnidek/9235597">https://gist.github.com/jirihnidek</a>
 				</section>
 				<section>
 					<h2>Děkuji za pozornost. Nějaké otázky?</h2>
