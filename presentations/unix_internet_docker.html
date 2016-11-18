@@ -68,7 +68,7 @@
 						<li class="fragment">Staticky linkované binární soubory</li>
 						<li class="fragment">Dynamicky linkované binární soubory (<a href="https://wiki.linuxfoundation.org/en/LSB">LSB</a>)</li>
 						<li class="fragment">Python balíčky, JAR soubory, atd.</li>
-						<li class="fragment">Instalační soubory</li>
+						<li class="fragment">Instalační soubory ("instalátory" s GUI)</li>
 						<li class="fragment">Instalační balíčky (RPM/DEB)</li>
 						<li class="fragment">Repositáře s instalačními balíčky</li>
 					</ul>
@@ -82,11 +82,11 @@
 						<h3>Virtualizace vs. Kontejnery</h3>
 						<ul>
 							<li>Virtualizace je drahá. Především na paměť.</li>
-							<li>Při virtualizaci se duplikuje jádro, knihovny, běžící služby, atd.</li>
+							<li>Při virtualizaci se v hostovaném OS duplikuje jádro, knihovny, běžící služby, atd.</li>
 							<li>Někdy je virtualizace nezbytná (software vyžaduje určitý hardware, OS, atd.)</li>
 							<li>Pro mnoho aplikací je vhodné použít nějakou kontejnerovou technologii.</li>
 							<ul>
-								<li>LXC, Docker, OpenVZ, Oracle Solaris Zones</li>
+								<li>LXC, Docker, OpenVZ, Oracle Solaris Zones, atd.</li>
 							</ul>
 						</ul>
 					</section>
@@ -99,7 +99,7 @@
 						<ul>
 							<li>Docker kontejner zabaluje software do balíčku obsahující vše potřebné ke svému běhu (kód, knihovny, nástroje, služby).</li>
 							<li>Takový kontejner je možné spustit všude, kde je Docker nainstalovaný.</li>
-							<li>Aplikace běžící v kontejneru je izolovaná od hostitelského operačního systému i od ostatních kontejnerů.</li>
+							<li>Sandboxing: aplikace běžící v kontejneru je izolovaná od hostitelského operačního systému i od ostatních kontejnerů. Možná znáte z Androidu.</li>
 						</ul>
 					</section>
 					<section>
@@ -115,12 +115,12 @@
 				</section>
 				<section>
 					<h2>Docker - instalace</h2>
-					<p>Docker můžete používat nejen na Linuxu, ale i na Macu a Windows (běží ve virtualizovaném prostředí).</p>
+					<p>Docker můžete používat nativne jen na Linuxu. Na Macu a Windows běží ve virtualizovaném prostředí.</p>
 					<p>Na Linuxu si ho můžete jednoduše nainstalovat pomocí:</p>
-					<pre><code>yum install docker</code></pre>
+					<pre><code>$ yum install docker</code></pre>
 					<p>Po instalaci budete potřebovat povolit a spustit službu docker:</p>
-					<pre><code>systectl enable docker</code></pre>
-					<pre><code>systectl start docker</code></pre>
+<pre><code>$ systectl enable docker
+$ systectl start docker</code></pre>
 				</section>
 				<section>
 					<section>
@@ -132,32 +132,34 @@
 					<section>
 						<h3>Stažení hotového obrazu</h3>
 						<p>Když naleznete hledaný obraz (př.: CentOS 7), tak ho si ho můžete stáhnout pomocí:</p>
-						<pre><code>docker pull centos:7</code></pre>
+						<pre><code>$ docker pull centos:7</code></pre>
 						<p>Po úspěšném stažení obrazu si můžeme ověřit, že přibyl v seznamu obrazů:</p>
-						<pre><code>docker images</code></pre>
-						<p>V našem případě dostaneme:</p>
+						<pre><code>$ docker images</code></pre>
+						<p>V našem případě dostaneme n2co jako:</p>
 <pre>
 REPOSITORY        TAG   IMAGE ID      CREATED      SIZE
 docker.io/centos  7     0584b3d2cf6d  2 weeks ago  196.5 MB</pre>
 					</section>
 					<section>
 						<h3>Was ist das Obraz?</h3>
-						<p>Vlastně je to komprimovaný archív uložený na hostu.</p>
+						<p>Vlastně je to komprimovaný archív nějaké minimální linuxové distribuce uložený na hostu v adresáři /var/lib/docker, který říká, jak bude vypadat běhové prostředí.</p>
+						<p></p>
+						<p>Docker používá koncepci vrstvených obrazů. Máme jeden základní obraz. V našem příkladě je to <code>centos:7</code> a na něj můžeme nabalovat další. Základní obraz v praxi používá několik kontejnerů.</p>
 					</section>
 				</section>
 				<section>
 					<section>
 						<h2>Docker - procesy</h2>
 						<p>Seznam běžících procesů ve všech kontejnerech získáme pomocí:</p>
-						<pre><code>docker ps</code></pre>
+						<pre><code>$ docker ps</code></pre>
 						<p>Měli bychom dostat prázdný seznam.</p>
 					</section>
 					<section>
 						<h3>Spuštění procesu</h3>
 						<p>Izolovaný proces v kontejneru spustíme pomocí:</p>
-						<pre><code>docker run centos:7 /path/to/binary</code></pre>
+						<pre><code>$ docker run centos:7 /path/to/binary</code></pre>
 						<p>Pro počáteční pokusy si spustíme bash v interaktivním režimu (-t) v terminálu (-t):</p>
-						<pre><code>docker run -i -t centos:7 /bin/bash</code></pre>
+						<pre><code>$ docker run -i -t centos:7 /bin/bash</code></pre>
 						<p>V seznamu procesů: <code>docker ps</code> můžeme vidět, že nám běží jeden proces:</p>
 <pre>
 CONTAINER ID  IMAGE     COMMAND     CREATED       STATUS       PORTS  NAMES
@@ -165,20 +167,37 @@ CONTAINER ID  IMAGE     COMMAND     CREATED       STATUS       PORTS  NAMES
 </pre>						
 					</section>
 					<section>
-						<h3>Změny v obraze</h3>
+						<h3>Správa procesů</h3>
+						<p>Kromě spuštění procesu můžeme procesy běžící v kontejneru, spravovat pomocí těchto příkazů:</p>
+						<pre><code>$ docker stop 84588d7d375e # Zastavení procesu</code></pre>
+						<pre><code>$ docker attach 84588d7d375e # Připojení se k běžícímu procesu</code></pre>
+						<pre><code>$ docker stop 84588d7d375e # Spuštění pozastaveného procesu</code></pre>
+						<pre><code>$ docker top 84588d7d375e # Top ten procesů</code></pre>
+						<pre><code>$ docker kill 84588d7d375e # Zabije proces</code></pre>
+						<pre><code>$ docker stats --help # Vypíše nápovědu k danému příkazu</code></pre>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Změny v obraze</h2>
 						<p>Za běhu procesu v kontejneru můžeme dělat beztrestně různé vylomeniny: <code >rm -rf .*</code></p>
-						<p>Po opětovném spuštění je souborový systém v původním stavu.</p>
-						<p>Nebo můžeme udělat něco užitečného: <code>yum -y update</code> a zm2ny v obraze mžeme vidět pomocí:</p>
-						<pre><code>docker diff 84588d7d375e</code></pre>
+						<p>Po opětovném spuštění je souborový systém v původním stavu (Copy-on-Write).</p>
+						<p>Nebo můžeme udělat něco užitečného: <code>yum -y update</code> a změny v obraze mužeme zobrazit pomocí:</p>
+						<pre><code>$ docker diff 84588d7d375e</code></pre>
 						<p>Když chceme výsledek uložit pod nějakým jménem:</p>
-						<pre><code>docker commit 84588d7d375e your_nick/product_name</code></pre>
+						<pre><code>$ docker commit 84588d7d375e your_nick/product_name</code></pre>
 					</section>
 					<section>
 						<h3>Publikování změn</h3>
 						<p>Nejprve je nutné vytvořit si na <a href="https://hubs.docker.com">hubs.docker.com</a> účet a ověřit ho. Pak je možné se přihlásit z příkazové řádky:</p>
-						<pre><code>docker login</code></pre>
+						<pre><code>$ docker login</code></pre>
 						<p>Po úspěšném přihlášení můžeme na hub nahrát naše změny:</p>
-						<pre><code>docker push your_nick/product_name</code></pre>
+						<pre><code>$ docker push your_nick/product_name</code></pre>
+					</section>
+					<section>
+						<h3>Sdílený adresář</h3>
+						<p>Pokud chceme používat docker k vývoji například nějaké webové aplikace, tak se hodí možnost sdílet vybraný adresář mezi hostem a kontejnerem:</p>
+						<pre><code>$ docker run -t -i -v /home/joe/html:/var/www/html centos:7 /bin/bash</code></pre>
 					</section>
 				</section>
 				<section>
@@ -186,11 +205,65 @@ CONTAINER ID  IMAGE     COMMAND     CREATED       STATUS       PORTS  NAMES
 					<img src="./img/cables-best.jpg" width="75%">
 				</section>
 				<section>
-					<h2>Docker a sítě</h2>
+					<section>
+						<h2>Docker a sítě</h2>
+						<p>Aby byla naše aplikace nějak užitečná, tak bude muset patrně komunikovat po síti.</p>
+						<p>Docker na hostu vytvoří jedno virtuální síťové rozhraní <code>docker0</code> a pro každý kontejner vždy jedno bridge rozhraní.</p>
+						<p>ǏPv4 adresy jsou přiřazované z privátní sítě: 172.17.0.0/16</p>
+						<p>Kontejneru lze volitelně přiřadit při startu IPv6 adresu.</p>
+					</section>
+					<section>
+						<h3>Mapování portů</h3>
+						<p>Předpokládejme, že v kontejneru běží server poslouchající na TCP portu 8080 a my na tento port chceme přesměrovat veškerý provoz přicházející na lokální TCP port 80:</p>
+						<pre><code>docker run -t -i -p 80:8080 centos:7 /bin/bash</code></pre>
+					</section>
 				</section>
 				<section>
-					<h2>Dockerfile</h2>
-					<p>Aby si mohl kdokoliv znovuvytvořit obraz pro běh v kontejneru, tak k tomu se používá Dockerfile.</p>
+					<section>
+						<h2>Dockerfile</h2>
+						<p>Aby si mohl kdokoliv znovuvytvořit daný obraz pro běh v kontejneru, tak k tomu se používá Dockerfile.</p>
+						<p>Dockerfile je textový soubor s předpisem pro vytvoření obrazu.</p>
+						<p>Pokud dáváme volně k dispozici náš obraz pro docker, tak je vhodné k tomu poskytnout i Dockerfile.</p>
+						<p>Každý si potom může také ověřit, co daný obraz obsaahuje.</p>
+					</section>
+					<section>
+						<h3>Dockerfile: překladač a spol</h3>
+						<p>Předpokládejme, že budeme potřebovat kompilovat projekt napsaný v jazyku C.</p>
+<pre><code>FROM centos:7
+MAINTAINER "me" &lt;your@email.here&gt;
+ENV container docker
+RUN yum -y update; \
+    yum -y install gcc make cmake git
+</code></pre>
+						 <p>Obraz vytvoříme pomocí:</p>
+						 <pre><code>docker build --rm -t local/c7-builder .</code></pre>
+					</section>
+					<section>
+						<h3>Dockerfile: kompilujeme a spouštíme</h3>
+						<p>Vlastní překlad provedeme v následujícím Dockerfile souboru:</p>
+<pre><code>FROM local/c7-builder
+MAINTAINER "me" &lt;your@email.here&gt;
+ENV container docker
+RUN mkdir -p my_workspace; \
+    cd my_workspace; \
+    git clone https://github.com/me/my_project; \
+    cd my_project; \
+    mkdir build; \
+    cd build; \
+    cmake ../; \
+    make; \
+    make install
+CMD [ "/usr/local/bin/my_project_binary" ]
+</code></pre>
+					</section>
+				</section>
+				<section>
+					<h2>Kontejnery pro Linuxový desktop</h2>
+					<p>Podobné principy, jaké se používají pro sandboxing v Dockeru, LXC nebo Androidu se snaží využít dva projekty pro Linuxový desktop.</p>
+					<ul>
+						<li>xdg-app</li>
+						<li>Appimage</li>
+					</ul>
 				</section>
 				<section>
 					<h2>Děkuji za pozornost. Nějaké otázky?</h2>
