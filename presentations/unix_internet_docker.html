@@ -135,7 +135,7 @@ $ systectl start docker</code></pre>
 						<pre><code>$ docker pull centos:7</code></pre>
 						<p>Po úspěšném stažení obrazu si můžeme ověřit, že přibyl v seznamu obrazů:</p>
 						<pre><code>$ docker images</code></pre>
-						<p>V našem případě dostaneme n2co jako:</p>
+						<p>V našem případě dostaneme něco jako:</p>
 <pre>
 REPOSITORY        TAG   IMAGE ID      CREATED      SIZE
 docker.io/centos  7     0584b3d2cf6d  2 weeks ago  196.5 MB</pre>
@@ -228,12 +228,12 @@ CONTAINER ID  IMAGE     COMMAND     CREATED       STATUS       PORTS  NAMES
 					</section>
 					<section>
 						<h3>Dockerfile: překladač a spol</h3>
-						<p>Předpokládejme, že budeme potřebovat kompilovat projekt napsaný v jazyku C.</p>
+						<p>Předpokládejme, že budeme potřebovat kompilovat projekt napsaný v jazyku C/C++.</p>
 <pre><code>FROM centos:7
 MAINTAINER "me" &lt;your@email.here&gt;
 ENV container docker
 RUN yum -y update; \
-    yum -y install gcc make cmake git
+    yum -y install gcc gcc-c++ make cmake git
 </code></pre>
 						 <p>Obraz vytvoříme pomocí:</p>
 						 <pre><code>docker build --rm -t local/c7-builder .</code></pre>
