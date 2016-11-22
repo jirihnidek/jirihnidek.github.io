@@ -156,10 +156,17 @@
 						V počítačové grafice je často nezbytné křivku převést na sadu úseček, protože úsečku je jednoduché rasterizovat (zobrazit na monitoru).
 					</section>
 					<section>
+						<h3>Přímka a úsečka</h3>
+						<p>Úsečka leží na přímce, kterou můžeme vyjádřit pomocí:</p>
+						$$
+						y = kx + q
+						$$
+					</section>
+					<section>
 						<h3>Rasterizaci úsečky</h3>
 						<p>Úsečka je část přímky, která je jednoznačně určena body $ P_{1} = [x_{1}, y_{1}]$ a $ P_{2} = [x_{2}, y_{2}] $. Směrnice přímky je:</p>
 						$$
-						k = \frac{\Delta x}{\Delta y} = \frac{y_{2} - y_{1}}{x_{1} - x_{2}}
+						k = \frac{\Delta y}{\Delta x} = \frac{y_{2} - y_{1}}{x_{1} - x_{2}}
 						$$
 						<p>Pro osmispojitou úsečku s tloušťkou jedna a rezignací na antialiasing lze použít například algoritmus DDA (Digital Differential Analyzer)</p>
 					</section>
@@ -181,6 +188,39 @@ while(x < x2) {
 						<h3>Tlouťka, antialising, přerušování, ukončení</h3>
 						<p>V praxi je často nutné vykreslovat úsečku jako geometrický útvar (nejčastěji obdelník) a řešit další netriviální problémy.</p>
 						<p class="fragment">Naštěstí existuje spousta knihoven a API (HTML5 Canvas, WebGL, atd.), které tyto problémy řeší za nás.</p>
+					</section>
+					<section>
+						<h2>Úsečka a HMTL5 - Canvas</h2>
+						<p>Úsečku můžeme do canvasu vykreslit jednoduše pomocí následujícího kódu v Javascriptu.</p>
+						<div style="width: 100%; overflow: hidden;">
+						<div style="float: left; width: 70%;">
+							<pre><code data-trim>
+var canvas = document.getElementById('myCanvas');
+var ctx = canvas.getContext('2d');
+ctx.beginPath();
+ctx.moveTo(150, 100);
+ctx.lineTo(390,170);
+ctx.lineWidth = 10;
+ctx.strokeStyle = 'white';
+ctx.lineCap = 'round';
+ctx.stroke();
+							</code></pre>
+						</div>
+						<div style="float: left; width: 30%;">
+							<canvas id="myCanvas01" width="400" height="300"></canvas>
+							<script type="text/javascript">
+							var canvas = document.getElementById('myCanvas01');
+							var ctx = canvas.getContext('2d');
+							ctx.beginPath();
+							ctx.moveTo(20, 50);
+							ctx.lineTo(250, 200);
+							ctx.lineWidth = 10;
+							ctx.strokeStyle = 'white';
+							ctx.lineCap = 'round';
+							ctx.stroke();
+							</script>
+						</div>
+						</div>
 					</section>
 				</section>
 
@@ -571,7 +611,7 @@ while(x < x2) {
 					<section>
 						<h2>Množina 2D bodů</h2>
 						<p>Mějme množinu 2D bodů $ P^{T} = [ P_{1}, P{2}, \dots, P_{n} ]$, kde $ P_{i} = [ x_{i}, y_{i} ]$.</p>
-						<p>Následně můžeme definovat tři samostatné vektory:</p>
+						<p>Následně můžeme definovat dva samostatné vektory:</p>
 						$$
 						\begin{align}
 						x^{T} &= [x_{1}, x_{2}, \dots, x_{n}] \\
@@ -583,9 +623,9 @@ while(x < x2) {
 						<h2>Parametrizace aproximovaných bodů</h2>
 						<p>Pro aproximaci množiny bodů $P=[P_{1}, P_{2}, \dots, P_{n}]$ potřebujeme definovat vektor parametrů:</p>
 						$$
-						T = [t_{1}, t_{2}, \dots, t_{n}]
+						T = [t_{1}, t_{2}, \dots, t_{n}] \quad t \in <0, 1>
 						$$
-						který mapuje jednotlivé body $P_{i}$ na body Bézierovy křivky.
+						<p>, který mapuje jednotlivé body $P_{i}$ na body Bézierovy křivky. První nástřel mapování může být vytvořen pomocí vzdálenosti boduů $P_{i}$ od počátečního bodu $P_{0}$.</p>
 					</section>
 					<section>
 						<h2>Výpočet parametrizace bodů</h2>
@@ -686,7 +726,7 @@ while(x < x2) {
 						<h2>Bézierovy kubiky a HMTL5 - Canvas</h2>
 						<div style="width: 100%; overflow: hidden;">
 						<div style="float: left; width: 70%;">
-							<pre><code data-trim contenteditable>
+							<pre><code data-trim>
 var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d');
 ctx.beginPath();
@@ -699,9 +739,9 @@ ctx.stroke();
 							</code></pre>
 						</div>
 						<div style="float: left; width: 30%;">
-							<canvas id="myCanvas" width="400" height="200"></canvas>
+							<canvas id="myCanvas02" width="400" height="200"></canvas>
 							<script type="text/javascript">
-							var canvas = document.getElementById('myCanvas');
+							var canvas = document.getElementById('myCanvas02');
 							var ctx = canvas.getContext('2d');
 							ctx.beginPath();
 							ctx.moveTo(20, 100);
@@ -872,7 +912,7 @@ ctx.stroke();
 						N_{i,1} =
 						\begin{cases}
 						1; &\quad t_{i} \leq t \le t_{i+1} \\
-						0; &\quad 
+						0; &\quad \text{otherwise}
 						\end{cases}
 						$$
 						$$
