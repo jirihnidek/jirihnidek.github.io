@@ -61,80 +61,326 @@
 				<section>
 					<section>
 						<h2>Historie Webu</h2>
+						<ul>
+							<li>1989 - CERN - Tim Barners-Lee</li>
+						</ul>
 					</section>
+<!--
 					<section>
 						<h3>Historie webových serverů</h3>
 					</section>
 					<section>
-						<h2>Historie webových prohlížečů</h2>
+						<h3>Historie webových prohlížečů</h3>
 					</section>
+-->
 				</section>
 				<section>
 					<section>
 						<h2>URI</h2>
+						<ul>
+							<li>Uniform Resource Identifier</li>
+							<li>Jednoznačně identifikuje "dokument" v síti</li>
+							<li>Skládá se z URL a URN</li>
+							<ul>
+								<li>Příklad: https://www.nekde.cz/neco/index.php?baf</li>
+							</ul>
+						</ul>
 					</section>
 					<section>
 						<h3>URL</h3>
+						<ul>
+							<li>Uniform Resource Locator</li>
+							<li>Obecně vypadá takto: schéma://jméno:heslo@doména:port</li>
+							<ul>
+								<li>schéma ... jméno protokolu, definuje zbytek URI</li>
+								<li>jméno:heslo ... umožňuje autentizaci</li>
+								<li>doména ... doménové jméno hosta</li>
+								<li>port ... číslo portu</li>
+							</ul>
+							<li>Lze zadat i IP adresu</li>
+							<ul>
+								<li>IPv4: schéma://jméno:heslo@127.0.0.1:port</li>
+								<li>IPv6: schéma://jméno:heslo@[::1]:port</li>
+							</ul>
+						</ul>
 					</section>
 					<section>
 						<h3>URN</h3>
+						<ul>
+							<li>Uniform Resource Name</li>
+							<li>Příklad: /cesta?dotaz#kotva</li>
+							<ul>
+								<li>cesta (path) ... cesta k dokumentu</li>
+								<li>dotaz (query) ... metodou GET lze předat data</li>
+								<li>kotva (anchor) ... značka uvnitř stránky</li>
+							</ul>
+						</ul>
 					</section>
 				</section>
 				<section>
 					<section>
 						<h2>HTTP</h2>
+						<ul>
+							<li>Hypertext Tranfer Protocol (RFC <a href="https://tools.ietf.org/html/rfc2616">2616</a>)</li>
+							<li>Transportní protokol TCP</li>
+							<li>Výchozí port je 80</li>
+							<li>Nejrozšířenější verse (rok 2016) je HTTP/1.1</li>
+							<li>Od roku 2015 je standardizována verze HTTP/2 (<a href="https://tools.ietf.org/html/rfc7540">RFC 7540</a>)</li>
+							<li>Textový a bezestavový protokol</li>
+						</ul>
+					</section>
+					<section>
+						<h3>HTTP dotaz</h3>
+						<p>Posílá klient serveru:</p>
+<pre><code>GET / HTTP/1.1
+Host: www.tul.cz
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.100 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Encoding: gzip, deflate, sdch, br
+Accept-Language: cs,en-US;q=0.8,en;q=0.6
+
+</code></pre>
+					</section>
+					<section>
+						<h3>HTTP odpověď</h3>
+						<p>Na dotaz server odpovídá odpovědí:</p>
+<pre><code>HTTP/1.0 200 OK
+Date: Fri, 15 Oct 2004 08:20:25 GMT
+Server: Apache/1.3.29 (Unix) PHP/4.3.8
+X-Powered-By: PHP/4.3.8
+Vary: Accept-Encoding,Cookie
+Cache-Control: private, s-maxage=0, max-age=0, must-revalidate
+Content-Language: cs
+Content-Type: text/html; charset=utf-8
+
+</code></pre>
 					</section>
 					<section>
 						<h3>Metody HTTP</h3>
+						<ul>
+							<li>Klient posílá metodu jako první klíčové slovo v HTTP dotazu.</li>
+							<li>Klient tím říká, co chce dělat s daným dokumentem</li>
+							<li>Nejčastěji používané metody: GET, POST, HEAD</li>
+							<li>PUT, DELETE, TRACE, atd. se příliš nepoužívají.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Metoda GET</h3>
+						<ul>
+							<li>Požadavek na získání dokumentu (html, css, obrázek, atd.)</li>
+							<li>Součástí dotazu jen HTTP hlavička</li>
+							<li>Parametry součástí URN (max 512 bytů)</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Metoda POST</h3>
+						<ul>
+							<li>Většinou slouží k odeslání formulářů na server</li>
+							<li>Součástí dotazu i tělo</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Metoda HEAD</h3>
+						<ul>
+							<li>Požadavek na získání meta informací o daném dokumentu</li>
+							<li>Server vlastní data dokumentu nepošle</li>
+						</ul>
 					</section>
 					<section>
 						<h3>Hlavička HTTP</h3>
+						<ul>
+							<li>Textová část dotazu i odpovědi</li>
+							<li>Položky hlavičky na samostatných řádcích ukončené znaky: \r\n</li>
+							<li>Hlavička je ukončena prázdným řádkem</li>
+							<li>Některé definované položky: Host, Connection, User-Agent, Server, atd.</li>
+							<li>Uživatelské položky: začínají X-</li>
+						</ul>
 					</section>
 					<section>
 						<h3>MIME Type</h3>
+						<ul>
+							<li>Typ internetového média</li>
+							<li>Multipurpose Internet Mail Extension</li>
+							<li>Identifikátor souborových formátů, které standardizuje IANA</li>
+							<li>Typ média má formát: typ/podtyp; volitelné parametry</li>
+							<ul>
+								<li>Příklad: text/html; charset=UTF-8</li>
+							</ul>
+						</ul>
 					</section>
 				</section>
 				<section>
 					<section>
 						<h2>HTTP a CNAME</h2>
+						<ul>
+							<li>V DNS serveru může mít jeden server přiděleno více doménových jmen (aliasů).</li>
+							<li>Překlad dvou doménových jmen může skončit s jednou IP adresou:</li>
+							<ul>
+								<li>Příklad: gitlab.tul.cz, jetbrains.tul.cz</li>
+							</ul>
+							<li>Aby server věděl, na který server se klient v HTTP dotazu dotazuje, tak jméno serveru musí být v hlavičce</li>
+<pre><code>GET / HTTP/1.1
+Host: gitlab.tul.cz</code></pre>
+						</ul>
 					</section>
 					<section>
 						<h3>Virtuální servery</h3>
+						<ul>
+							<li>Položka Host v hlavičce HHTP dotazu od verse HTTP/1.0</li>
+							<li>Pro každý CNAME je na serveru jakoby virtuální webový server</li>
+							<li>Pro každé doménové jméno rozdílná konfigurace, logy, nastavení, atd.</li>
+						</ul>
 					</section>
 				</section>
 				<section>
 					<section>
 						<h2>HTTPS</h2>
+						<ul>
+							<li>HTTP je možné zabezpečit pomocí SSL/TLS</li>
+							<li>Schéma je https</li>
+							<li>Výchozí port je 443</li>
+							<li>Test nastavení server možno povést na: <a href="https://www.ssllabs.com/ssltest/">www.ssllabs.com</a></li>
+						</ul>
 					</section>
 					<section>
 						<h3>SNI</h3>
+						<ul>
+							<li>Sever Name Indication</li>
+							<li>Při použití SSL/TLS není během handshaku ještě jasné s jakým virtuálním webovým server se bude komunikovat</li>
+							<li>Bez použití SNI musel certifikát obsahovat doménová jména všech virt. web. serverů</li>
+							<li>Problém pro web-hostingy</li>
+							<li>SNI umožňuje již během SSL/TLS handshaku avizovat s jakým doménovým jménem chceme komunikovat</li>
+							<li>Server na základě toho může použít správný certifikát</li>
+						</ul>
 					</section>
 				</section>
 				<section>
 					<h2>HTTP 2.0</h2>
+					<ul>
+						<li>Vychází z protokolu SPDY (Google)</li>
+						<li>Proudy a jejich priority</li>
+						<li>Nový formát zpráv</li>
+						<li>Komprese hlaviček</li>
+						<li>Textový i binární (prohlížeče podporují většinou pouze binární)</li>
+						<li>Server Push</li>
+						<li>Kontrola zahlcení příjemce</li>
+						<li>V roce 2016 používá 10% webů HTTP/2 (statistika z 10 milionů nejanvštěvovanějších webů)</li>
+					</ul>
 				</section>
 				<section>
-					<h2>WebSocket</h2>
+					<section>
+						<h2>WebSocket</h2>
+						<ul>
+							<li>HTML5 &amp; Javascript</li>
+							<li><a href="http://tools.ietf.org/html/rfc6455">RFC 6455</a></li>
+							<li>Umožňuje asynchronní, plně duplexní komunikaci mezi klientem a serverem.</li>
+							<li>Textový i binární protokol</li>
+							<li>Schémata: ws:// (nezabezpečený) a wss:// (šifrovaný přenos)</li>
+							<li>Serverem nemusí být nutně webový server</li>
+							<li>Klientem nemusí být webový prohlížeč</li>
+						</ul>
+					</section>
+					<section>
+						<h3>HTTP dotaz prohlížeče</h3>
+<pre><code>GET /game HTTP/1.1
+Host: server.example.com
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==
+Sec-WebSocket-Protocol: game-1.0, game-1.1
+Sec-WebSocket-Version: 13
+Origin: http://example.com
+
+</code></pre>
+					</section>
+					<section>
+						<h3>HTTP odpověď serveru</h3>
+<pre><code>HTTP/1.1 101 Switching Protocols
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=
+Sec-WebSocket-Protocol: game-1.1
+
+</code></pre>
+					</section>
+					<section>
+						<h3>Příklad WebSocket klienta</h3>
+<pre><code>&lt;script type="text/javascript"&gt;
+$(function() {
+    window.WebSocket = window.WebSocket || window.MozWebSocket;
+    var websocket = new WebSocket('ws://127.0.0.1:9000',
+                                  'game-1.0, game-1.1');
+    websocket.onopen = function () {console.log('Connected');};
+    websocket.onerror = function () {console.log('');};
+    websocket.onmessage = function (message) {
+        console.log(message.data);
+    };
+    $('button').click(function(e) {
+        e.preventDefault();
+        websocket.send($('input').val());
+    });
+});
+&lt;/script&gt;
+</code></pre>
+					</section>
+					<section>
+						<h3>WebSocket server</h3>
+						<ul>
+							<li>Je možné implementovat na webové serveru a použít stejný port (80/443)</li>
+							<li>Node.js</li>
+							<li>Python</li>
+							<li>Java</li>
+							<li>PHP</li>
+							<li>C/C++</li>
+						</ul>
+					</section>
 				</section>
 				<section>
 					<h2>Statické stránky</h2>
+					<ul>
+						<li>Soubory jsou vygenerované a uložené na disku / v paměti počítače</li>
+						<li>Rychlé a bezpečné (1000-10000 požadavků za vteřinu)</li>
+						<li>Snadno lze dosáhnout vysokého výkonu a omezení je v rychlosti síte, velikosti RAM případně rychlosti disků</li>
+					</ul>
 				</section>
 				<section>
 					<h2>Dynamické stránky</h2>
+					<ul>
+						<li>Stránka generována podle požadavku klienta</li>
+						<li>Dnes se nejčastěji používají interpretované jazyky: PHP, Python, Ruby, atd.</li>
+						<li>Pro snížení režie program běží stále se serverem komunikuje např. pomocí CGI rozhraní.</li>
+					</ul>
 				</section>
 				<section>
 					<section>
 						<h2>Apache</h2>
+						<ul>
+							<li>Nejpoužívanější webový server (40%)</li>
+							<li>Poměrně starý návrh (90. léta)</li>
+							<li>Worker mód</li>
+							<li>PreWorker mód</li>
+						</ul>
 					</section>
 				</section>
 				<section>
 					<section>
 						<h2>NGINX</h2>
+						<ul>
+							<li>2. nejpoužívanější webový server</li>
+							<li>Vznik v roce 2006.</li>
+						</ul>
 					</section>
 				</section>
 				<section>
 					<section>
 						<h2>Testování serveru</h2>
+						<ul>
+							<li>Apache tools:</li>
+							<ul>
+								<li>ab -c 10 -n 1000 http://example.com/</li>
+							</ul>
+						</ul>
 					</section>
 				</section>
 				<section>
