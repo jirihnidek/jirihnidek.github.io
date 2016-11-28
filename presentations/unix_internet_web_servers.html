@@ -240,6 +240,7 @@ Host: gitlab.tul.cz</code></pre>
 							<li>HTTP je možné zabezpečit pomocí SSL/TLS</li>
 							<li>Schéma je https</li>
 							<li>Výchozí port je 443</li>
+							<li>Může negativně ovlivnit výkon aplikace</li>
 							<li>Test nastavení server možno povést na: <a href="https://www.ssllabs.com/ssltest/">www.ssllabs.com</a></li>
 						</ul>
 					</section>
@@ -328,11 +329,20 @@ $(function() {
 						<h3>WebSocket server</h3>
 						<ul>
 							<li>Je možné implementovat na webové serveru a použít stejný port (80/443)</li>
-							<li>Node.js</li>
-							<li>Python</li>
-							<li>Java</li>
-							<li>PHP</li>
-							<li>C/C++</li>
+							<li>Je ovšem nutné se serverem vytvořit nové TCP spojení.</li>
+							<li><a href="http://stackoverflow.com/questions/16392260/which-websocket-library-to-use-with-node-js">Node.js</a></li>
+							<li><a href="https://pypi.python.org/pypi/websockets">Python</a></li>
+							<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java">Java</a></li>
+							<li><a href="http://socketo.me/">PHP</a></li>
+							<li><a href="https://github.com/jirihnidek/wslay">C/C++</a></li>
+						</ul>
+					</section>
+					<section>
+						<h3>AutoBahn</h3>
+						<ul>
+							<li>Framework zjednodušující implementaci WebSocketu a WAMP</li>
+							<li><a href="http://autobahn.ws/">autobahn.ws</a></li>
+							<li>Součástí projektu je i sada testů pro projekty implementující WebSocket protokol (klient i server)</li>
 						</ul>
 					</section>
 				</section>
@@ -358,17 +368,34 @@ $(function() {
 						<ul>
 							<li>Nejpoužívanější webový server (40%)</li>
 							<li>Poměrně starý návrh (90. léta)</li>
-							<li>Worker mód</li>
-							<li>PreWorker mód</li>
+							<li><a href="https://httpd.apache.org/docs/2.4/mod/prefork.html">Pre-fork model</a>: vytvoří několik potomků do zásoby, ale pro každé spojení vlastní proces.</li>
+							<li><a href="https://httpd.apache.org/docs/2.4/mod/worker.html">Worker model</a>: kombinuje více procesů a více jader.</li>
+							<li><a href="https://httpd.apache.org/docs/2.4/mod/event.html">Event model</a>: podobné workeru, ale má vždy jedno naslouchací a jedno pracující vlákno pro dané spojení.</li>
 						</ul>
+					</section>
+					<section>
+						<h3>Příklad konfigurace</h3>
+						<p>Konfigurační soubory se nacházejí v adresáři <code>/etc/httpd</code></p>
+						<p>Hlavní konfigurační soubor: <code>/etc/httpd/conf/httpd.conf</code></p>
+						<p>Další konfigurační soubory v: <code>/etc/httpd/conf.d/*.conf</code></p>
+						<p>Případně v <code>/etc/httpd/conf.modules.d/*.conf</code></p>
 					</section>
 				</section>
 				<section>
 					<section>
 						<h2>NGINX</h2>
 						<ul>
-							<li>2. nejpoužívanější webový server</li>
+							<li>Dle <a href="https://news.netcraft.com/archives/2016/09/19/september-2016-web-server-survey.html">Netcraft</a> 2. nejpoužívanější webový server</li>
 							<li>Vznik v roce 2006.</li>
+							<li>Jeden naslouchací proces a pro každé CPU jádro jeden worker proces</li>
+							<li>HTTP server, reverzní proxy, cache server, rozklad zátěže, dynamické stránky</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Příklad konfigurace</h3>
+						<ul>
+							<li>Konfigurační soubory v <code>/etc/nginx</code></li>
+							<li>Další konfigurační soubory jsou v <code>/etc/nginx/conf.d/*.conf</code></li>
 						</ul>
 					</section>
 				</section>
@@ -379,6 +406,7 @@ $(function() {
 							<li>Apache tools:</li>
 							<ul>
 								<li>ab -c 10 -n 1000 http://example.com/</li>
+								<li>A mnohé <a href="http://xmodulo.com/web-server-benchmarking-tools-linux.html">další nástroje</a></li>
 							</ul>
 						</ul>
 					</section>
