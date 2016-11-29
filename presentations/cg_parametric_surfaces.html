@@ -114,6 +114,7 @@
 					<h2>Navazování a spojitost plátů</h2>
 					<p>U ploch je podobně jako u křivek definovan parametrická (C) a geometrická (G) spojitost.</p>
 					<p>Plochy musí mít společnou stranu, která je minimálně křivkou třídy $C^{0}$.</p>
+					<p>Obecně lze říci, že spojité navazování parametrických ploch je problematické, protože pri interaktivním návrhu plochy trpí ztuhlostí.</p>
 				</section>
 				<section>
 					<h2>Interpolační a aproximační plochy</h2>
@@ -235,6 +236,29 @@
 				<section>
 					<section>
 						<h2>B-spline plochy</h2>
+						<ul>
+							<li>Parametrické plochy, kde hlavní křivky v obou směrech u a v jsou B-Spline křivky.</li>
+							<li>Navazují se snadněji než Bézierovy plochy</li>
+							<li>B-spline plocha n-tého stupně zaručuje spojitost $C^{n-1}$ bez nutnosti zadávat geometrických podmínek na řídíci body.</li>
+							<li>B-spline pláty</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Další vlastnosti B-spline ploch</h3>
+						<ul>
+							<li>Plocha leží v konvexní obálce řídích bodů</li>
+							<li>Změn polohy řídícího bodu ovlivňuje pouze okolní povrh</li>
+							<li>Násobnost bodů: plocha pak prochází danými řídícím body</li>
+							<li>Plocha je invariantní k lineárním transformacím.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Bikubické B-spline plochy</h3>
+						<p>Bikubická B-spline plocha je dána předpisem:</p>
+						$$
+						Q(u, v) = \sum_{i=0}^{3}\sum_{j=0}^{3}P_{i,j}B_{i}(u)B_{j}(v)
+						$$
+						<p>kde $B_{i}$ a $B_{j}$ jsou bázové funkce.</p>
 					</section>
 				</section>
 				<section>
@@ -262,7 +286,8 @@
 				transition: 'slide', // none/fade/slide/convex/concave/zoom
 
 				math: {
-					mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js', //'/plugin/math/MathJax.js',
+					//mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+					mathjax: 'plugin/mathjax/MathJax.js',
 					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
 				},
 
