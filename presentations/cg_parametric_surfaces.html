@@ -264,7 +264,43 @@
 				<section>
 					<section>
 						<h2>NURBs plochy</h2>
+						<p>NURBs plochy jsou zobecněním B-spline ploch, kde body na povrchu jsou vyjádřeny pomocí:</p>
+						$$
+						Q(u, v) = 
+						\frac{\sum_{i=0}^{n}\sum_{j=0}^{m} w_{i,j} P_{i,j} N_{i,p}(u) N_{j,q}(v)}
+						{\sum_{i=0}{n}\sum_{j=0}^{m} w_{i,j} N_{i,p}(u) N_{j,q}(v)}
+						$$
+						<p>kde $w_{i,j}$ je váha řídícího bodu $P_{i,j}$. $p$ a $q$ jsou stupně polynomů a $N_{i,p}(u), N_{i,q}(v)$ jsou normalizované B-spline bázové funkce</p>
 					</section>
+					<section>
+						<h3>Normalizované bázové funkce</h3>
+						<p>Jsou definované následujícím rekurentním vztahem:</p>
+						$$
+						N_{i,1} =
+						\begin{cases}
+						1; &\quad t_{i} \leq t \le t_{i+1} \\
+						0; &\quad \text{otherwise}
+						\end{cases}
+						$$
+						$$
+						N_{i,k} =
+						\frac{t - t_{i}}{t_{i+k-1} - t_{i}}N_{i,k-1}(t) +
+						\frac{t_{i+k} - t}{t_{i+k} - t_{i+1}}N_{i+1,k-1}(t)
+						$$
+						<p>Předchozí vztah platí pro:</p>
+						$$
+						t_{i} \le t_{i+1+k}; 0 \leq i \leq n
+						$$
+						<p>Pokud se ve jmenovateli vyskytuje nula, tak výsledná hodnota je v tomto případě rovna nule.</p>
+					</section>
+				</section>
+				<section>
+					<h2>Parametrické plochy a web</h2>
+					<p>Je nutná podpora knihoven třetích stran</p>
+					<a href="http://verbnurbs.com/">http://verbnurbs.com/</a>
+				</section>
+				<section>
+					<h2>Děkuji za pozornost</h2>
 				</section>
 			</div>
 
@@ -286,8 +322,8 @@
 				transition: 'slide', // none/fade/slide/convex/concave/zoom
 
 				math: {
-					//mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
-					mathjax: 'plugin/mathjax/MathJax.js',
+					mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+					//mathjax: 'plugin/mathjax/MathJax.js',
 					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
 				},
 
