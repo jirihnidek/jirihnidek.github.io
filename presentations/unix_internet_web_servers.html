@@ -124,7 +124,7 @@
 							<li>Hypertext Tranfer Protocol (RFC <a href="https://tools.ietf.org/html/rfc2616">2616</a>)</li>
 							<li>Transportní protokol TCP</li>
 							<li>Výchozí port je 80</li>
-							<li>Nejrozšířenější verse (rok 2016) je HTTP/1.1</li>
+							<li>Nejrozšířenější verze (rok 2016) je HTTP/1.1</li>
 							<li>Od roku 2015 je standardizována verze HTTP/2 (<a href="https://tools.ietf.org/html/rfc7540">RFC 7540</a>)</li>
 							<li>Textový a bezestavový protokol</li>
 						</ul>
@@ -374,6 +374,14 @@ $(function() {
 						</ul>
 					</section>
 					<section>
+						<h3>Procesy vs. vlákna</h3>
+						<p>Pro porovnání časové náročnosti vytváření procesů a vláken je možné použít tyto dva příklady:</p>
+						<ul>
+							<li><a href="https://gist.github.com/jirihnidek/cf931d17f40cc7ba2bc11d107eadc4c1">Procesy - test</a></li>
+							<li><a href="https://gist.github.com/jirihnidek/5b94074591e9ed11fba02569bce50379">Vlákna - test</a></li>
+						</ul>
+					</section>
+					<section>
 						<h3>Příklad konfigurace</h3>
 						<p>Konfigurační soubory se nacházejí v adresáři <code>/etc/httpd</code></p>
 						<p>Hlavní konfigurační soubor: <code>/etc/httpd/conf/httpd.conf</code></p>
@@ -388,6 +396,7 @@ $(function() {
 							<li>Dle <a href="https://news.netcraft.com/archives/2016/09/19/september-2016-web-server-survey.html">Netcraft</a> 2. nejpoužívanější webový server</li>
 							<li>Vznik v roce 2006.</li>
 							<li>Jeden naslouchací proces a pro každé CPU jádro jeden worker proces</li>
+							<li>Snaha o efektivní využívání zdrojů (CPU, paměť)</li>
 							<li>HTTP server, reverzní proxy, cache server, rozklad zátěže, dynamické stránky</li>
 						</ul>
 					</section>
