@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="cs">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>UNIX a Internet - Opakování počítačových sítí</title>
+
+		<meta name="description" content="Opakování počítačových sítí">
+		<meta name="author" content="Jiří Hnídek">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!-- Analytics -->
+		<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-52302083-5', 'auto');
+		ga('send', 'pageview');
+		</script>
+		<!-- End Analytics -->
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>UNIX a Internet</h1>
+					<h2>E-mail</h2>
+					<p>
+						<small>Autor: <a href="http://jirihnidek.github.io">Jiří Hnídek</a> / <a href="mailto:jiri.hnidek@tul.cz">jiri.hnidek@tul.cz</a></small>
+					</p>
+				</section>
+				<section>
+					<section>
+						<h2>E-mail</h2>
+						<ul>
+							<li>Elektronická pošta</li>
+							<li>1965 - MIT v USA</li>
+							<li>Komunikace mezi uživateli sálového počítače</li>
+							<li>1966 - přenos zpráv různými počítači</li>
+							<li>1969 - ARPANET</li>
+							<li>Nejprve různé systémy přenosu zpráv</li>
+							<li>1971 - znak @</li>
+						</ul>
+					</section>
+					<section>
+						<h3>@</h3>
+						<ul>
+						<li>1971 - Ray Tomlinson</li>
+						<li>Zavináč, anglicky <i>"at"</i></li>
+						<li>Původně poštovní adresa pro konkrétní počítač</li>
+						<ul>
+							<li>Dříve: <a href="mailto:petr.novak@slow.nti.tul.cz">petr@slow.nti.tul.cz</a></li>
+							<li>Dnes: <a href="mailto:petr.novak@slow.nti.tul.cz">petr.novak42@tul.cz</a></li>
+						</ul>
+						<li>Zodpovědnost za příjem pošty pro doménu definuje MX v DNS: počítač přijímající SMTP spojení na dané doméně</li>
+						</ul>
+					</section>
+					<section>
+						<h3>E-mailová adresa</h3>
+						<ul>
+							<li>&quot;Petr Novák&quot; &lt;<a href="mailto:petr.novak42@tul.cz">petr.novak42@tul.cz</a>&gt;</li>
+							<li>V uvozovkách je „plné jméno“, které si nastavuje sám uživatel včetně národních znaků (Base64)</li>
+							<li>Adresa odesílatele se nijak nekontroluje</li>
+							<li>Odchozí SMTP servery kontrolují jen existenci domény (např. @gmail.com)</li>
+							<li>SMTP server nemá způsob zjistit platnost jména pokud není zároveň příjemcem</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>MUA</h2>
+					<ul>
+					<li>(Mail) User Agent (též jen UA)</li>
+					<li>Program pro čtení a vytváření/odesílání e-mailu</li>
+					<li>Čtení pomocí protokolů POP3 nebo IMAP</li>
+					<li>Odesílání pomocí SMTP protokolu</li>
+					<li>Většinou specializovaná aplikace:</li>
+					<ul>
+						<li>Outlook</li>
+						<li>Thunderbird</li>
+						<li>Mail.app</li>
+						<li>Mobilní aplikace (Android, iOS, atd.)</li>
+					</ul>
+					<li>Dnes nejčastěji Webmail - MUA v prohlížeči: GMail a spol.</li>
+					</ul>
+				</section>
+				<section>
+					<h2>MTA</h2>
+					<ul>
+						<li>Mail Transfer Agent</li>
+						<li>Program pro přepravu elektronické pošty</li>
+						<li>Sendmail, Postfix, Exchange, atd.</li>
+						<li>Pro komunikaci používá protokol SMTP</li>
+						<li>Koncový MTA předává e-mail MDA</li>
+						<li>Nutná ochrana proti SPAMu</li>
+						<li>Též často specializovaný jako MSA</li>
+					</ul>
+				</section>
+				<section>
+					<h2>MSA</h2>
+					<ul>
+						<li>Mail Submission Agent</li>
+						<li>Program pro převzetí nového e-mailu od MUA</li>
+						<li>Podpora pro mobilní MUA klienty a typicky pro „vlastní“ ověřené uživatele. E-mail pomocí něj lze poslat z libovolného počítače v Internetu</li>
+						<li>Kontroluje, zda získaný e-mail není SPAM, HOAX apod.</li>
+						<li>Menší objem e-mailů, šifrování, ...</li>
+						<li>Není nutné konfigurovat MSA zároveň jako klasické MTA</li>
+					</ul>
+				</section>
+				<section>
+					<section>
+					<h2>MDA</h2>
+					<ul>
+						<li>Mail Delivery Agent</li>
+						<li>Program, který uloží e-mail uživateli do schránky</li>
+						<li>Na Linuxu: procmail, maildrop</li>
+						<li>Někdy jako součást MTA (bezpečnostní riziko)</li>
+						<li>Některé umožňuje poštu filtrovat, provádět autom. akce</li>
+						<li>Schránka typicky v podobě:</li>
+						<ul>
+							<li>Mbox</li>
+							<li>MailDir</li>
+						</ul>
+					</ul>
+					</section>
+					<section>
+						<h3>MBox</h3>
+						<ul>
+							<li>Tradiční formát - velký soubor s mnoha e-maily</li>
+							<li>Pomalejší zpracování, nevhodné pro (rozdílové) zálohování</li>
+						</ul>
+					</section>
+					<section>
+						<h3>MailDir</h3>
+						<ul>
+							<li>Sdresář, kde každý e-mail je jeden soubor</li>
+							<li>Novější, je typicky rychlejší</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>SMTP</h2>
+						<ul>
+							<li>Simple Mail Transfer Protocol (1982)</li>
+							<li>Slouží pro předávání elektronické pošty</li>
+							<li>Používají ho ke vzájemné komunikaci MTA</li>
+							<li>MTA se řídí jen údaji v obálce</li>
+							<li>Používá standardně TCP port 25</li>
+							<li>Původně se počítalo jen s přepravou ASCII: prostý anglický text (spodních 7 bitů)</li>
+							<li>SMTP definuje:</li>
+							<ul>
+								<li>Obálku: reálná adresa odesílatele a příjemce</li>
+								<li>Vlastní e-mail: libovolný obsah</li>
+							</ul>
+						</ul>
+					</section>
+					<section>
+						<h3>Příklad SMTP komunikace</h3>
+<pre><code>[jirka@proxima ~]$ telnet smtp.tul.cz 25
+Trying 2001:718:1c01:16::aa...
+Connected to smtp.tul.cz.
+Escape character is '^]'.
+220 bubo.tul.cz ESMTP Postfix
+HELO neco
+250 bubo.tul.cz
+MAIL From: petr.novak42@tul.cz
+250 2.1.0 Ok
+RCPT To: jiri.hnidek@tul.cz
+250 2.1.5 Ok
+DATA
+354 End data with <CR><LF>.<CR><LF>
+Subject: Pokus
+From: kobliha@cukrarna.cz
+To: kremrole@sladarna.cz
+
+Sladky pokus.
+.
+250 2.0.0 Ok: queued as 614E618050A0C
+QUIT
+221 2.0.0 Bye
+Connection closed by foreign host.
+</code></pre>
+					</section>
+					<section>
+						<h3>SMTP komunikace</h3>
+						<ul>
+						<li>Obálka: zahodí se po doručení e-mailu do schránky</li>
+						<ul>
+						<li>HELO jméno-klienta</li>
+						<li>MAIL From: &lt;e-mail@odesílatele&gt;</li>
+						<ul>
+						<li>Slouží při vrácení chybového hlášení</li>
+						</ul>
+						<li>RCPT To: &lt;e-mail@příjemce&gt;</li>
+						<ul>
+						<li>Skutečný příjemce, kterému bude e-mail doručen</li>
+						</ul>
+						</ul>
+						<li>Vlastní e-mail (příkaz DATA): hlavičky e-mailu, prázdný řádek, tělo e-mailu, samotná tečka na řádku</li>
+						<li>Ukončení komunikace se SMTP serverem</li>
+						<ul>
+						<li>QUIT</li>
+						</ul>
+						</ul>
+						</ul>
+					</section>
+					<section>
+						<h3>ESMTP</h3>
+						<ul>
+							<li>Rozšíření SMTP (1995)</li>
+							<li>RFC 1869</li>
+							<li>Indikace pomocí uvítacího příkazu EHLO</li>
+							<li>Protistrana reaguje zasláním seznamu rozšíření</li>
+							<li>STARTTLS</li>
+							<ul>
+								<li>Nutná podpora na obou stranách spojení</li>
+								<li>Šifrování komunikace pomocí mezivrstvy TLS</li>
+								<li>Autentizace serveru (certifikát)</li>
+								<li>Řeší přenos hesla pomocí AUTH</li>
+								<li>Zabezpečený přenos dat na SMTP server</li>
+							</ul>
+						</ul>
+					</section>
+					<section>
+						<h3>Chybové zprávy</h3>
+						<ul>
+							<li>Při problému s předáním e-mailu jinému MTA</li>
+							<li>Trvalá chyba v doručování:</li>
+							<ul>
+								<li>Neznámý adresát, neznámá (cílová) doména</li>
+								<li>Odmítnutí od MTA příjemce (nebo na cestě)</li>
+								<li>E-mail je doručen zpět odesílateli</li>
+							</ul>
+							<li>Dočasná chyba v doručování</li>
+							<ul>
+								<li>Přeplněný mailbox uživatele</li>
+								<li>Dočasné přetížení na straně cílového MTA</li>
+								<li>E-mail zůstane ve frontě a pokus o doručení je opakován</li>
+							</ul>
+						</ul>
+					</section>
+					<section>
+						<h3>Fronta</h3>
+						<ul>
+						<li>Implementuje MTA (příkaz mailq)</li>
+						<li>E-maily čekající na odeslání/doručení</li>
+						<li>Je to specifický adresář (/var/spool/mqueue)</li>
+						<li>Fronta se používá pro dočasné uložení před odesláním</li>
+						<li>Při havárii je neodeslaný e-mail stále na disku</li>
+						<li>Vysoká zátěž počítače s MTA</li>
+						<li>E-mail se jen uloží do fronty, dále se (zatím) nezpracovává</li>
+						<li>MTA se opakovaně snaží položky ve frontě zpracovat</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Doručování z fronty</h3>
+						<ul>
+							<li>Průchod frontou vždy po 15 - 45 minutách:</li>
+							<ul>
+								<li>E-mail zde čeká na nový pokus o doručení</li>
+								<li>Z fronty bude smazán až po převzetí dalším MTA tj. po oznámení:<i> „Message accepted for delivery“</i></li>
+							</ul>
+							<li>Po cca 4 hodinách:</li>
+							<ul>
+								<li>Varování odesílateli, že jsou problémy s doručením: <i>„You don't need to resend your message“</i></li>
+							</ul>
+							<li>Po cca 4 dnech:</li>
+							<ul>
+								<li>E-mail vrácen odesílateli spolu s chybovým hlášením> <i>„Mailbox full“, „Connection reset by peer“, ...</i></li>
+							</ul>
+						</ul>
+					</section>
+					<section>
+						<h3>Ztráta e-mailu?</h3>
+						<ul>
+							<li>E-mail by se neměl „ztratit“</li>
+							<li>Dokud přijímající (MTA) nepotvrdí příjem, musí mít odesílající MTA e-mail stále na disku</li>
+							<li>Při příjmu používá MTA zápisové bariéry a fsync()</li>
+							<li>MTA přijme (do RAM) a dám pokyn k zápisu na disk</li>
+							<li>Dokud disk nepotvrdí, že je zapsáno, nepokračuji dál</li>
+							<li>Teprve po potvrzení potvrdím příjem e-mailu protistraně</li>
+							<li>Fakticky je tak ztráta e-mailu nemožná</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Formát e-mailu</h2>
+						<ul>
+						<li>Hlavičky</li>
+						<ul>
+						<li>Některé pevně definovány</li>
+						<ul>
+						<li>From:, To, Subject:, Date:, Received:</li>
+						</ul>
+						<li>Uživatelské začínají na X-</li>
+						<ul>
+						<li>X-Virus-Scanned: clamav-milter 0.97.8 at smtp.firma.cz</li>
+						</ul>
+						<li>Je-li záznam delší, než max. povolená délka řádku, pokračuje se na dalším řádku mezerami</li>
+						</ul>
+						<li>Prázdný řádek</li>
+						<li>Tělo e-mailu s vlastním obsahem</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Hlavička e-mailu</h3>
+						<ul>
+							<li>From:</li>
+							<li>To:</li>
+							<ul>
+							<li>Slouží pro zobrazení odesílatele a příjemce při doručování se nijak nevyužívají.</li>
+							</ul>
+							<li>Subject:</li>
+							<ul>
+							<li>Předmět e-mailu</li>
+							</ul>
+							<li>Date:</li>
+							<ul>
+							<li>Datum odeslání, sestavuje klient, jen zobrazení</li>
+							</ul>
+							<li>Received:</li>
+							<ul>
+								<li>Průchody MTA</li>
+							</ul>
+						</ul>
+					</section>
+					<section>
+						<h3>Průchody MTA</h3>
+						<ul>
+							<li>Podpis vkládaný MTA při průchodu e-mailu</li>
+							<li>Umístěn vždy na začátek hlaviček</li>
+							<li>Odkud přijato (from ...), kým převzato (by ...)</li>
+							<li>Dokumentuje "cestu" e-mailu skrze různé MTA</li>
+							<li>Řádky v hlavičce mohou být zfalšovány odesílatelem!</li>
+							<li>V záznamech jsou uvedena ID (vytváří MTA)</li>
+							<li>Podle ID lze hledat v záznamech o přepravě (logy MTA)</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Tělo e-mailu</h3>
+						<ul>
+							<li>Hlavní část e-mailu</li>
+							<li>Původně jen čisté ASCII (7 bitů) znaky s kódy: 0 - 127</li>
+							<li>Problém s kódváním národních znaků: jak zakódovat 8 bitů do 7bitů</li>
+							<ul>
+							<li>Z počátku různé metody závislé na konrétním klientovi</li>
+							<li>Např: 8bit, binary</li>
+							<li>Způsoby překódování do 7bitové podoby</li>
+							<ul>
+								<li>uuencode, quoted printable, base64</li>
+							</ul>
+							<li>Dnes používán MIME standard (umí všichni klienti)</li>
+						</ul>
+					</section>
+					<section>
+						<h3>MIME</h3>
+						<ul>
+							<li>Multipurpose Internet Mail Extensions</li>
+							<li>RFC 2822 (2001)</li>
+							<li>Umožňuje do e-mailu včlenit 8bitový obsah</li>
+							<li>Text s národními znaky (+různá kódování). Dnes převážně UTF-8</li>
+							<li>Přílohy v e-mailu jako soubory různých typů</li>
+							<li>Internet media type (dříve MIME typy):</li>
+							<ul>
+								<li>image/jpeg, image/gif, image/png, ...</li>
+								<li>text/plain, text/html, ...</li>
+								<li>application/javascript, application/ogg, application/octet-stream</li>
+								<li>audio/mpeg, audio/ogg, ...</li>
+							</ul>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>POP</h2>
+						<ul>
+							<li>Post Office Protocol (1984), port 110</li>
+							<li>Dnes POP3 (verze 3) od roku 1988</li>
+							<li>Vybírání poštovní schránky (jen z INBOXu)</li>
+							<li>Jen příchozí pošta (resp. nová pošta)</li>
+							<li>Určeno k off-line připojení (připojit se, stáhnout poštu, odpojit se)</li>
+							<li>Dnes se příliš nepoužívá. Nahrazeno protokolem IMAP.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>POP3S</h3>
+						<ul>
+							<li>Podpora SSL/TLS</li>
+							<li>Původní verze protokolu používala nezabezpečenou komunikaci</li>
+							<li>TCP port 995</li>
+							<li>Vložení mezivrstvy zajišťující šifrování</li>
+							<li>Zbytek protokolu zůstane stejný</li>
+							<li>Využití certifikátů k ověření autenticity protistrany (serveru)</li>
+							<li>Šifrování komunikace mezi MTA a MUA</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>IMAP</h2>
+						<ul>
+							<li>Internet Message Access Protocol (1988)</li>
+							<li>RFC 1064, TCP port 143</li>
+							<li>Vzdálený přístup k poštovní schránce (on-line)</li>
+							<li>Umožňuje pracovat s dalšími složkami, ne tedy jen INBOX jako POP3</li>
+							<li>Poměrně složitá a komplexní implementace</li>
+							<li>Konkurenční přístup více klientů zároveň</li>
+							<li>Nutná vzájemná synchronizace (po smazání emailu atp.)</li>
+							<li>Možnost off-line práce s elektronickou poštou</li>
+							<li>Prohledávání, přesouvání a kopírování e-mailů</li>
+						</ul>
+					</section>
+					<section>
+						<h3>IMAPS</h3>
+						<ul>
+							<li>Podpora SSL/TLS </li>
+							<li>Původní verze protokolů jen otevřenou komunikaci</li>
+							<li>TCP port 993 (IMAPS)</li>
+							<li>Vložení mezivrstvy zajišťující šifrování</li>
+							<li>Zbytek protokolu zůstane stejný</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>S/MIME</h2>
+					<ul>
+						<li>Podpora šifrování a podepsání e-mailu pomocí MIME</li>
+						<li>Využití certifikačních autorit, certifikátů</li>
+						<li>Hierarchická struktura CA, úložiště certifikátů, ...</li>
+						<li>Většina MUA to umí již v základu</li>
+						<li>Většinou komerční záležitos: nutnost zaplatit za osobní certifikát</li>
+						<li>Každý e-mail vlastník certifikátu a klíče může podepsat</li>
+						<li>Pokud máme veřejný klíč příjemce, tak můžeme e-mail i zašifrovat</li>
+						<li>Problém s webmaily (jak zacházet s tajným klíčem)</li>
+					</ul>
+				</section>
+				<section>
+					<h2>PGP</h2>
+					<ul>
+						<li>Standard definovaný programem PGP</li>
+						<li>Umožňuje obsah e-mailu podepsat a případně zašifrovar</li>
+						<li>Reimplementace: OpenGPG, GnuPG, gpg</li>
+						<ul>
+							<li>Volně šiřitelné, kompatibilní, modulární</li>
+						</ul>
+						<li>Používání sítí důvěry (Web of Trust)</li>
+						<li>Vlastní klíčenka, vyjadřování stupně důvěry klíčům, ...</li>
+						<li>Typicky jako doplněk do MUA</li>
+						<li><a href="https://addons.mozilla.org/cs/thunderbird/addon/enigmail/">Enigmail pro Thunderbird</a></li>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>SPAM &amp; spol.</h2>
+						<ul>
+							<li>Nevyžádaná elektronická pošta</li>
+							<li>Typicky reklama na výrobky, služby (Viagra, konference, nigerijské e-maily, atd.)</li>
+							<li>Reaguje zanedbatelné množství příjemců</li>
+							<li>Rozesíláno obrovská množství e-mailů</li>
+							<li>Nízká cena na odeslání 1 e-mailu, proto se vyplatí</li>
+							<li>Antispamová ochrana</li>
+							<ul>
+								<li>Administrátor MTA nebo koncový uživatel</li>
+								<li>Restrikce na SMTP servery</li>
+								<li>Filtrování zpráv</li>
+							</ul>
+						</ul>
+					</section>
+					<section>
+						<h3>HAM</h3>
+						<ul>
+						<li>Opak SPAMu</li>
+							<li>Většinou žádoucí pošta v podobně obchodních nabídek, bulletinů apod.</li>
+							<li>Problém pro odesílatele, že vypadá jako nežádoucí</li>
+							<li>Používání whitelistů: seznam výjimek</li>
+							<li>E-maily je potřeba odesílat "pomalu" z velkého množství serverů</li>
+							<li>Většinou pro firmy dostupné jako placená služba</li>
+						</ul>
+					</section>
+					<section>
+						<h3>SPAM a SMTP servery</h3>
+						<ul>
+							<li>Ochrana proti SPAMu zaváděna na konci 90. let 20. století</li>
+							<li>Přijímá e-mail pouze od důvěryhodných IP adres</li>
+							<li>Od kohokoliv jen jako koncový příjemce:</li>
+							<ul>
+								<li>MTA s e-mailovými schránkami</li>
+								<li>Výjimky:</li>
+								<ul>
+									<li>Autentizovaní uživatelé: AUTH pro SMTP</li>
+									<li>Servery s MX záznamy v DNS</li>
+								</ul>
+							</ul>
+							<li>Spammer pak nemá přes koho rozesílat a vznikají mu další náklady na rozesílání e-mailů</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Filtrování zpráv</h3>
+						<ul>
+							<li>Podle charakteristických slov</li>
+							<li>Filtr má svoji databázi slov</li>
+							<li>Různé váhy na slova: bayesovský filtr</li>
+							<ul>
+								<li>Vlastně expertní systém s umělou inteligencí</li>
+								<li>Musí se nejprve "naučit" - databáze SPAMu</li>
+								<li>SPAM je, když je pravděpodobnost větší než X</li>
+								<li>Když je ještě větší než Y, pak samoučení</li>
+							</ul>
+							<li>Charakteristické rysy: špatně formátované hlavičky a podobně</li>
+							<li>OCR na obrázkový SPAM</li>
+						</ul>
+					</section>
+					<section>
+						<h3>HOAX</h3>
+						<ul>
+							<li>Virální zprávy</li>
+							<li>Těží z naivity uživatelů</li>
+							<li>Uživatelé si sami zprávy přeposílají</li>
+							<li>Příklad: "Daruj krev umírající holčičce", "Pište PIN obráceně", ...</li>
+							<li>Často nesmyslné</li>
+							<li>Ochrana: nepřeposílat, přemýšlet, školit uživatele</li>
+							<li>Jste-li na pochybách: <a href="http://www.hoax.cz">www.hoax.cz</a> - seznam známých HOAXů</li>
+						</ul>						
+					</section>
+					<section>
+						<h3>Zabiják SPAMu</h3>
+						<ul>
+							<li>SpamAssasin: program pro klasifikaci SPAMu</li>
+							<li>Dnes pod hlavičkou Apache Foundation</li>
+							<li>Bayesiánský filtr, databáze charakteristik</li>
+							<li>Vlastní pravidla, veřejné blacklisty IP adres</li>
+							<li>Propojení s externím OCR</li>
+							<li>Když je pravděpodobnost nižší než 5, tak je e-mail OK</li>
+							<li>Když je vyšší jak 5, označí e-mail jako SPAM</li>
+							<li>MUA má pak možnost poštu roztřídit</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>DNS &amp; MX záznamy</h2>
+					<pre><code>$ dig tul.cz MX</code></pre>
+				</section>
+				<section>
+					<h2>Systémové a virtuální účty</h2>
+					<ul>
+						<li>Systémový účet</li>
+						<ul>
+							<li>Uživatel má svůj uživatelský účet na cílovém počítači, domácí adresář a v něm poštovní schránka</li>
+							<li>Klasická situace, kterou MTA umí obsloužit</li>
+						</ul>
+						<li>Virtuální účet</li>
+						<ul>
+							<li>Databáze příjemců mimo systémové účty</li>
+							<li>Např. v tabulce SQL serveru, textovém souboru, LDAP</li>
+							<li>Hodí se pro například pro hostingy, velké organizace</li>
+							<li>Nutná dodatečná podpora v MTA</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<h2>Poštovní schránka</h2>
+					<ul>
+						<li>Typicky soubor nebo adresář</li>
+						<li>Každý uživatel má svoji poštovní schránku</li>
+						<ul>
+							<li>Nová pošta - INBOX</li>
+							<li>Možnost vytváření vlastních složek, do kterých si uživatel může třídit e-maily</li>
+						</ul>
+						<li>Formát poštovní schránky (složky)</li>
+						<ul>
+							<li>Soubor (mbox) - klasika (náchylné k souběhu!)</li>
+							<li>E-maily jsou za sebou, odděleny prázdným řádkem a "From"</li>
+							<li>Pomalé při smazání e-mailu</li>
+						</ul>
+						<li>Adresář (maildir) - moderní přístup</li>
+						<ul>
+							<li>1 e-mail = 1 soubor (FS s podporou velkých adresářů)</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<h2>Aliasy</h2>
+<ul>
+	<li>Alternativní adresy</li>
+	<li>Jeden uživatel může mít více aliasů</li>
+	<li>Typicky pro služby:</li>
+	<ul>
+		<li><a href="mailto:info@domena.cz">info@domena.cz</a>, <a href="mailto:postmaster@domena.cz">postmaster@domena.cz</a>, ...</li>
+	</ul>
+	<li><code>/etc/aliases</code></li>
+	<ul>
+		<li><code>alias: prijemce1,prijemce2,...</code></li>
+	</ul>
+	<li>Po modifikaci příkaz: newaliases</li>
+	<ul>
+		<li>Vznikne soubor <code>/etc/aliases.db</code></li>
+		<li>MTA s binárním .db pracuje rychleji a efektivněji</li>
+	</ul>
+</ul>
+				</section>
+				<section>
+					<h2>Filtry na příchozí zprávy</h2>
+					<ul>
+						<li>Typická úloha pro MDA</li>
+						<li>Uživatel si může pravidla nastavit na serveru sám, pokud tam má účet</li>
+						<li>Lze v poštovním programu, ale též na WebMailu</li>
+						<li>Možnost automatické odpovědi</li>
+						<ul>
+							<li>Např: jsem na dovolené, přijedu dne …</li>
+							<li>Mělo by se odeslat jen jednou</li>
+							<li>Nutnost ukládat ID přeposlaných e-mailů</li>
+							<li>Problém s elektronickými konferencemi</li>
+						</ul>
+						<li>v Linuxu je oblíben procmail:</li>
+						<ul>
+							<li>Soubory: <code>/etc/procmailrc</code>, <code>~/.procmailrc</code></li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<h2>Out of Office</h2>
+					<ul>
+						<li>"Jsem týden na dovolené"</li>
+						<li>Automatická odpověď od MDA</li>
+						<li>Pozor na smyčky: jsou-li oba lidé na dovolené.</li>
+						<li>Oznámení by se mělo poslat jen 1x</li>
+						<ul>
+							<li>automat vede evidenci adres, kam již oznámení poslal</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<h2>DSN</h2>
+					<ul>
+						<li>Delivery Status Notification</li>
+						<li>Oznámení příjemci, že:</li>
+						<ul>
+							<li>Uživatel si e-mail přečetl: posílá MUA</li>
+							<li>E-mail byl doručen do schránky: posílá MTA/MDA</li>
+						</ul>
+						<li>Neexistuje jednotná závazná akceptovaná norma:</li>
+						<ul>
+							<li>Podpora je mizerná, uživatelé si to často nepřejí</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<h2>Webmail</h2>
+					<ul>
+						<li>MUA na webové stránce</li>
+						<li>Webová aplikace</li>
+						<li>Dnes v HTML5: JavaScript &amp; WebSocket</li>
+						<li>Asynchronní zpracování akcí uživatele (ení nutné obnovovat celou stránku)</li>
+						<li>Offline fungování</li>
+						<li>Příklady:</li>
+						<ul>
+							<li><a href="https://mail.google.com">GMail</a></li>
+							<li><a href="https://protonmail.com/">Proton Mail</a></li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<h2>E-mailová konference</h2>
+					<ul>
+						<li>Automatické rozesílání elektronické pošty, příklad: <a href="http://httpd.apache.org/lists.html">httpd.apache.org/lists.html</a></li>
+						<li>E-mail poslaný na adresu konference je rozeslán automaticky všem odběratelům</li>
+						<li>Program - démon</li>
+						<li>Seznam odběratelů</li>
+						<ul>
+							<li>Mohou mít vlastní nastavení, www rozhraní</li>
+							<li>Lze se přihlásit/odhlásit</li>
+						</ul>
+						<li>Uzavřené, otevřené konference</li>
+						<li>Automatické vypnutí, když se e-maily vrací</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Děkuji za pozornost. Nějaké otázky?</h2>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				math: {
+					mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js', //'/plugin/math/MathJax.js',
+					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+				},
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
