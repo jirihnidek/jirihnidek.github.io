@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="cs">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>UNIX a Internet - Opakování počítačových sítí</title>
+
+		<meta name="description" content="Opakování počítačových sítí">
+		<meta name="author" content="Jiří Hnídek">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!-- Analytics -->
+		<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-52302083-5', 'auto');
+		ga('send', 'pageview');
+		</script>
+		<!-- End Analytics -->
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>UNIX a Internet</h1>
+					<h2>Samba</h2>
+					<p>
+						<small>Autor: <a href="http://jirihnidek.github.io">Jiří Hnídek</a> / <a href="mailto:jiri.hnidek@tul.cz">jiri.hnidek@tul.cz</a></small>
+					</p>
+				</section>
+				<section>
+					<h2>Protokol SMB</h2>
+					<ul>
+						<li>SMB je zkratka pro Server Message Block (původně protokol LAN Manager)</li>
+						<li>IBM a Microsoft, původně NetBIOS, dnes TCP/IP</li>
+						<li>Poskytované služby (pomocí <a href="">RPC</a>)</li>
+						<ul>
+							<li>Autentizace uživatelů</li>
+							<li>Sdílení souborů</li>
+							<li>Tisk na vzdálené tiskárny</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>Samba</h2>
+						<ul>
+							<li>Open source projekt (1992), <a href="http://www.samba.org/">www.samba.org</a></li>
+							<li>Implementace SMB protokolu</li>
+							<li>Jakýkoliv systém (Linux, BSD, Mac OS X) může komunikovat jako Windows server nebo klient</li>
+							<li>Konfigurační soubory: /etc/samba</li>
+							<li>Běhové soubory: /var/lib/samba</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Server &amp; klient</h2>
+						<ul>
+							<li>Server</li>
+							<ul>
+								<li>Dva démoni napsané v jazyce C</li>
+								<ul>
+									<li>smbd: pro sdílení, tisk, autentizaci</li>
+									<li>nmbd: pro správu jmen stanic v síti</li>
+								</ul>
+							</ul>
+							<li>Klient</li>
+							<ul>
+								<li>V Linuxu jako síťový souborový systém (ovladač v jádře)</li>
+								<li>Původně modul smb, dnes cifs (asynchronní komunikace)</li>
+							</ul>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>Uživatelé na Samba serveru</h2>
+					<ul>
+						<li>Samba server eviduje vlastní uživatele, ale v systému musí existovat stejnojmenný unixový uživatel</li>
+						<li>Server využívá běžná oprávnění na soubory a adresáře (přístup k souborům/adresářům řeší systém a nikoliv server)</li>
+						<li>Autentizace - hash hesla uložen v databázi Samby</li>
+						<ul>
+							<li>Textový soubor, binární TDB soubory, externí LDAP server, ...</li>
+						</ul>
+						<li>Hash hesla je odlišný od hashe, který používá PAM (/etc/shadow)</li>
+					</ul>
+				</section>
+				<section>
+					<h2>RPC</h2>
+					<ul>
+						<li>Remote Procedure Call</li>
+						<li>Meziprocesová komunikace přes počítačovou síť umožňující volání funkce na vzdáleném počítači</li>
+						<ul>
+							<li>Jméno funkce i parametry se zabalí a odešlou</li>
+							<li>Příjemce rozbalí: funkce, parametry. Vykoná funkci</li>
+							<li>Zabalení výsledku a odeslání zpět</li>
+						</ul>
+						<li>Zjednodušení implementace (SMB, NFS, ...)</li>
+						<li>Tvůrce síťové funkce neřeší logiku zasílání přes síť</li>
+						<li>Různé nevýhody</li>
+						<ul>
+							<li>Bezpečnostní problémy, nelze předávat ukazatel</li>
+							<li>Neřeší se síťová optimalizace</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<h2>Verze SMB</h2>
+					<ul>
+						<li>LAN Manager (1990)</li>
+						<ul>
+							<li>Firma IBM</li>
+						</ul>
+						<li>SMB (1991)</li>
+						<ul>
+							<li>Implementace LAN Manager pro Windows (spolupráce IBM a Microsoft - OS/2)</li>
+						</ul>
+						<li>CIFS (1996)</li>
+						<ul>
+							<li>Windows 95/98</li>
+						</ul>
+						<li>SMB2 (2006)</li>
+						<ul>
+							<li>Windows Vista</li>
+						</ul>
+						<li>SMB2.1</li>
+						<ul>
+							<li>Windows 7</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>Názvy počítačů</h2>
+						<ul>
+							<li>Každý počítač (v "síti Windows") má své unikátní SMB jméno</li>
+							<li>Nesmí být stejné s jiným jménem v síti (uživatel, skupina)</li>
+							<li>Dříve dva samostatné systémy: Broadcast, WINS server</li>
+							<li>Dnes se využívá DNS</li>
+							<ul>
+								<li>SMB jméno je shodné se jménem stanice v DNS</li>
+								<li>Očekává se synchronizace DHCP a DNS</li>
+							</ul>
+						</ul>
+					</section>
+					<section>
+						<h3>SMB broadcast</h3>
+						<ul>
+							<li>Navrženo pro malé sítě LAN</li>
+							<li>Stanice oznamuje broadcastem své jméno</li>
+							<li>SMB broadcast se dále používá např. pro hlasování:</li>
+							<ul>
+								<li>Master browser (magické číslo OS level)</li>
+								<li>Master browser má seznam všech stanic ve skupině (doméně)</li>
+								<li>Hlasování je periodické</li>
+								<li>Novější systém má větší číslo - vetší šance na výhru</li>
+							</ul>
+						</ul>
+					</section>
+					<section>
+						<h3>WINS server</h3>
+						<ul>
+							<li>Udržuje databázi jmen</li>
+							<li>Stanice se na něj průběžně ohlašují</li>
+							<li>WINS server vytváří jejich seznam (jméno, IP adresa)</li>
+							<li>Poskytuje na dotaz překlad (SMB) jména na IP adresu</li>
+							<li>Dnes nahrazeno DNS (od Windows 2000)</li>
+							<li>DNS je stejně nutné pro fungování IP sítí</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>Doména Windows</h2>
+					<ul>
+						<li>Plochá centrální databáze obsahující uživatele, skupiny, počítače</li>
+						<li>Uživatel: jméno, heslo, členství ve skupinách</li>
+						<li>Stanice se do domény také přihlašuje (má vlastní jméno + heslo)</li>
+						<li>Pro přidání stanice do domény nutné heslo správce domény</li>
+					</ul>
+				</section>
+				<section>
+					<h2>PDC</h2>
+					<ul>
+						<li>PDC - Primary Domain Controller</li>
+						<ul>
+							<li>Obsahuje databázi domény</li>
+							<li>Provádí autentizaci uživatelů</li>
+						</ul>
+						<li>BDC - Backup Domain Controller</li>
+						<ul>
+							<li>Kompletní kopie PDC</li>
+							<li>V případě výpadku PDC ho může zastoupit po obnovení spojení synchronizace změn</li>
+							<li>Například změněná hesla, pozná podle časových značek</li>
+							<li>PDC i BDC musí mít synchronizován čas</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<h2>Active Directory</h2>
+					<ul>
+						<li>Strukturovaná centrální databáze</li>
+						<li>Náhrada za jednoduché ploché Domény</li>
+						<li>Vlastně implementace LDAP</li>
+						<li>Stromová struktura, kde podstromy spravují samostatné servery</li>
+						<li>Autorizační tikety od nekompatibilního Kerberosu</li>
+						<li>Distribuovaná struktura</li>
+						<li>Samba 4 umí fungovat jako AD</li>
+					</ul>
+				</section>
+				<section>
+					<h2>UNC</h2>
+					<ul>
+						<li>Uniform Naming Convention</li>
+						<li>Označení umístění síťového zdroje v síti Winsows</li>
+						<li>Sdílený adresář, soubor, tiskárna, např:</li>
+						<pre>\\Computer\SharedFolder\Directory</pre>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>Konfigurační soubory</h2>
+						<ul>
+							<li>Hlavní konfigurační soubor: <code>/etc/samba/smb.conf</code></li>
+							<li>Jednoduchý textový soubor</li>
+							<li>Volby ve formě: parametr = hodnota</li>
+							<li>Globální sekce: [global]</li>
+							<ul>
+								<li>Zavádí nastavení platná pro celou konfiguraci</li>
+							</ul>
+							<li>Sekce pro jednotlivá sdílení: [share_name]</li>
+							<ul>
+								<li>Jednotlivé sekce si mohou předefinovat globální nastavení</li>
+							</ul>
+						</ul>
+					</section>
+					<section>
+						<h3>Sdílený adresář</h3>
+<ul>
+<li>Běžný adresář v systému</li>
+<li>V konfiguračním souboru definován jako sekce</li>
+<li>Lze využít globální parametry, ale i sekční</li>
+<li>Omezení přístupu (uživatel, skupina), omezení zápisu, maska oprávnění pro nové soubory, ...</li>
+</ul>
+<pre><code>
+[public]
+        comment = Public folder
+        path = /home/public
+        browseable = yes
+        writable = yes
+        guest ok = yes
+</code></pre>
+					</section>
+					<section>
+						<h3>Tiskový server</h3>
+<ul>
+<li>Nabízí ke sdílení tiskárny aktuálního systému</li>
+<li>Lokálně tiskový subsystém je většinou CUPS</li>
+<li>Přijatá data se předávají tiskovému subsystému</li>
+</ul>
+<pre><code>
+[printers]
+        comment = All Printers
+        path = /var/spool/samba
+        browseable = no
+        guest ok = no
+        writable = no
+        printable = yes
+</code></pre>
+					</section>
+					<section>
+						<h3>Příklad konfiguračního souboru</h3>
+<pre><code>
+[global]
+	workgroup = WORKGROUP
+	security = USER
+[test] 
+	comment = Test Shared Folder
+	path = /export/samba/test
+	read only = no
+	guest ok = yes
+</code></pre>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Autentizace na Samba serveru</h2>
+						<ul>
+							<li>Autentizace uživatele: parametr security</li>
+							<li>SHARE</li>
+							<ul>
+								<li>Prostředky přístupné všem (jako u Win 3.x, Win 95, ...)</li>
+								<li>Podle hesla povoleno čtení, nebo čtení i zápis</li>
+							</ul>
+							<li>USER</li>
+							<ul>
+								<li>Každý uživatel jméno + heslo (jako Windows NT)</li>
+							</ul>
+							<li>SERVER, DOMAIN</li>
+							<ul>
+								<li>Autentizace přeposílána na jiný Win či Samba server</li>
+							</ul>
+							<li>ADS</li>
+							<ul>
+								<li>Jako DOMAIN, ale pro autentizaci Kerberos</li>
+							</ul>
+						</ul>
+					</section>
+					<section>
+						<h3>Založení uživatelského účtu</h3>
+<ul>
+<li>Nejprve je nutné založit uživatele v systému:</li>
+<pre><code>$ useradd josef.novak</code></pre>
+<li>Tím se vytvoří domácí adresář a záznam v <code>/etc/passwd</code></li>
+<li>Heslo v <code>/etc/shadow</code> vytvoříme pomocí:</li>
+<pre><code>$ passwd josef.novak</code></pre>
+<li>Založení uživatele + hesla v Sambě:</li>
+<pre><code>$ smbpasswd -a josef.novak</code></pre>
+</ul>
+					</section>
+				</section>
+				<section>
+					<h2>Cestovní profily</h2>
+<ul>
+<li>Samba server musí zároveň sloužit jako PDC</li>
+<li>Stanice musí být zaregistrovaná v doméně</li>
+<li>Uživatelé mají účet na Samba serveru</li>
+<li>Profily se ukládají do domácího adresáře:</li>
+<ul>
+<li>V podadresáři <code>profile</code> (WinXP)</li>
+<li>V <code>profile.V2</code> (Win7)</li>
+</ul>
+<li>Když je profil poškozen, tak uživatel si profil sám nemůže smazat/opravit</li>
+<li>Synchronizace profilů je neefektivní. Při přihlášení profil kopírován ze serveru na lokální počítač, při odhlášení kopírován zpět.</li>
+</ul>
+				</section>
+				<section>
+					<h2>Děkuji za pozornost. Nějaké otázky?</h2>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				math: {
+					mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js', //'/plugin/math/MathJax.js',
+					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+				},
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
