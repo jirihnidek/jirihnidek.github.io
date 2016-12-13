@@ -88,7 +88,7 @@
 								<li>Práci s fonty</li>
 								<li>Obsluhu událostí</li>
 							</ul>
-							<li>Výše popsané vlastnostni podporují např.: <a href="https://www.opengl.org/resources/libraries/glut/">GLUT</a> nebo <a href="http://www.glfw.org/">GLFW</a></li>
+							<li>Výše popsané vlastnostmi podporují např.: <a href="https://www.opengl.org/resources/libraries/glut/">GLUT</a> nebo <a href="http://www.glfw.org/">GLFW</a></li>
 							<li>Při absenci grafického akcelerátoru možno použít softwarovou emulaci pomocí <a href="http://www.mesa3d.org/">Mesa</a>.</li>
 						</ul>
 					</section>
@@ -140,7 +140,7 @@ glEnd();</code></pre>
 						<ul>
 							<li>glColor4f(); glLineWidth(); glLineStipple(); GL_LI­NE_SMOOTH</li>
 						</ul>
-						<li>Pločka</li>
+						<li>Ploška</li>
 						<ul>
 							<li>glPolygonMode(); glFrontFace(); glCullFace(); glPolygonStip­ple();</li>
 						</ul>
@@ -175,8 +175,8 @@ glEnd();</code></pre>
 					</ul>
 					</section>
 					<section>
-						<h3>Pixmapa</h3>
-						<p>Pixmapu můžeme vykreslit takto:</p>
+						<h3>Bitmapa</h3>
+						<p>Bitmapu můžeme vykreslit takto:</p>
 <pre><code>const GLubyte bitmap[24] = {
 	0xc0, 0x00, 0xc0, 0x00, 0xc0, 0x00, 0xc0, 0x00,
 	0xc0, 0x00, 0xff, 0x00, 0xff, 0x00, 0xc0, 0x00,
@@ -187,8 +187,8 @@ glRasterPos2i(100, 100);
 glBitmap(10, 12, 0.0f, 0.0f, 0.0f, 0.0f, bitmap);</code></pre>
 					</section>
 					<section>
-						<h3>Bitmapa</h3>
-						<p>Bitmapu je možné vykreslovat v několika barevných módech:</p>
+						<h3>Pixmapa</h3>
+						<p>Pixmapu je možné vykreslovat v několika barevných módech:</p>
 <pre><code>#define PIXMAP_WIDTH    256
 #define PIXMAP_HEIGHT   256
 
@@ -293,7 +293,7 @@ glEnd();
 					<h2>VBO</h2>
 					<ul>
 						<li>Vertex Buffer Objects</li>
-						<li>Data (vertexy) se nahrajou do paměti grafického akcelerátoru optimálně pouze jednou</li>
+						<li>Data (vertexy) se nahrají do paměti grafického akcelerátoru optimálně pouze jednou</li>
 						<li>Zobrazovaná data jsou v jednoduchém případě statická</li>
 						<li>I <a href="https://www.opengl.org/wiki/VBO_-_just_examples">jednoduchý příklad</a> se nevejde na jeden slajd.</li>
 					</ul>
@@ -333,7 +333,7 @@ glEnable(GL_LIGHT0); // Enable light
 				<section>
 					<h2>Phongův osvětlovací model</h2>
 					<ul>
-						<li>Defaultní osvěltovací materiál v OpenGL</li>
+						<li>Defaultní osvětlovací model v OpenGL</li>
 						<li>Je potřeba před vykreslením objektů nastavit použitý materiál:</li>
 					</ul>
 <pre><code>
