@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="cs">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Počítačová grafika - parametrické plochy</title>
+
+		<meta name="description" content="Parametrické plochy">
+		<meta name="author" content="Jiří Hnídek">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!-- Analytics -->
+		<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-52302083-5', 'auto');
+		ga('send', 'pageview');
+		</script>
+		<!-- End Analytics -->
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>OpenGL</h1>
+					<h3>Kurz počítačové grafiky</h3>
+					<p>
+						<small>Autor: <a href="http://jirihnidek.github.io">Jiří Hnídek</a> / <a href="mailto:jiri.hnidek@tul.cz">jiri.hnidek@tul.cz</a></small>
+					</p>
+				</section>
+				<section>
+					<img src="./img/OpenGL_logo.svg" style="border: 0px; background: transparent; box-shadow: none;">
+				</section>
+				<section>
+					<h2>Historie OpenGL</h2>
+					<ul>
+						<li>Firma Silicon Graphics (<a href="http://www.sgi.com/">SGI</a>) v 90. letech</li>
+						<li>Předchůdce knihovna IRIS GL</li>
+						<li>Aplikační programové rozhraní (API) pro akcelerované grafické karty</li>
+						<li>Původně pouze pro IRIX, později dostupná na ostatních UNIXech, Windows i Linuxu</li>
+						<li>Konkurent Direct3D od Microsoftu (polovina 90. let)</li>
+						<li>Specifikaci a vývoj zaštiťuje <a href="Khronos Group">https://www.khronos.org/</a></li>
+						<li>Aktuální verze OpenGL: 4.5</li>
+						<li>Pro Web: WebGL, pro přenosná zařízení: OpenGL ES</li>
+						<li>Budoucnost: <a href="https://www.khronos.org/vulkan/">Vulkan</a></li>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>Základní vlastnosti</h2>
+						<ul>
+							<li>Akcelerace 2D a 3D grafiky</li>
+							<li>Multiplatformní a nezávislá na použitém: operačním systému, grafickém akcelerátoru, správci oken, atd.</li>
+							<li>Z toho důvodu nemá žádnou podporu pro:</li>
+							<ul>
+								<li>Práci s okny</li>
+								<li>Vytváření uživatelského rozhraní</li>
+								<li>Práci s fonty</li>
+								<li>Obsluhu událostí</li>
+							</ul>
+							<li>Výše popsané vlastnostni podporují např.: <a href="https://www.opengl.org/resources/libraries/glut/">GLUT</a> nebo <a href="http://www.glfw.org/">GLFW</a></li>
+							<li>Při absenci grafického akcelerátoru možno použít softwarovou emulaci pomocí <a href="http://www.mesa3d.org/">Mesa</a>.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Základní vlastnosti - pokračování</h3>
+						<ul>
+							<li>Knihovna je použitelná téměř v libovolném programovacím rozhraní (C/C++, Java, Python, Fortran, atd.)</li>
+							<li>Standardně dodáván hlavičkový soubor pro C/C++</li>
+							<li>Knihovnu není většinou nutné instalovat. Je součástí ovladačů grafické karty.</li>
+							<li>Definuje vlastní datové typy (př.: GLint, GLdouble, atd.)</li>
+							<li>Chová se jako stavový automat</li>
+							<li>Podporuje vykreslení pouze základních primitiv: bod, úsečka, trojúhelník, polygon, bitmapa, pixmapa.</li>
+							<li>Pro další funkcionalitu nutné použít knihovny: GLU, OpenInventor, atd.</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>Syntaxe funkcí</h2>
+					<pre><code>glVertex3f(1.0, 0.0, 1.0);</code></pre>
+					<ul>
+						<li>Všechny funkce začínají přefixem "gl"</li>
+						<li>Následuje tělo funkce</li>
+						<li>Počet parametrů a typ proměné</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Základní primitiva</h2>
+<pre><code>glBegin(GL_LINES);
+glVertex3f(0.0, 0.0, 0.0);
+glVertex3f(1.0, 0.0, 0.0);
+glEnd();</code></pre>
+					<p>Ve funkci <code>glBegin()</code> mohou být následující parametry: <code>GL_POINTS</code>, <code>GL_LINES</code>, <code>GL_LINE_STRIP</code>, <code>GL_POINTS</code>, <code>GL_LINE_LOOP</code>, <code>GL_TRIANLES</code>, <code>GL_TRIANGLE_FAN</code>, <code>GL_TRIANGLE_STRIP</code>, <code>GL_QUADS</code>, <code>GL_QUAD_STRIP</code>, <code>GL_POLYGON</code></p>
+				</section>
+				<section>
+					<h2>Překlad programu</h2>
+					<p>Pokud píšete program v programovacím jazyku C, tak se program přeloží pomocí:</p>
+<pre><code>$ gcc -o app ./main.c -lglut -lGL -lGLU -lm -lX11 -lXmu</code></pre>
+				</section>
+				<section>
+					<h2>Vlastnosti primitiv</h2>
+					<p>Vlastnost pro primitiva lze povolit například takto:</p>
+<pre><code>glEnable(GL_LI­NE_SMOOTH);</code></pre>
+					<ul>
+						<li>Bod</li>
+						<ul>
+							<li>glColor4f(); glPointSize(); GL_PO­INT_SMOOTH</li>
+						</ul>
+						<li>Hrana</li>
+						<ul>
+							<li>glColor4f(); glLineWidth(); glLineStipple(); GL_LI­NE_SMOOTH</li>
+						</ul>
+						<li>Pločka</li>
+						<ul>
+							<li>glPolygonMode(); glFrontFace(); glCullFace(); glPolygonStip­ple();</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<h2>Transformační matice</h2>
+					<p>Nejprve je potřeba říci jakou matici budeme měnit:</p>
+<pre><code>glMatrixMode(GLenum mode);</code></pre>
+					<ul>
+						<li>Matice mohou být následující:</li>
+						<ul>
+							<li><code>GL_MODELVIEW</code> - transformace objektů a kamery</li>
+							<li><code>GL_PROJECTION</code> - projekce objektů do kamery</li>
+							<li><code>GL_TEXTURE</code> - mapování textur</li>
+						</ul>
+						<li>Příklady funkcí pro nastavení matic: glLoadIdentity(), glLoadMatrix(), glMultMatrix(), glTran­slate(), glScale() a glRotate()</li>
+				</section>
+				<section>
+					<h2>Display-listy</h2>
+					<ul>
+						<li>Umožňuje si příkazy zapamatovat na grafické kartě a pak je znovu zavolat.</li>
+						<li>glNewList(i, GL_COMPILE); glEndList(); glCallList(i);</li>
+						<li>Ve srovnání s Vertex Arrays nebo VBO málo efektivní.</li>
+				</section>
+				<section>
+					<section>
+					<h2>Bitmapy a pixmapy</h2>
+					<ul>
+						<li>Bitmapa: každý pixel uložen pomocí jednoho bitu. Využití: např.: jednoduché rastrové fonty</li>
+						<li>Pixmapa: obrázek s větším počtem barev</li>
+					</ul>
+					</section>
+					<section>
+						<h3>Pixmapa</h3>
+						<p>Pixmapu můžeme vykreslit takto:</p>
+<pre><code>const GLubyte bitmap[24] = {
+	0xc0, 0x00, 0xc0, 0x00, 0xc0, 0x00, 0xc0, 0x00,
+	0xc0, 0x00, 0xff, 0x00, 0xff, 0x00, 0xc0, 0x00,
+	0xc0, 0x00, 0xc0, 0x00, 0xff, 0xc0, 0xff, 0xc0
+};
+glColor3f(1.0, 0.0, 0.0);
+glRasterPos2i(100, 100);
+glBitmap(10, 12, 0.0f, 0.0f, 0.0f, 0.0f, bitmap);</code></pre>
+					</section>
+					<section>
+						<h3>Bitmapa</h3>
+						<p>Bitmapu je možné vykreslovat v několika barevných módech:</p>
+<pre><code>#define PIXMAP_WIDTH    256
+#define PIXMAP_HEIGHT   256
+
+unsigned char pixmap[PIXMAP_HEIGHT][PIXMAP_WIDTH][3];
+glRasterPos2i(0, 0);
+glDrawPixels(
+		PIXMAP_WIDTH, PIXMAP_HEIGHT,
+		GL_RGB,
+		GL_UNSIGNED_BYTE,
+		pixmap);
+</code></pre>
+					</section>
+				</section>
+				<section>
+					<h2>Framebuffer</h2>
+					<ul>
+						<li>Ve framebufferu je několik bufferů, které se používají pro vytvoření finálního 3D obrazu:</li>
+						<ul>
+							<li>Color buffer - barevná informace o fragmentu (většinou dva)</li>
+							<li>Depth buffer - vzdálenost fragmentu od kamery (řeší viditelnost)</li>
+							<li>Stencil buffer - UI, stereo obraz, VR</li>
+							<li>Accumulation buffer - podobný jako color buffer, ale barvy se sčítají (motion blur)</li>
+						</ul>
+						<li>Lze vytvářet i uživatelsky definované. Jednotlivé buffery lze zapínat/vypínat. </li>
+					</ul>
+<pre><code>glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_STENCIL);</code></pre>
+				</section>
+				<section>
+					<h2>Double-buffering</h2>
+					<ul>
+						<li>Je vhodné při "animaci" do jednoho barevného bufferu vykreslovat a druhý zobrazovat.</li>
+						<li>Zamezuje nepříjemnému problikávání</li>
+					</ul>
+<pre><code>
+glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+// Draw scene ...
+glFlush();
+glutSwapBuffers();
+</code></pre>
+				</section>
+				<section>
+					<section>
+						<h2>Kamera</h2>
+						<ul>
+							<li>Kamera může být ortogonální (rovinné promítání) nebo perspektivní</li>
+							<li>Je vhodné využít knihovny GLU</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Ortogonální kamera</h3>
+						<p>Nastavení ortogonální kamery je možné provést takto:</p>
+<pre><code>glViewport(0, 0, window_width, window_height);
+glMatrixMode(GL_PROJECTION);
+glLoadIdentity();
+glOrtho(-20, 20, -20, 20, -30, 30);
+
+glMatrixMode(GL_MODELVIEW);
+glLoadIdentity();
+gluLookAt(5.0, 5.0, 20.0,	// Position of camera
+          0.0, 0.0,  0.0,	// LookAt point
+          0.0, 0.0,  1.0);	// Direction UP
+</code></pre>
+					</section>
+					<section>
+						<h3>Perspektivní kamera</h3>
+						<p>Nastavení perspektivní kamery:</p>
+<pre><code>float fov = 70.0; // Field of View
+float near_plane = 0.1;
+float far_plane = 100.0;
+
+glViewport(0, 0, window_width, window_height);
+glMatrixMode(GL_PROJECTION);
+glLoadIdentity();
+gluPerspective(fov,
+	(double)window_width/(double)window_height,
+	near_plane, far_plane);
+</code></pre>
+					</section>
+				</section>
+				<section>
+					<h2>Vertex Arrays</h2>
+					<ul>
+						<li>Snižuje množství volání API při velkém množství vykreslovaných elementů:</li>
+						<li>Efektivnější jak display listy</li>
+					</ul>
+<pre><code>static GLint vertices[]={
+	0, 0, 0,
+	1, 0, 0,
+	1, 1, 0
+	0, 1, 0
+}
+int i;
+glEnableClientState(GL_VERTEX_ARRAY);
+glVertexPointer(3, GL_INT, 0, vertices);
+glBegin(GL_QUADS);
+    for (i=0; i<4; i++)
+        glArrayElement(i);
+glEnd();
+</code></pre>
+				</section>
+				<section>
+					<h2>VBO</h2>
+					<ul>
+						<li>Vertex Buffer Objects</li>
+						<li>Data (vertexy) se nahrajou do paměti grafického akcelerátoru optimálně pouze jednou</li>
+						<li>Zobrazovaná data jsou v jednoduchém případě statická</li>
+						<li>I <a href="https://www.opengl.org/wiki/VBO_-_just_examples">jednoduchý příklad</a> se nevejde na jeden slajd.</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Mlha</h2>
+					<ul>
+						<li>Jednoduchá simulace mlhy s konstantní hustotou (žádná objemová data)</li>
+<pre><code>GLfloat fog_color[4] = {0.5, 0.5, 0.5, 1.0};
+glEnable(GL_FOG);
+glFogi(GL_FOG_MODE, GL_EXP);
+glFogfv(GL_FOG_COLOR, fog_color);
+glFogf(GL_FOG_DENSITY, 0.1);
+glHint(GL_FOG_HINT, GL_DONT_CARE);
+glFogf(GL_FOG_START, 1.0);
+glFogf(GL_FOG_END, 10.0);
+</code></pre>
+					</ul>
+				</section>
+				<section>
+					<h2>Světla</h2>
+					<ul>
+						<li>OpenGL v základu podporuje pouze bodové zdroje světla a reflektor</li>
+					</ul>
+<pre><code>GLfloat light_position[] = {100.0, 100.0, 100.0, 1.0};
+GLfloat light_direction[] = {-1, -1, -1};
+GLfloat light_color[] = {1.0, 1.f, 1.0};
+glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light_direction);
+glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 7);	// Spot angle
+glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, 0.5f);
+glLightfv(GL_LIGHT0, GL_DIFFUSE, light_color);
+glEnable(GL_LIGHTING); // Enable ligthing in the scen
+glEnable(GL_LIGHT0); // Enable light
+</code></pre>
+				</section>
+				<section>
+					<h2>Phongův osvětlovací model</h2>
+					<ul>
+						<li>Defaultní osvěltovací materiál v OpenGL</li>
+						<li>Je potřeba před vykreslením objektů nastavit použitý materiál:</li>
+					</ul>
+<pre><code>
+GLfloat material_ambient[] = {0.6, 0.6, 0.6, 1.0};
+GLfloat material_diffuse[] = {0.8, 0.4, 0.4, 1.0};
+GLfloat material_specular[] = {1.0, 1.0, 1.0, 1.0};
+GLfloat material_shininess[] = {50.0};
+glMaterialfv(GL_FRONT, GL_AMBIENT, material_ambient);
+glMaterialfv(GL_FRONT, GL_DIFFUSE, material_diffuse);
+glMaterialfv(GL_FRONT, GL_SPECULAR, material_specular);
+glMaterialfv(GL_FRONT, GL_SHININESS, material_shininess);
+</code></pre>
+				</section>
+				<section>
+					<section>
+						<h2>Texturování</h2>
+						<ul>
+							<li>Texturu je nutné načíst z externího souboru nebo vygenerovat a nastavit pár parametrů</li>
+						</ul>
+<pre><code>glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+             TEXTURE_WIDTH, TEXTURE_HEIGHT,
+             0, GL_RGBA, GL_UNSIGNED_BYTE, texture);
+glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+glEnable(GL_TEXTURE_2D);
+</code></pre>
+					</section>
+					<section>
+						<h3>Textura UV souřadnice</h3>
+<pre><code>glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f); glVertex2i(100, 100);
+	glTexCoord2f(1.0f, 0.0f); glVertex2i(300, 100);
+	glTexCoord2f(1.0f, 1.0f); glVertex2i(300, 300);
+	glTexCoord2f(0.0f, 1.0f); glVertex2i(100, 300);
+glEnd();
+</code></pre>
+					</section>
+				</section>
+<!--
+				<section>
+					<h2>Mipmapping</h2>
+				</section>
+				<section>
+					<h2>Blending</h2>
+				</section>
+-->
+				<section>
+					<h2>Reference</h2>
+					<ul>
+						<li><a href="https://www.root.cz/serialy/graficka-knihovna-opengl/">Root.cz - Seriál článků o OpenGL</a></li>
+					</ul>
+				</section>
+				<section>
+					<h2>Děkuji za pozornost</h2>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				math: {
+					//mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+					mathjax: 'plugin/mathjax/MathJax.js',
+					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+				},
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
