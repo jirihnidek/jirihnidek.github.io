@@ -156,8 +156,28 @@ firewall-cmd --add-rich-rule='rule family="ipv4" source address="147.230.0.0/16"
 firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="147.230.0.0/16" service name="nrpe" accept limit value="1/s"'
 ```
 
+## Enable Port ##
+
+When you do not want to create service definition and you want to simply [enable some port](https://docs.fedoraproject.org/en-US/Fedora/19/html/Security_Guide/sec-Open_Ports_in_the_firewall-CLI.html), then you can use following command:
+
+```bash
+firewall-cmd --add-port=12345/tcp
+```
+
+To enable some UDP port you can use following command:
+
+```bash
+firewall-cmd --add-port=12345/udp
+```
+
+When you wanto to enable some range of port, then use something like this:
+
+```bash
+firewall-cmd --add-port=10000-10010/udp
+```
+
 ## References ##
 
-[1] https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/sec-Using_Firewalls.html
+[1] [Red Hat Enterprise Linux 7 Security - Using Firewalls](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/sec-Using_Firewalls.html)
 
 That's all folks. :-)
