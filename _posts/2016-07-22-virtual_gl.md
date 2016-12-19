@@ -25,7 +25,7 @@ If you want to use VirtualGL on remote server, then you can not connect to the r
 
     $ vglconnect -s user.name@remote.server.org # client
 
-You can test running OpenGL application are remote server:
+You can test running OpenGL application at remote server:
 
     $ vglrun glxinfo
 
