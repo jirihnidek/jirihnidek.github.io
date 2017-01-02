@@ -191,6 +191,18 @@
 					</ul>
 				</section>
 				<section>
+					<h2>RAID</h2>
+					<ul>
+						<li>Redundant Array of Inexpensive/Independent Disks</li>
+						<li>Používá se ke zvýšení spolehlivostí uložení dat na pevných discích</li>
+						<li>RAID může být: softwarový a hardwarový</li>
+						<li>Typicky se používají tyto typy: RAID 1. RAID 5 a RAID 6</li>
+						<li>Softwarový RAID lze v Linuxu vytvořit pomocí: <a href="http://jirihnidek.github.io/wiki/linux_software_raid/">mdadm</a></li>
+						<li>Pro správu hardwarových RAIDů je nutné použít specifické nástroje daného výrobce.</li>
+						<li>Některé implementace umožňují <a href="http://jirihnidek.github.io/wiki/dell_hw_raid_resize/">zvětšování RAIDu</a>.</li>
+					</ul>
+				</section>
+				<section>
 					<h2>Out-of-band Management Card</h2>
 					<ul>
 						<li>Přídavná karta do serveru, která umožňuje vzdálený management hardwaru.</li>
@@ -198,7 +210,7 @@
 						<li>Umožňuje monitorovat parametry hardwaru (teplota, větráky, zdroje, atd.)</li>
 						<li>Často poskytuje vzdálenoý terminál (můžete vzdáleně konfigurovat "BIOS")</li>
 						<li>Pouze u "značkových" serverů: Dell, HP, IBM, ...</li>
-						<li>Je to věc, kterou chcete.</li>
+						<li>Je to věc, kterou na svém serveru určitě chcete.</li>
 					</ul>
 				</section>
 				<section>
@@ -245,32 +257,145 @@
 					<section>
 						<h2>Nagios &amp; Icinga</h2>
 						<ul>
-							<li>Původní systém Nagios (pomalý vývoj, one man show).</li>
-							<li>Icinga: fork Nagiosu, velká komunita, moderní webové rozhraní.</li>
+							<li>Původní systém <a href="https://www.nagios.org/">Nagios</a> (pomalý vývoj, one man show).</li>
+							<li><a href="https://www.icinga.com/">Icinga</a>: fork Nagiosu, velká komunita, moderní webové rozhraní.</li>
 							<li>Systémy pro monitoring zdraví serverů a síťových zařízení.</li>
 						</ul>
 					</section>
 					<section>
+						<h3>Definujeme hosta</h3>
+						<p>Konfigurační soubor icingy (nachází se v <code>/etc/icinga/</code>) kontrolující server musí začínat konfigurací hosta</p>
+<pre><code>define host {
+    use         linux-server
+    host_name   virtual01.server.company.com
+    parents     server.company.com
+    alias       virtual01
+    address     147.230.12.23
+    address6    2001:718:1c01:72:7a2b:cbff:fe1f:1234
+    contacts    john_doe
+}
+</code></pre>
+					</section>
+					<section>
 						<h3>Ping</h3>
+						<ul>
+							<li>Příklad vzdálené služby</li>
+							<li>Základní způsob jak zjisti, zda je dané zařízení dostupné</li>
+							<li>Vhodné kontrolovat jak IPv4 tak IPv6</li>
+							<li>Je vhodné takto kontrolovat všechny NIC (servery jich většinou mají více)</li>
+						</ul>
 					</section>
 					<section>
-						<h3>Vzdálený monitoring</h3>
+						<h3>Příklad konfigurace PINGu</h3>
+						<p>Musíme vytvořit konfiguraci jak pro ping po IPv4 tak pro ping po IPv6</p>
+<pre><code>define service {
+    use                     remote-service
+    host_name               virtual01.server.company.com
+    service_description     PING
+    check_command           check_ping!100.0,20%!500.0,60%
+}
+</code></pre>
+
+<pre><code>define service {
+    use                     remote-service
+    host_name               virtual01.server.company.com
+    service_description     PING6
+    check_command           check_ping6!100.0,20%!500.0,60%
+}
+</code></pre>
 					</section>
 					<section>
-						<h3>Lokální monitoring</h3>
+						<h3>Vzdálená služba</h3>
+						<p>Typicky se používá ke kontrole dostupnosti server na portu pomocí vybraného protokolu</p>
+<pre><code>define service {
+    use                     remote-service
+    host_name               virtual01.server.company.com
+    service_description     HTTP www.company.com IPv4
+    check_command           check_http_vhost!www.company.com!-4
+    notifications_enabled   1
+}
+</code></pre>
+
+<pre><code>define service {
+    use                     remote-service
+    host_name               virtual01.server.company.com
+    service_description     HTTPS www.company.com IPv6
+    check_command           check_https_vhost!www.company.com!-6
+    notifications_enabled   1
+}
+</code></pre>
+					</section>
+					<section>
+						<h3>Lokální služba</h3>
+						<p>Slouží ke kontrole lokálních vlastnosti daného stroje (CPU load, využití paměti, swapu, atd).</p>
+<pre><code>define service {
+    use                     local-service
+    host_name               localhost
+    service_description     CPU Load
+    check_command           check_load
+}
+</code></pre>
 					</section>
 					<section>
 						<h3>NRPE</h3>
+						<ul>
+							<li>Nagios Remote Plugin Executor</li>
+							<li>Umožňuje kontrolovat lokální vlastnosti na vzdálených strojích.</li>
+							<li>Nutné mít na vzdáleném stroji spuštěnou službu nrped a na firewallu otevřený příslušný TCP port (5666).</li>
+							<li>Na vzdáleném stroji je taktéž nutné mít nainstalované všechny příslušné nagios pluginy.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>NRPE služba</h3>
+						<p>Příklad konfigurace vzdálené služby</p>
+<pre><code>
+define service {
+    use                     remote-service
+    host_name               virtual01.server.company.com
+    service_description     CPU Load
+    check_command           check_nrpe!check_load
+}
+</code></pre>
+					</section>
+					<section>
+						<h3>Seznam doporučených pluginů</h3>
+						<p>Na každý server se hodí trochu něco jiného, ale na server od Dellu připojený na UPS od APC bych doporučil toto:</p>
+						<p>check_openmanage, check_ups, check_local_load, check_local_users, check_local_procs, check_local_disk, check_local_swap, check_updates, check_ssh, check_http, check_https</p>
 					</section>
 				</section>
 				<section>
 					<h2>Zennos</h2>
+					<a href="https://www.zenoss.com/">www.zenoss.com</a>
 				</section>
 				<section>
 					<h2>Zabbix</h2>
+					<a href="http://www.zabbix.com/">www.zabbix.com</a>
 				</section>
 				<section>
-					<h2>Statistiky přístupu na web</h2>
+					<section>
+						<h2>Statistiky přístupu na web</h2>
+						<ul>
+							<li><a href="http://www.awstats.org/">AwStats</a></li>
+							<li><a href="https://goaccess.io/">GoAccess</a></li>
+							<li><a href="https://analytics.google.com/analytics">Google Analytics</a></li>
+						</ul>
+					</section>
+					<section>
+						<h3>Google Analytics - So Simple! So danger?</h3>
+<pre><code><script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-52302083-5', 'auto');
+  ga('send', 'pageview');
+</script>
+</code></pre>
+					</section>
+				</section>
+				<section>
+					<h4>And Now. Something completely different.</h4>
+					<a href="https://my-netdata.io/">my-netdata.io</a>
 				</section>
 				<section>
 					<h2>Děkuji za pozornost. Nějaké otázky?</h2>
