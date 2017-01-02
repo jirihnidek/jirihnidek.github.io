@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="cs">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Počítačová grafika - souborové formáty</title>
+
+		<meta name="description" content="Souborové formáty používané v počítačové grafice">
+		<meta name="author" content="Jiří Hnídek">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!-- Analytics -->
+		<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-52302083-5', 'auto');
+		ga('send', 'pageview');
+		</script>
+		<!-- End Analytics -->
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Animace</h1>
+					<h3>Kurz počítačové grafiky</h3>
+					<p>
+						<small>Autor: <a href="http://jirihnidek.github.io">Jiří Hnídek</a> / <a href="mailto:jiri.hnidek@tul.cz">jiri.hnidek@tul.cz</a></small>
+					</p>
+				</section>
+				<section>
+					<h2>Druhy animace</h2>
+					<ul>
+						<li>Animace může být součástí interaktivní aplikace (simulátory, hry) nebo neinteraktivní (2D/3D video sekvence: filmy, vizualizace, atd.)</li>
+						<li>Animaci můžeme dělít na nízkoúrovňovou (např. klíčování) a vysokoúrovňovou (simulace davů)</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Story board</h2>
+					<ul>
+						<li>Vizuální varianta scénáře</li>
+						<li>Pomáhá umělcům/tvůrcům/programátorum si ujasnit, jak bude animace/aplikace vypadat</li>
+					</ul>
+					<img src="">
+				</section>
+				<section>
+					<h2>Stop motion</h2>
+					<ul>
+						<li>Nemá většinou moc souvislost s počítačovou grafikou</li>
+						<li>Loutky jsou fotografovány snímek po snímku</li>
+						<li>Vyžaduje precizní přípravu a trpělivou práci</li>
+						<li>Příklad: animované filmy <a href="">Fimfárum</a>, <a href="">Omega</a></li>
+					</ul>
+				</section>
+				<section>
+					<h2>Obnovovací frekvence (Frame Rate)</h2>
+					<ul>
+						<li>Hodnota se udává v FPS (Frames per Seconds)</li>
+						<li>Udává kolikrát za vteřinu je zobrazen snímek animace</li>
+						<li>Typické hodnoty jsou: 24, 25, 30, 50, 60</li>
+						<li>Video sekvence může být tzv. prokládaná</li>
+						<ul>
+							<li>Animace je ukládaná/přenášena s poloviční frekvencí než je obnovovací frekvence</li>
+							<li>Každý snímek obsahuje v sobě jakoby dva snímky (lichá řádky první, sudé druhý)</li>
+							<li>Dříve používáno při přenosu televizního signálu</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>Keying alias Klíčování</h2>
+						<ul>
+							<li>Termín vznikl ve 20. letech 20. století ve studiu Walta Disneyho</li>
+							<li>Základ animace je vytvořen pouze v klíčových snímcích</li>
+							<li>Mezilehlé snímky vytvářeli dříve méně talentovaní/zkušení kreslíři</li>
+							<li>Dnes mezilehlé snímky dopočítává počítač</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Animování rastrové grafiky</h3>
+						<ul>
+							<li>Spíše připomíná stop motion</li>
+							<li>Pokud animační program dokáže nakreslenou čáru převést na lomenou/hladkou čáru, tak lze provádět klíčování a interpolaci tvaru křivky.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Interpolace parametrů</h3>
+						<ul>
+							<li></li>
+						</ul>
+					</section>
+					<section>
+						<h3>Extrapolace parametrů</h3>
+					</section>
+					<section>
+						<h3>Animace transformace objektů</h3>
+						<ul>
+							<li>Jednoduchý případ animace kdy se animuje pouze poloha, rotace a velikost objektů</li>
+							<li>Lze použít klíčování a mezilehlé snímky lze snadno dopočítat</li>
+							<li>Příklad: první krátké animované filmy studia Pixar: <a href="">Luxo</a> aneb i s malým kašpárkem lze hrát velké divadlo.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Deformace tvaru objektu</h3>
+					</section>
+					<section>
+						<h3>Deformace objektu mřížkou</h3>
+					</section>
+					<section>
+						<h3>Animační křivky</h3>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Animace postav</h2>
+					</section>
+					<section>
+						<h3>Dopředná kinematika</h3>
+					</section>
+					<section>
+						<h3>Inverzní kinematika</h3>
+					</section>
+					<section>
+						<h3>Dynamika postav</h3>
+					</section>
+					<section>
+						<h3>Simulace chování svalů a měkkých tkání</h3>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Fyzikální simulace</h2>
+					</section>
+					<section>
+						<h3>Kolize objektů</h3>
+					</section>
+					<section>
+						<h3>Simulace pružných/mekých objektů</h3>
+					</section>
+					<section>
+						<h3>Simulace látek</h3>
+					</section>
+					<section>
+						<h3>Částicové systémy</h3>
+					</section>
+					<section>
+						<h3>Simulace kapalin</h3>
+					</section>
+					<section>
+						<h3>Simulace ohně a kouře</h3>
+					</section>
+				</section>
+				<section>
+					<h2>Simulace davů</h2>
+				</section>
+				<section>
+					<h2>Děkuji za pozornost. Nějaké otázky?</h2>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				math: {
+					//mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+					mathjax: 'plugin/mathjax/MathJax.js',
+					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+				},
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
