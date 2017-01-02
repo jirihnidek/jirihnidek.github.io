@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="cs">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>UNIX a Internet - Opakování počítačových sítí</title>
+
+		<meta name="description" content="Opakování počítačových sítí">
+		<meta name="author" content="Jiří Hnídek">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!-- Analytics -->
+		<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-52302083-5', 'auto');
+		ga('send', 'pageview');
+		</script>
+		<!-- End Analytics -->
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>UNIX a Internet</h1>
+					<h2>Monitoring</h2>
+					<p>
+						<small>Autor: <a href="http://jirihnidek.github.io">Jiří Hnídek</a> / <a href="mailto:jiri.hnidek@tul.cz">jiri.hnidek@tul.cz</a></small>
+					</p>
+				</section>
+				<section>
+					<h2>Logové soubory</h2>
+					<ul>
+						<li>Soubory (většinou textové) se záznamem běhu nějakého démona.</li>
+						<li>Logové soubory se většinou nacházejí v adresáři:</li>
+<pre><code>/var/log</code></pre>
+						<li>Nové záznamy se přidávají na konec souboru.</li>
+						<li>Logové soubory umožňují:</li>
+						<ul>
+							<li>Objevovat chyby a problémy</li>
+							<li>Provádět statistiky přístupu</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<h2>Logování</h2>
+					<ul>
+						<li>Lze provádět různě. Třeba pomocí:</li>
+<pre><code>fprintf(logfile, "Error: Fire in server room.\n");</code></pre>
+						<li>V praxi budeme potřebovat nějaké ty úrovně logů. Něco jako:</li>
+<pre><code>my_log_print(LOG_LEVEL_ERR, "Error: Fire in server room.\n");</code></pre>
+						<li>Jak naložit s více procesama, vláknama, ...</li>
+						<li>Hele, nevymýšlím náhodou znovu kolo? ... Nóó, jasně. Existuje přeci syslog.</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Syslog</h2>
+					<ul>
+						<li>Umožňuje konfigurovat jaký logový soubro se bude používat <code>openlog()</code>.</li>
+						<li>Zápis logových zpráv lze s různými ůrovněmi pomocí <code>syslog()</code> a <code>vsyslog()</code></li>
+						<li>Logový soubor lze uzavřít pomocí <code>closelog()</code></li>
+						<li>Všechna volání jsou thread-safe</li>
+						<li>Více informací v man syslog</li>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>Logrotate</h2>
+						<ul>
+							<li>Pokud bychom nechali démon zapisovat do logového souboru, tak by mohl narůst do olbřích rozměrů a zaplnit volné místo na disku</li>
+							<li>Z toho důdovodu je vhodné logové soubor pravidelně "rotovat".</li>
+							<li>Aktuální logový soubor (např.: daemon.log) se přejmenuje (např na daemon.log.1.backup) a vytvoří se nový prázdný logový soubor.</li>
+							<li>Pokud existovala nějaká starší záloha s kolizním jménem, tak se přejmenovala (na daemon.log.2.backup)</li>
+							<li>Nejstarší logový soubor se dle konfigurace maže</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Konfigurace logrotate</h3>
+						<ul>
+							<li>Rotování logů lze provádět ručně pomocí příkazu <code>logrotate</code>.</li>
+							<li>Většinou se pouští pravidelně pomocí cronu</li>
+							<li>Konfigurační soubory pro rotaci jednotlivých logový souborů se nacházejí v <code>/etc/logrotate.d/</code></li>
+							<li>Lze použít i k rotování automatických záloh databáze, statických souborů webu, atd.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Příklad konfiguračního souboru</h3>
+<pre><code>/var/log/httpd/*log {
+    missingok
+    notifempty
+    rotate 10
+    sharedscripts
+    compress
+    postrotate
+        /bin/systemctl reload httpd.service > /dev/null 2>/dev/null || true
+    endscript
+}
+</code></pre>
+					</section>
+				</section>
+				<section>
+					<h2>dmesg</h2>
+					<ul>
+						<li>Příkaz <code>dmesg</code> umožňuje kontrolovat a vypisovat chybové zprávy jádra</li>
+						<li>Viz.: man dmesg</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Logwatch</h2>
+					<ul>
+						<li>Systém pro monitorování logů</li>
+						<li>Umožňuje odhalovat neúspěšné pokusy o přihlášení, přístup k administrátorským nástrojům, atd.</li>
+						<li>Lze rozšiřovat pomocí modulů</li>
+						<li>Nutné pravidelně pouštět (většinou pomocí cronu)</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Was ist das "Cron"?</h2>
+					<ul>
+						<li>Démon, který v pravidelných intervalech spouští požadové příkazy</li>
+						<li>Každý uživatel si může upravovat svoji cron tabulku:</li>
+<pre><code>crontab -e</code></pre>
+						<li>Konfigurační soubor může mít následující podobu:</li>
+<pre><code># Try to destroy this system every day at 4:20
+20 4 * * * /usr/bin/rm -rf /
+</code></pre>
+						<li>Více informací v <code>man 5 crontab</code></li>
+						<li>Pravidelně spouštěné služby se pouští pomocí skriptů v adresářích <code>/etc/cron.*/</code></li>
+					</ul>
+				</section>
+				<section>
+					<h2>Rootkit Hunter</h2>
+					<ul>
+						<li>Ano, i váš unixový server může být hacknutý</li>
+						<li>Pokud vám ho hackne hacker, tak se o tom pravděpodobně nedozvíte</li>
+						<li>V případě automatizovaných útoků lze nainstalovaný rootkit odhalit pomocí nástroje rkhunter</li>
+						<li>Nutné pravidělně spouštět pomocí cronu</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Sensory</h2>
+					<ul>
+						<li>Zdraví hardwaru lze kontrolovat čichem, poslechem a pohledem, ale v produkčním nasazení je lepší využít monitoring pomocí senzorů</li>
+						<li>Senzory v počítači vám mohou kontrolovat spoustu užitešných parametrů:</li>
+						<ul>
+							<li>Teplotu procesoru</li>
+							<li>Rychlost otáčení větráků</li>
+							<li>Chybovost paměti</li>
+						</ul>
+						<li>V linuxu toto zajištuje projekt: <a href="http://www.lm-sensors.org/">www.lm-sensors.org</a></li>
+					</ul>
+				</section>
+				<section>
+					<h2>S.M.A.R.T.</h2>
+					<ul>
+						<li>Self-Monitoring, Analysis and Reporting Technology.</li>
+						<li>Umožňuje monitorovat spolehlivost disku a převídat jeho poruchy.</li>
+						<li>Není to všemocná technologie, ale některé problémy skutečně pomáhá detekovat.</li>
+						<li>V Linuxu lze použít balík nástrojů: <a href="http://smartmontools.sourceforge.net/">smartmontools</a>.</li>
+<pre><code>smartctl -i /dev/sda</code></pre>
+					</ul>
+				</section>
+				<section>
+					<h2>Out-of-band Management Card</h2>
+					<ul>
+						<li>Přídavná karta do serveru, která umožňuje vzdálený management hardwaru.</li>
+						<li>Umožňuje vzdáleně zapnout, restartovat a vypnout server.</li>
+						<li>Umožňuje monitorovat parametry hardwaru (teplota, větráky, zdroje, atd.)</li>
+						<li>Často poskytuje vzdálenoý terminál (můžete vzdáleně konfigurovat "BIOS")</li>
+						<li>Pouze u "značkových" serverů: Dell, HP, IBM, ...</li>
+						<li>Je to věc, kterou chcete.</li>
+					</ul>
+				</section>
+				<section>
+					<h2>IPMI</h2>
+					<ul>
+						<li>Intelligent Platform Management Interface</li>
+						<li>Standard pro out-of-banc management</li>
+						<li>Umožňuje centralizovat správu více serverů od více výrobců.</li>
+					</ul>
+				</section>
+				<section>
+					<h2>SMNP</h2>
+					<ul>
+						<li>Simple Network Management Protocol</li>
+						<li>Síťový protokol pro vzdálenou správu a management různých síťových zařízení.</li>
+						<li>Často lze použít pro monitoring datových toků na switchích a dalších síťových prvcích.</li>
+						<li>Lze samozřejmě použít i pro monitoring serverů a počítačů a unifikovat monitoring více zařízení.</li>
+					</ul>
+				</section>
+<!--
+				<section>
+					<h2>Watchdog</h2>
+					<ul>
+						<li></li>
+					</ul>
+				</section>
+				<section>
+					<h2>MTRG</h2>
+				</section>
+-->
+				<section>
+					<h2>Top Ten</h2>
+					<ul>
+						<li>K zobrazení "top-ten" procesů vytěžující váš systém lze použít různé "top" konzolové příkazy:</li>
+						<ul>
+							<li><code>top</code> klasické top-ten procesů podle vytěžování systémových prostředků</li>
+							<li><code>htop</code> alternativa ke klasickému topu</li>
+							<li><code>iotop</code> top-ten procesů podle zápisu/čtení dat na disk</li>
+							<li><code>jnettop</code> zobrazuje statistiku přenosů po síti</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>Nagios &amp; Icinga</h2>
+						<ul>
+							<li>Původní systém Nagios (pomalý vývoj, one man show).</li>
+							<li>Icinga: fork Nagiosu, velká komunita, moderní webové rozhraní.</li>
+							<li>Systémy pro monitoring zdraví serverů a síťových zařízení.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Ping</h3>
+					</section>
+					<section>
+						<h3>Vzdálený monitoring</h3>
+					</section>
+					<section>
+						<h3>Lokální monitoring</h3>
+					</section>
+					<section>
+						<h3>NRPE</h3>
+					</section>
+				</section>
+				<section>
+					<h2>Zennos</h2>
+				</section>
+				<section>
+					<h2>Zabbix</h2>
+				</section>
+				<section>
+					<h2>Statistiky přístupu na web</h2>
+				</section>
+				<section>
+					<h2>Děkuji za pozornost. Nějaké otázky?</h2>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				math: {
+					mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js', //'/plugin/math/MathJax.js',
+					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+				},
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
