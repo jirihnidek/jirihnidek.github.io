@@ -62,16 +62,16 @@
 					<h2>Druhy animace</h2>
 					<ul>
 						<li>Animace může být součástí interaktivní aplikace (simulátory, hry) nebo neinteraktivní (2D/3D video sekvence: filmy, vizualizace, atd.)</li>
-						<li>Animaci můžeme dělít na nízkoúrovňovou (např. klíčování) a vysokoúrovňovou (simulace davů)</li>
+						<li>Animaci můžeme dělit na nízkoúrovňovou (např. klíčování) a vysokoúrovňovou (simulace davů)</li>
 					</ul>
 				</section>
 				<section>
 					<h2>Story board</h2>
 					<ul>
 						<li>Vizuální varianta scénáře</li>
-						<li>Pomáhá umělcům/tvůrcům/programátorum si ujasnit, jak bude animace/aplikace vypadat</li>
+						<li>Pomáhá <a href="https://cloud.blender.org/p/caminandes-3/56420a72c379cf01af611632">umělcům</a>/<a href="https://tympanus.net/codrops/2016/04/26/the-aviator-animating-basic-3d-scene-threejs/">tvůrcům/programátorům</a> si ujasnit, jak bude <a href="https://cloud.blender.org/p/caminandes-3/56aea0d5c379cf4aeeb79454">animace</a>/<a href="https://tympanus.net/Tutorials/TheAviator/">aplikace</a> vypadat</li>
 					</ul>
-					<img src="">
+					<img src="https://gooseberry.blender.org/wp-content/uploads/2015/01/greasepencil-storyboard.png" width="70%">
 				</section>
 				<section>
 					<h2>Stop motion</h2>
@@ -79,7 +79,7 @@
 						<li>Nemá většinou moc souvislost s počítačovou grafikou</li>
 						<li>Loutky jsou fotografovány snímek po snímku</li>
 						<li>Vyžaduje precizní přípravu a trpělivou práci</li>
-						<li>Příklad: animované filmy <a href="">Fimfárum</a>, <a href="">Omega</a></li>
+						<li>Příklad: animované filmy <a href="http://www.csfd.cz/film/49569-fimfarum-jana-wericha/prehled/">Fimfárum</a>, <a href="http://www.omegastopmotion.com/">Omega</a></li>
 					</ul>
 				</section>
 				<section>
@@ -116,42 +116,87 @@
 					<section>
 						<h3>Interpolace parametrů</h3>
 						<ul>
-							<li></li>
+							<li>Hodnota poslední klíčové hodnoty</li>
+							<li>Lineární interpolace</li>
+							<li>Interpolace polynomem (často Bézierova křivka)</li>
 						</ul>
 					</section>
 					<section>
 						<h3>Extrapolace parametrů</h3>
+						<ul>
+							<li>Hodnoty klíčovaných parametrů před prvním a posledním klíčovým stavem je nutné nějak definovat</li>
+							<li>Konstantní funkce</li>
+							<li>Přímka se směrnicí odpovídající tečnému vektoru v prvním/posledním klíčovém stavu</li>
+							<li>Cyklické opakování klíčových stavů</li>
+							<li>Cokoliv dalšího, co kreativní hlavička vymyslí</li>
+						</ul>
 					</section>
 					<section>
 						<h3>Animace transformace objektů</h3>
 						<ul>
 							<li>Jednoduchý případ animace kdy se animuje pouze poloha, rotace a velikost objektů</li>
 							<li>Lze použít klíčování a mezilehlé snímky lze snadno dopočítat</li>
-							<li>Příklad: první krátké animované filmy studia Pixar: <a href="">Luxo</a> aneb i s malým kašpárkem lze hrát velké divadlo.</li>
+							<li>Příklad: první krátké animované filmy studia Pixar: <a href="http://www.csfd.cz/film/32956-luxo-junior/prehled/">Luxo</a> aneb i s malým kašpárkem lze hrát velké divadlo.</li>
 						</ul>
 					</section>
 					<section>
 						<h3>Deformace tvaru objektu</h3>
+						<ul>
+							<li>Tvar objektu lze deformovat mnoha způsoby</li>
+							<li>Nejjednodušší způsob spočívá v tom, že máme objekt se dvěma stavy souřadnic vertexů a mezi těmito stavy provádím jednoduchý blending pomocí lineární interpolace.</li>
+						</ul>
 					</section>
 					<section>
 						<h3>Deformace objektu mřížkou</h3>
+						<ul>
+							<li>Prostorová mřížka obepínající objekt</li>
+							<li>Deformace mřížky deformuje i objekt(y)</li>
+							<li>Objekt mimo mřížku není deformovaný (průchod objektu deformovanou mřížkou)</li>
+						</ul>
 					</section>
 					<section>
 						<h3>Animační křivky</h3>
+						<ul>
+							<li>Může to být v podstatě libovolná parametrická křivka $Q(t)$</li>
+							<li>Parametr $t$ zde chápeme jako čas animace. Při změně $t$ dochází i ke změně polohy objektu.</li>
+							<li>Aby se objekt i natáčel ve směru pohyby, tak je potřeba spočítat tři vektory.</li>
+							<li>Z tečného vektoru $\vec{q}'(t)$ reprezentující rychlost a druhé derivace $\vec{q}''(t)$ reprezentující zrychlení spočítáme binormální vektor $\vec{b}(t) = \vec{q}'(t) \times \vec{q}''(t)$</li>
+							<li>Orientaci nelze určit v inflexním bodě, kde $\vec{q}'(t) = k \vec{q}''(t); k \neq 0$</li>
+						</ul>
 					</section>
 				</section>
 				<section>
 					<section>
 						<h2>Animace postav</h2>
+						<ul>
+							<li>Předpokládejme, že postava je vytvořena jako 3D objekt s ploškovou reprezentací</li>
+							<li>Pro její snadnou animaci se většinou používá vnitřní hierarchická kostra</li>
+							<li>Kostra je tvořena jednotlivými kostmi, které mohou mít mezi sebou vztah rodič-potomek</li>
+							<li>Poslední kost, která nemá žádného potomka se nazývá koncový efektor</li>
+							<li>Mezi kostmi mohou být definovány další vazby, které snižují stupeň volnosti kostry.</li>
+						</ul>
 					</section>
 					<section>
 						<h3>Dopředná kinematika</h3>
+						<ul>
+							<li>Výsledná animace tvaru kostry je určena postupným natáčením jednotlivých kostí</li>
+							<li>Jak interpolovat rotaci kostí mezi klíčovými stavy? Robustní řešení poskytují kvaterniony.</li>
+						</ul>
 					</section>
 					<section>
 						<h3>Inverzní kinematika</h3>
+						<ul>
+							<li>Klíčuje se pozice koncového efektoru a natočení ostatních kostí vůči sobě se dopočítává.</li>
+							<li>Nejednoznačné: pro koncový stav efektoru existuje více řešení.</li>
+							<li>Jisté řešení poskytují vazby a omezení na rotaci kostí vůči sobě.</li>
+						</ul>
 					</section>
 					<section>
 						<h3>Dynamika postav</h3>
+						<ul>
+							<li>Především interaktivní aplikace</li>
+							<li>Nezáleží pouze na tvaru kostry, ale i na hmotnosti a působících silách.</li>
+						</ul>
 					</section>
 					<section>
 						<h3>Simulace chování svalů a měkkých tkání</h3>
@@ -165,7 +210,7 @@
 						<h3>Kolize objektů</h3>
 					</section>
 					<section>
-						<h3>Simulace pružných/mekých objektů</h3>
+						<h3>Simulace pružných/měkkých objektů</h3>
 					</section>
 					<section>
 						<h3>Simulace látek</h3>
@@ -206,8 +251,8 @@
 				transition: 'slide', // none/fade/slide/convex/concave/zoom
 
 				math: {
-					//mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
-					mathjax: 'plugin/mathjax/MathJax.js',
+					mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+					//mathjax: 'plugin/mathjax/MathJax.js',
 					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
 				},
 
