@@ -9,7 +9,7 @@ Nejprve je potřeba jako bežný uživatel zkusit vytvořit Kerberos lístek pom
 
     kinit jmeno_prijmeni@EINFRA
 
-Zde budete požádáni o heslo. Pokud heslo nemáte, tak je potřeba se zaregistrovat na: https://einfra.cesnet.cz/
+Zde budete požádáni o heslo. Pokud heslo nemáte, tak je potřeba se zaregistrovat na: [https://einfra.cesnet.cz/](https://einfra.cesnet.cz/)
 
 > Poznámka: uživatelské jméno nemusí být nutně ve formátu: `jmeno_prijmeni`, ale záleží na tom jaké jste si zvolili uživatelské jméno při registraci na stránkách datového úložiště.
 
