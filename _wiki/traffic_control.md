@@ -13,7 +13,7 @@ Pozn.: toto jsou pouze moje osobní poznámky, ve kterých se můžou vyskytovat
 
 ### Queues (fronty) ###
 
-Každý paket, který má být odeslán, je zařazen od tzv. fronty (queue). Na frontu můžeme pohlížet jako na paměť typu FIFO, která ovšem není nekonečně velká. Pokud se paket do fronty nevejde, tak je zahozen.
+Každý paket, který má být odeslán, je zařazen do tzv. fronty (queue). Na frontu můžeme pohlížet jako na paměť typu FIFO, která ovšem není nekonečně velká. Pokud se paket do fronty nevejde, tak je zahozen.
 
                   +------+-+-+-+
     ---packet-->--+      | | | +---->
@@ -55,10 +55,10 @@ U shapingu se uplatňuje právě non-work-conserving mechanismus.
 
 Sheduling je mechanismus, kdy dochází ke změně pořadí paketů na výstupní frontě. Správný sheduler by měl splňovat 4 základní pravidla:
 
-* **Jednoduchá implementace**: pro *N* spojení by operační náročnost měla být *O(1)*. Operační náročnost třeba i *O(n)* je nepřijatelná, protože směrovače často obhospodařují desetitisíce až statisíce spojení a jakékoliv spoždění na směrovači je kritické.
+* **Jednoduchá implementace**: pro *N* spojení by časová náročnost měla být *O(1)*. Časová náročnost třeba i *O(n)* je nepřijatelná, protože směrovače často obhospodařují desetitisíce až statisíce spojení a jakékoliv spoždění na směrovači je kritické.
 * **Férovost a ochrana negarantovaných služeb**: férovost znamená, že systémové zdroje jsou rovnoměrně rozděleny mezi všechny spojení (uvažujeme stejnou prioritu všech spojení). Ochrana služeb znamená, že zbabělé a neférové chování jedneho spojení bude umravněno a negativně neovlivní ostatní spojení.
 * **Garantovaná kvalita spojení**: parametry, které se většinou garantují: šířka pásma (bandwidth), spoždění (delay), rozkmitání spoždění (delay jitter) a ztrátovost paketů (loss).
-* **Jednoduchá a efektivní přístupová kontrola**: rozhodování o tom, jestli bude nové spojení přijato, tak aby nebyly ohroženy existující spojení. Zároveň musí být zajištěno, aby nebyly nová spoejení odmítána zbytečně a nedocházelo k neefektivnímu využívání sítě.
+* **Jednoduchá a efektivní přístupová kontrola**: rozhodování o tom, jestli bude nové spojení přijato, tak aby nebyly ohroženy existující spojení. Zároveň musí být zajištěno, aby nebyla nová spojení odmítána zbytečně a nedocházelo k neefektivnímu využívání sítě.
 
 ### Klasifikace ###
 
@@ -66,7 +66,7 @@ Třídění a přiřazování trafiku (paketů) do různých front.
 
 ### Policing (dohled) ###
 
-Dohled na trafikem v jednotlivých frontách.
+Dohled nad trafikem v jednotlivých frontách.
 
 ### Droping (zahazování) ###
 
