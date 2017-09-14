@@ -61,7 +61,7 @@
 
 				<section>
 					<section>
-						<h1>Testing environment</h1>
+						<h2>Testing environment</h2>
 						<ul>
 							<li>We will need two VMs for running client and server</li>
 							<ul>
@@ -72,7 +72,7 @@
 						</ul>
 					</section>
 					<section>
-						<h2>Create new network</h2>
+						<h3>Create new network</h3>
 						<ul>
 							<li>Start: <code>virt-manager</code></li>
 							<li>Go to: "Edit -&gt; Connection Details"</li>
@@ -83,7 +83,7 @@
 						<img src="./img/virt-manager_create_network.png" alt="virt-manager: create new network" title="virt-manager: create new network" height="600x" style="">
 					</section>
 					<section>
-						<h2>Setup new network</h2>
+						<h3>Setup new network</h3>
 						<ul>
 							<li>Wizard has 4 pages</li>
 							<ol>
@@ -95,7 +95,7 @@
 						</ul>
 					</section>
 					<section>
-						<h2>Use new network</h2>
+						<h3>Use new network</h3>
 						<ul>
 							<li>Make sure VM (client) is not running</li>
 							<li>Open preferences of selected VM</li>
@@ -109,7 +109,7 @@
 						</ul>
 					</section>
 					<section>
-						<h2>Testing and final tweaking</h2>
+						<h3>Testing and final tweaking</h3>
 						<ul>
 							<li>Start VMs login there and make sure new network interface is active and IP address(es) were assigned to it</li>
 							<li>Try to ping from client to server and vica verse</li>
@@ -120,7 +120,7 @@
 
 				<section>
 					<section>
-						<h1>Traffic Control</h1>
+						<h2>Traffic Control</h2>
 						<ul>
 							<li>It can be used for shaping and scheduling of traffic</li>
 							<li>Routers are usually responsible for this (fast, hardware)</li>
@@ -128,7 +128,7 @@
 						</ul>
 					</section>
 					<section>
-						<h2>Traffic Control and some terminology</h2>
+						<h3>Traffic Control and some terminology</h3>
 						<ul>
 							<li>Traffic Control in Linux can be assembled from "qdisc" (queuing disciple)</li>
 							<li>We can simply imagine qdisc as FIFO or queue</li>
@@ -136,7 +136,7 @@
 						</ul>
 					</section>
 					<section>
-						<h2>Netem and TBF</h2>
+						<h3>Netem and TBF</h3>
 						<ul>
 							<li>Traffic Controll can be also used for simulation of condition of real network</li>
 							<li>Qdisc called Netem can be used for simulating of delay, delay jitter, packet loss, corrupting of packets, etc.</li>
@@ -156,73 +156,71 @@
 
 				<section>
 					<section>
-					<h1>Linux Traffic Control</h1>
+					<h2>Linux Traffic Control</h2>
 						<ul>
 							<li>For our purpose we can use only netem for simulation of delay and delay jitter</li>
 							<li>To list existing traffic control used at specific network inteface:</li>
-	<pre><code>
-	$ tc -s -d qdisc show dev eth0
-	</code></pre>
+<pre><code>$ tc -s -d qdisc show dev eth0</code></pre>
 						</ul>
 					</section>
 					<section>
-						<h2>Queue Length</h2>
+						<h3>Queue Length</h3>
 						<ul>
 							<li>To get length of all queues we need to use another command:</li>
-	<pre><code>
-	$ ip link list
-	</code></pre>
-							<li>We can set new length of queue using following command:</li>
-	<pre><code>
-	$ ip link set dev eth0 txqueuelen 100
-	</code></pre>							
+<pre><code>$ ip link list</code></pre>
+						<li>We can set new length of queue using following command:</li>
+<pre><code>$ ip link set dev eth0 txqueuelen 100</code></pre>
 						</ul>
 					</section>
 				</section>
 
 				<section>
-					<h1>Netem</h1>
+					<h2>Netem</h2>
 					<ul>
 						<li>To replace default qdisc with netem we have to use following command:</li>
-<pre><code>
-$ tc qdisc add dev eth0 parent root handle 1:0 netem delay 100ms
-</code></pre>
+<pre><code>$ tc qdisc add dev eth0 parent root handle 1:0 netem delay 100ms</code></pre>
 						<li>We can try to use ping, but we will get constant delay. To get more realistic result we need to set also delay jitter using following command:</li>
-<pre><code>
-$ tc qdisc change dev eth0 parent root handle 1:0 netem delay 100ms 10ms 25%
-</code></pre>
-						<li>We will need to set same qdisc for at server and client</li>
+<pre><code>$ tc qdisc change dev eth0 parent root handle 1:0 \
+netem delay 100ms 10ms 25%</code></pre>
+						<li>We will need to set same qdisc on server and client</li>
 					</ul>
 				</section>
 
 				<section>
-					<h1>Delay matters</h1>
+					<h2>Delay matters</h2>
 					<a href="https://atlas.ripe.net/results/maps/rtt-fixed/">https://atlas.ripe.net/results/maps/rtt-fixed/</a>
 				</section>
 
 				<section>
-					<h1>Subman and delay</h1>
-					<ul>
-						<li>We can test delay using subscription-manager and curl command</li>
-<pre><code>
-$ subscription-manager version
+					<section>
+						<h2>Subman and Delay</h2>
+						<ul>
+							<li>We can test delay using subscription-manager and curl command</li>
+<pre><code>$ time subscription-manager version</code></pre>
+
+							<li>We can mimic recreating of TCP connection using following command:</li>
+
+<pre><code>$ time curl -k -u admin:admin "https://candle:8443/candlepin/"; \
+  time curl -k -u admin:admin "https://candle:8443/candlepin/status"
 </code></pre>
 
-<pre><code>
-$ curl -k -u admin:admin "https://candle:8443/candlepin/"; \
-  curl -k -u admin:admin "https://candle:8443/candlepin/status"
-</code></pre>
+						</ul>
+					</section>
+					<section>
+						<h3>Proposed improvements</h3>
+						<ul>
+							<li>If TCP connection was reused between REST API call, then result time would be twice smaller:</li>
 
-<pre><code>
-$ curl -k -u admin:admin "https://candle:8443/candlepin/" \
+<pre><code>$ time curl -k -u admin:admin "https://candle:8443/candlepin/" \
   "https://candle:8443/candlepin/status"
 </code></pre>
 
-<pre><code>
-$ curl -k -u admin:admin "https://candle:8443/candlepin/" &amp; \
+							<li>We could go even better, when HTTP/2 was used:</li>
+<pre><code>$ curl -k -u admin:admin "https://candle:8443/candlepin/" &amp; \
   curl -k -u admin:admin "https://candle:8443/candlepin/status"
 </code></pre>
-					</ul>
+						</ul>
+					</section>
 				</section>
 
 				<section>
